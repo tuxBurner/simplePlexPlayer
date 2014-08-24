@@ -44,10 +44,10 @@ var AudioJsWrapper = function(audioJs) {
 
     if(nextTitle == true) {
       next = $('#playList li.playing').next();
-      if(!next.length) next = $('#playList li.playing').first();
+      if(next.length == 0) next = $('#playList li').first();
     } else {
       next = $('#playList li.playing').prev();
-      if(!next.length) next = $('#playList li.playing').last();
+      if(next.length == 0) next = $('#playList li').last();
     }
 
     $('#playList li.playing').removeClass('playing');
@@ -168,14 +168,13 @@ var Player = function() {
 
   this.initPlayer = function() {
 
-    var initAudiojs = audiojs.createAll({
+    var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
           trackEnded: function() {
-            next = $('#playList li.playing').next();
-            if(!next.length) next = $('#playList li.playing').first();
+            that.audioJsWrapper.loadNextTrack(true);
           }
         });
 
-    var audioJs = initAudiojs[0];
+  //  var audioJs = initAudiojs[0];
     // Mark the first track
     $('#playList li').first().addClass('playing');
     that.audioJsWrapper = new AudioJsWrapper(audioJs);

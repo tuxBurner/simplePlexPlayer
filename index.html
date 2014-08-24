@@ -11,8 +11,9 @@
     <!-- CSS -->
     <link rel="stylesheet" href="bootstrap-3.2.0-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap-3.2.0-dist/css/bootstrap-theme.min.css">
-
     <link rel="stylesheet" href="font-awesome-4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="main.css">
+
 
   </head>
   <body>
@@ -48,7 +49,7 @@
         {{/each}}
         {{#if files}}
         <div class="item" data-type="playall" data-id="{{{key}}}" data-interval="false">
-          <img data-src="holder.js/900x500/lava/text:PlayAll ({{files.length}})" alt="PlayAll" />
+          <img data-src="holder.js/900x500/auto/lava/text:PlayAll ({{files.length}})" alt="PlayAll" />
         </div>
         {{/if}}
         {{#each files}}
@@ -65,7 +66,7 @@
   <script id="player-tpl" type="text/x-handlebars-template">
     <div id="wrapper">
       <h1>{{title}}</h1>
-      <audio preload></audio>
+      <audio id="audioJsAudio"></audio>
 
       <ul class="media-list" id="playList">
         {{#each files}}
