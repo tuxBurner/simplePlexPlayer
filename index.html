@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="bootstrap-3.2.0-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap-3.2.0-dist/css/bootstrap-theme.min.css">
 
+    <link rel="stylesheet" href="font-awesome-4.1.0/css/font-awesome.min.css">
+
   </head>
   <body>
     <div class="container" id="mainContainer">
@@ -61,14 +63,22 @@
 
   <!-- PLAYER -->
   <script id="player-tpl" type="text/x-handlebars-template">
-       <div id="wrapper">
+    <div id="wrapper">
       <h1>{{title}}</h1>
       <audio preload></audio>
-      <ol>
+
+      <ul class="media-list" id="playList">
         {{#each files}}
-          <li><a href="#" data-src="{{mp3}}">{{title}}</a></li>
+        <li class="media" data-src="{{mp3}}">
+          <a class="pull-left" href="#">
+            <img data-src="holder.js/32x32/vine" alt="{{title}}" />
+          </a>
+         <div class="media-body">
+           <h4 class="media-heading">{{title}}</h4>
+         </div>
+        </li>
         {{/each}}
-      </ol>
+      </ul>
     </div>
   </script>
   <!-- EO PLAYER -->

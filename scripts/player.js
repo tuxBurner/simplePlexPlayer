@@ -29,6 +29,34 @@ var Directory = function(key,title,parent) {
   }
 }
 
+var AudioJsWrapper = function(audioJs) {
+  this.audioJs = audioJs;
+
+  this.loadTrack =  function() {
+    var trackSrc = $('#playList li.playing').attr('data-src');
+    this.audioJs.load(trackSrc);
+    this.audioJs.play();
+  }
+
+  this.loadNextTrack = function(nextTitle) {
+
+    var next = null;
+
+    if(nextTitle == true) {
+      next = $('#playList li.playing').next();
+      if(!next.length) next = $('#playList li.playing').first();
+    } else {
+      next = $('#playList li.playing').prev();
+      if(!next.length) next = $('#playList li.playing').last();
+    }
+
+    $('#playList li.playing').removeClass('playing');
+    $(next).addClass('playing');
+
+    this.loadTrack();
+  }
+}
+
 var File = function(id,title,mp3,duration) {
   this.id = id;
   this.title = title;
@@ -47,7 +75,7 @@ var Player = function() {
     id : ""
   }
 
-  this.audioJs = null;
+  this.audioJsWrapper = null;
 
   this.config = {
     // path to the the plex server
@@ -140,22 +168,18 @@ var Player = function() {
 
   this.initPlayer = function() {
 
-    var a = audiojs.createAll({
+    var initAudiojs = audiojs.createAll({
           trackEnded: function() {
-            var next = $('ol li.playing').next();
-            if (!next.length) next = $('ol li').first();
-            next.addClass('playing').siblings().removeClass('playing');
-            audio.load($('a', next).attr('data-src'));
-            audio.play();
+            next = $('#playList li.playing').next();
+            if(!next.length) next = $('#playList li.playing').first();
           }
         });
 
-        // Load in the first track
-        this.audioJs = a[0];
-        var first = $('ol a').attr('data-src');
-        $('ol li').first().addClass('playing');
-        this.audioJs.load(first);
-        this.audioJs.playPause();
+    var audioJs = initAudiojs[0];
+    // Mark the first track
+    $('#playList li').first().addClass('playing');
+    that.audioJsWrapper = new AudioJsWrapper(audioJs);
+    that.audioJsWrapper.loadTrack();
   }
 
 

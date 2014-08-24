@@ -13,9 +13,7 @@ $(function() {
           }
 
           if(player.currentDisplayTpl == "player") {
-            var next = $('li.playing').next();
-            if (!next.length) next = $('ol li').first();
-            next.click();
+            player.audioJsWrapper.loadNextTrack(true);
           }
         // left button
         } else if(e.which == 37){
@@ -24,6 +22,9 @@ $(function() {
           }
 
           if(player.currentDisplayTpl == "player") {
+            if(player.currentDisplayTpl == "player") {
+              player.audioJsWrapper.loadNextTrack(false);
+            }
           }
         // enter button
         } else if(e.which == 13) {
