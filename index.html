@@ -31,22 +31,44 @@
             <img data-src="holder.js/900x500/sky/text:{{title}}" alt="{{title}}" />
           </div>
         {{/each}}
+        <div class="item" data-type="settings" data-id="-1" data-interval="false">
+          <img data-src="holder.js/900x500/lava/text:Settings" alt="Settings" />
+        </div>
       </div>
     </div>
   </script>
   <!-- EO MAIN MENU -->
 
+  <!-- SETTINGS -->
+  <script id="settings-tpl" type="text/x-handlebars-template">
+    <div class="carousel slide">
+      <div class="carousel-inner">
+        <div class="item" data-type="settings" data-id="-1" data-interval="false">
+          <img data-src="holder.js/900x500/lava/text:Settings" alt="Settings" />
+        </div>
+      </div>
+    </div>
+  </script>
+  <!-- EO SETTINGS>
+
   <!-- DIRECTORY -->
   <script id="directory-tpl" type="text/x-handlebars-template">
     <h1>{{title}} Dir: {{subDirs.length}}</h1>
-
     <div class="carousel">
       <div class="carousel-inner">
         {{#each subDirs}}
           <div class="item" data-type="directory" data-id="{{{key}}}" data-interval="false">
-            <img data-src="holder.js/900x500/sky/text:{{title}}" alt="{{title}}" />
+            {{#if thumb}}
+              <img width="900" height="500" src="{{thumb}}" alt="{{title}}" />
+              <div class="carousel-caption">
+                <h3>{{title}}</h3>
+              </div>
+            {{else}}
+              <img data-src="holder.js/900x500/sky/text:{{title}}" alt="{{title}}" />
+            {{/if}}
           </div>
         {{/each}}
+
         {{#if files}}
         <div class="item" data-type="playall" data-id="{{{key}}}" data-interval="false">
           <img data-src="holder.js/900x500/auto/lava/text:PlayAll ({{files.length}})" alt="PlayAll" />
@@ -54,7 +76,14 @@
         {{/if}}
         {{#each files}}
           <div class="item" data-type="file" data-id="{{{id}}}" data-interval="false">
-            <img data-src="holder.js/900x500/vine/text:{{title}}" alt="{{title}}" />
+            {{#if thumb}}
+              <img width="900" height="500" src="{{thumb}}" alt="{{title}}" />
+              <div class="carousel-caption">
+                <h3>{{title}}</h3>
+              </div>
+            {{else}}
+              <img data-src="holder.js/900x500/vine/text:{{title}}" alt="{{title}}" />
+            {{/if}}
           </div>
         {{/each}}
       </div>
@@ -72,7 +101,11 @@
         {{#each files}}
         <li class="media" data-src="{{mp3}}">
           <a class="pull-left" href="#">
-            <img data-src="holder.js/32x32/vine" alt="{{title}}" />
+          {{#if thumb}}
+            <img width="64" height="64" src="{{thumb}}" alt="{{title}}" />
+          {{else}}
+            <img data-src="holder.js/64x64/vine/" alt="{{title}}" />
+          {{/if}}
           </a>
          <div class="media-body">
            <h4 class="media-heading">{{title}}</h4>

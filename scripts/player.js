@@ -1,13 +1,17 @@
-var Directory = function(key,title,parent) {
+var Directory = function(key,title,thumb,parent) {
   this.title = title;
   this.key = key;
+  this.thumb = thumb;
   this.subDirs = [];
   this.files = [];
   this.parent = parent;
   this.initialized = false;
 
-  this.addSubDir = function(key,title,player) {
-    var dir = new Directory(key,title,this.key);
+  this.addSubDir = function(key,title,thumb,player) {
+    if(thumb !== undefined) {
+      thumb = player.config.baseUrl+thumb;
+    }
+    var dir = new Directory(key,title,thumb,this.key);
     this.subDirs.push(dir);
     player.directories[key] = dir;
   }
@@ -21,13 +25,21 @@ var Directory = function(key,title,parent) {
     var id = $(partXml).attr('id');
     var mp3Url = player.config.baseUrl+"/library/parts/"+id+"/file.mp3";
 
-    var file = new File(id,title,mp3Url,duration)
+    var file = new File(id,title,mp3Url,this.thumb)
 
     this.files.push(file);
     player.files[id] = file;
 
   }
 }
+
+var File = function(id,title,mp3,thumb) {
+  this.id = id;
+  this.title = title;
+  this.thumb = thumb;
+  this.mp3 = mp3;
+}
+
 
 var AudioJsWrapper = function(audioJs) {
   this.audioJs = audioJs;
@@ -55,13 +67,6 @@ var AudioJsWrapper = function(audioJs) {
 
     this.loadTrack();
   }
-}
-
-var File = function(id,title,mp3,duration) {
-  this.id = id;
-  this.title = title;
-  this.duration = duration;
-  this.mp3 = mp3;
 }
 
 var Player = function() {
@@ -98,7 +103,7 @@ var Player = function() {
       for(idx in player.config.allowedSections) {
         var sectionId = player.config.allowedSections[idx];
         $('Directory[key="'+sectionId+'"]',data).each(function(i) {
-          that.sections[sectionId] = new Directory(sectionId,$(this).attr('title'),-1,player);
+          that.sections[sectionId] = new Directory(sectionId,$(this).attr('title'),-1,undefined,player);
           that.directories[sectionId] = that.sections[sectionId];
         });
       }
@@ -189,7 +194,7 @@ var Player = function() {
   }
 
   this.loadSection = function(id) {
-    this.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/folder");
+    this.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/all");
   }
 
   this.loadDirectory = function(id,url) {
@@ -199,7 +204,10 @@ var Player = function() {
       this.loadPlexXml(url, function(data) {
         $('Directory',data).each(function(i) {
           var key = $(this).attr('key');
-          dir.addSubDir(key,$(this).attr('title'),that);
+          var title = $(this).attr('title');
+          if(title != "All tracks") {
+            dir.addSubDir(key,title,$(this).attr('thumb'),that);
+          }
         });
 
         $('Track',data).each(function(i) {
