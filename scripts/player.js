@@ -19,8 +19,9 @@ var Directory = function(key,title,parent) {
     var duration = $(mediaXml).attr('duration');
     var title = $(fileXml).attr('title');
     var id = $(partXml).attr('id');
+    var mp3Url = player.config.baseUrl+"/library/parts/"+id+"/file.mp3";
 
-    var file = new File(id,title,duration)
+    var file = new File(id,title,mp3Url,duration)
 
     this.files.push(file);
     player.files[id] = file;
@@ -28,15 +29,11 @@ var Directory = function(key,title,parent) {
   }
 }
 
-var File = function(id,title,duration) {
+var File = function(id,title,mp3,duration) {
   this.id = id;
   this.title = title;
   this.duration = duration;
-}
-
-var PlayListItem = function(file) {
-  this.title = file.title;
-  this.mp3 = "/library/parts/"+file.id+"/file.mp3";
+  this.mp3 = mp3;
 }
 
 var Player = function() {
@@ -49,6 +46,8 @@ var Player = function() {
     type : "",
     id : ""
   }
+
+  this.audioJs = null;
 
   this.config = {
     // path to the the plex server
@@ -92,7 +91,7 @@ var Player = function() {
   }
 
   this.displayPlayer = function(files) {
-    this.displayContent("player",null,this.initPlayer(files));
+    this.displayContent("player",{"files": files},this.initPlayer);
   }
 
   this.displayContent = function(tplName,data,callBack) {
@@ -132,44 +131,33 @@ var Player = function() {
        files.push(this.files[this.activeComponent.id]);
        this.displayPlayer(files);
      }
+
+     if(this.activeComponent.type == "playall") {
+       var files = this.directories[this.activeComponent.id].files;
+       this.displayPlayer(files);
+     }
   }
 
-  this.initPlayer = function(files) {
+  this.initPlayer = function() {
 
-    new jPlayerPlaylist({
-	      jPlayer: "#jquery_jplayer_1",
-	      cssSelectorAncestor: "#jp_container_1"
-	    },
-      [
-		{
-			title:"Cro Magnon Man",
-			artist:"The Stark Palace",
-			mp3:"http://www.jplayer.org/audio/mp3/TSP-01-Cro_magnon_man.mp3",
-			oga:"http://www.jplayer.org/audio/ogg/TSP-01-Cro_magnon_man.ogg",
-			poster: "http://www.jplayer.org/audio/poster/The_Stark_Palace_640x360.png"
-		}
-]
-        , {
-		swfPath: "/jQuery.jPlayer.2.6.0",
-		supplied: "webmv, ogv, m4v, oga, mp3",
-		smoothPlayBar: true,
-		keyEnabled: true,
-		audioFullScreen: true
-	});
+    var a = audiojs.createAll({
+          trackEnded: function() {
+            var next = $('ol li.playing').next();
+            if (!next.length) next = $('ol li').first();
+            next.addClass('playing').siblings().removeClass('playing');
+            audio.load($('a', next).attr('data-src'));
+            audio.play();
+          }
+        });
 
-//	$("#jplayer_inspector_1").jPlayerInspector({jPlayer:$("#jquery_jplayer_1")});
+        // Load in the first track
+        this.audioJs = a[0];
+        var first = $('ol a').attr('data-src');
+        $('ol li').first().addClass('playing');
+        this.audioJs.load(first);
+        this.audioJs.playPause();
   }
 
-  this.filesToPlayList = function(files) {
-    var playList = [];
-    for(idx in files) {
-      var file = files[idx];
-      playList.push(new PlayListItem(file));
-    }
-
-    console.error(playList);
-    return playList;
-  }
 
   this.performEscAction = function() {
     if(this.currentDisplayTpl == "directory") {
