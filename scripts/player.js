@@ -90,8 +90,8 @@ var Player = function() {
     this.displayContent("mainMenu",{"sections" : this.sections},this.initCarousel);
   }
 
-  this.displayPlayer = function(files) {
-    this.displayContent("player",{"files": files},this.initPlayer);
+  this.displayPlayer = function(files,title) {
+    this.displayContent("player",{"files": files, "title" : title},this.initPlayer);
   }
 
   this.displayContent = function(tplName,data,callBack) {
@@ -129,12 +129,12 @@ var Player = function() {
      if(this.activeComponent.type == "file") {
        var files = [];
        files.push(this.files[this.activeComponent.id]);
-       this.displayPlayer(files);
+       this.displayPlayer(files,this.files[this.activeComponent.id].title);
      }
 
      if(this.activeComponent.type == "playall") {
        var files = this.directories[this.activeComponent.id].files;
-       this.displayPlayer(files);
+       this.displayPlayer(files,this.directories[this.activeComponent.id].title);
      }
   }
 
