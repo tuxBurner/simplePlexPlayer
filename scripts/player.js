@@ -29,7 +29,6 @@ var Directory = function(key,title,thumb,parent) {
 
     this.files.push(file);
     player.files[id] = file;
-
   }
 }
 
@@ -44,8 +43,11 @@ var File = function(id,title,mp3,thumb) {
 var AudioJsWrapper = function(audioJs) {
   this.audioJs = audioJs;
 
+  this.total = undefined;
+
   this.loadTrack =  function() {
     var trackSrc = $('#playList li.playing').attr('data-src');
+    $('#playList li.playing .progress').show();
     this.audioJs.load(trackSrc);
     this.audioJs.play();
   }
@@ -61,11 +63,28 @@ var AudioJsWrapper = function(audioJs) {
       next = $('#playList li.playing').prev();
       if(next.length == 0) next = $('#playList li').last();
     }
-
+    // hide all progress bars
+    $('#playList .progress').hide();
     $('#playList li.playing').removeClass('playing');
     $(next).addClass('playing');
-
     this.loadTrack();
+  }
+
+  this.updatePercentage = function(percentage) {
+
+    var  p = this.audioJs.duration * percentage;
+    var m = Math.floor(p / 60);
+    var s = Math.floor(p % 60);
+    var playedString = ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
+
+    if(this.total === undefined) {
+      var m = Math.floor(this.audioJs.duration / 60);
+      var s = Math.floor(this.audioJs.duration % 60);
+      total = ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
+    }
+
+    $('#playList li.playing .progress .progress-bar').width(percentage+"%").html(playedString+" / "+total);
+
   }
 }
 
@@ -176,6 +195,9 @@ var Player = function() {
     var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
           trackEnded: function() {
             that.audioJsWrapper.loadNextTrack(true);
+          },
+          updatePlayhead: function(percentage) {
+            that.audioJsWrapper.updatePercentage(percentage);
           }
         });
 
