@@ -35,9 +35,9 @@
 
   <!-- DIRECTORY -->
   <script id="directory-tpl" type="text/x-handlebars-template">
-    <h1>{{title}}</h1>
+    <h1>{{title}} Dir: {{subDirs.length}}</h1>
 
-    <div class="carousel slide">
+    <div class="carousel">
       <div class="carousel-inner">
         {{#each subDirs}}
           <div class="item" data-type="directory" data-id="{{{key}}}" data-interval="false">
@@ -46,7 +46,7 @@
         {{/each}}
         {{#if files}}
         <div class="item" data-type="playall" data-id="{{{key}}}" data-interval="false">
-          <img data-src="holder.js/900x500/lava/text:PlayAll" alt="PlayAll" />
+          <img data-src="holder.js/900x500/lava/text:PlayAll ({{files.length}})" alt="PlayAll" />
         </div>
         {{/if}}
         {{#each files}}
