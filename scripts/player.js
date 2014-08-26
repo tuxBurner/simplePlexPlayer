@@ -25,18 +25,20 @@ var Directory = function(key,title,thumb,parent) {
     var id = $(partXml).attr('id');
     var mp3Url = player.config.baseUrl+"/library/parts/"+id+"/file.mp3";
 
-    var file = new File(id,title,mp3Url,this.thumb)
+    var readableDuration = Tools.readableDuration((duration / 1000));
+    var file = new File(id,title,mp3Url,this.thumb,readableDuration);
 
     this.files.push(file);
     player.files[id] = file;
   }
 }
 
-var File = function(id,title,mp3,thumb) {
+var File = function(id,title,mp3,thumb,readableDuration) {
   this.id = id;
   this.title = title;
   this.thumb = thumb;
   this.mp3 = mp3;
+  this.duration = readableDuration;
 }
 
 
@@ -71,21 +73,18 @@ var AudioJsWrapper = function(audioJs) {
   }
 
   this.updatePercentage = function(percentage) {
-
-    var  p = this.audioJs.duration * percentage;
-    var m = Math.floor(p / 60);
-    var s = Math.floor(p % 60);
-    var playedString = ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
-
-    if(this.total === undefined) {
-      var m = Math.floor(this.audioJs.duration / 60);
-      var s = Math.floor(this.audioJs.duration % 60);
-      total = ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
-    }
-
-    $('#playList li.playing .progress .progress-bar').width(percentage+"%").html(playedString+" / "+total);
+    var playedString = Tools.readableDuration(this.audioJs.duration * percentage);
+    var percent = Math.round(percentage*100);
+    $('#playList li.playing .progress .progress-bar').css("width",percent+"%").html(playedString);
 
   }
+}
+
+var Tools =  function() {}
+Tools.readableDuration = function(duration) {
+    var m = Math.floor(duration / 60);
+    var s = Math.floor(duration % 60);
+    return ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
 }
 
 var Player = function() {
@@ -201,7 +200,9 @@ var Player = function() {
           }
         });
 
-  //  var audioJs = initAudiojs[0];
+    // hide the player
+    //$('div.audiojs').hide();
+
     // Mark the first track
     $('#playList li').first().addClass('playing');
     that.audioJsWrapper = new AudioJsWrapper(audioJs);

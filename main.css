@@ -1,0 +1,24 @@
+/* highlight played item */
+li.playing {
+  background-color: #E1E1E1;
+}
+
+/* hide the audiojs player */
+div.audiojs {
+  display: none;
+}
+
+
+/* hide the progress bars for the player */
+.progress {
+  display: none;
+}
+
+/* disable transitions on the progress bars */
+.progress .progress-bar {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}
