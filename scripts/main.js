@@ -9,7 +9,7 @@ $(function() {
         // right button
         if(e.which == 39){
           if(player.currentDisplayTpl != "player") {
-            $('.carousel').carousel('next');
+            player.nextMenuItem(true);
           }
 
           if(player.currentDisplayTpl == "player") {
@@ -18,7 +18,7 @@ $(function() {
         // left button
         } else if(e.which == 37){
           if(player.currentDisplayTpl != "player") {
-            $('.carousel').carousel('prev');
+            player.nextMenuItem(false);
           }
 
           if(player.currentDisplayTpl == "player") {

@@ -76,7 +76,6 @@ var AudioJsWrapper = function(audioJs) {
     var playedString = Tools.readableDuration(this.audioJs.duration * percentage);
     var percent = Math.round(percentage*100);
     $('#playList li.playing .progress .progress-bar').css("width",percent+"%").html(playedString);
-
   }
 }
 
@@ -92,11 +91,6 @@ var Player = function() {
   var that = this;
 
   this.templates = {};
-
-  this.activeComponent = {
-    type : "",
-    id : ""
-  }
 
   this.audioJsWrapper = null;
 
@@ -115,6 +109,9 @@ var Player = function() {
 
   this.currentDisplayTpl = ""
 
+  this.currentMenuItems = [];
+  this.currentMenuIdx = 0;
+
   this.init = function() {
     this.initTemplats();
     this.loadPlexXml(player.config.baseUrl+"/library/sections", function(data) {
@@ -132,13 +129,69 @@ var Player = function() {
   this.initTemplats = function() {
     this.templates = {
       "mainMenu" : Handlebars.compile($("#main-tpl").html()),
-      "directory" : Handlebars.compile($("#directory-tpl").html()),
-      "player" : Handlebars.compile($("#player-tpl").html())
+      "player" : Handlebars.compile($("#player-tpl").html()),
+      "menuitem" : Handlebars.compile($("#menuitem-tpl").html())
     }
   }
 
   this.displayMainMenu = function() {
-    this.displayContent("mainMenu",{"sections" : this.sections},this.initCarousel);
+    that.currentMenuItems = [];
+    for(idx in that.sections) {
+      var section = that.sections[idx];
+      that.currentMenuItems.push({"title" : section.title, "id" : section.key, "type" : "section"});
+    }
+    that.currentMenuItems.push({"title" : "Settings", "id" : "-1" , "type" : "settings"});
+    that.displayContent("mainMenu",{},that.initMenu);
+  }
+
+  this.dirToMenuItem = function(dir) {
+    var menuItems = [];
+    for(idx in dir.subDirs) {
+      var subDir = dir.subDirs[idx];
+      menuItems.push({"title" : subDir.title, "id" : subDir.key, "type" : "directory", "thumb" : subDir.thumb});
+    }
+    if(dir.files.length > 0) {
+
+      menuItems.push({"title" : "Play All", "id" : dir.key, "type" : "playAll"});
+
+      for(idx in dir.files) {
+        var file = dir.files[idx];
+        menuItems.push({"title" : file.title, "id" : file.id, "type" : "file", "thumb" : file.thumb});
+      }
+    }
+
+    return menuItems;
+  }
+
+  this.initMenu = function() {
+    that.currentMenuIdx = 0;
+    that.displayMenuItem();
+  }
+
+  this.displayMenuItem = function() {
+    var menuItem = that.currentMenuItems[that.currentMenuIdx];
+    var content = that.templates["menuitem"](menuItem);
+    $('#menuContainer').html(content);
+  };
+
+  this.nextMenuItem = function(nextItem) {
+    if(that.currentMenuItems.length <= 1) {
+      return;
+    }
+
+    if(nextItem == true) {
+      that.currentMenuIdx++;
+      if(that.currentMenuIdx == that.currentMenuItems.length) {
+        that.currentMenuIdx = 0;
+      }
+    } else {
+      that.currentMenuIdx--;
+      if(that.currentMenuIdx < 0) {
+        that.currentMenuIdx = that.currentMenuItems.length-1;
+      }
+    }
+
+    that.displayMenuItem();
   }
 
   this.displayPlayer = function(files,title) {
@@ -155,42 +208,39 @@ var Player = function() {
     }
   }
 
-  this.initCarousel = function() {
-    // mark first item in the carousel and activate it
-    $('.carousel .carousel-inner .item').first().addClass('active');
-    that.setActiveComponent('.carousel .carousel-inner .active');
-
-    // initialize the carousel
-    $('.carousel').carousel();
-    $('.carousel').on('slid.bs.carousel', function () {
-      that.setActiveComponent('.carousel .carousel-inner .active');
-      $('.carousel').carousel('pause');
-    });
-  }
 
   this.performAction = function() {
-    if(this.activeComponent.type == "section") {
-      this.loadSection(this.activeComponent.id);
+
+    var currentMenuItemType = that.currentMenuItems[that.currentMenuIdx].type;
+    var currentMenuItemId = that.currentMenuItems[that.currentMenuIdx].id;
+
+    if(currentMenuItemType == "section") {
+      that.loadSection(currentMenuItemId);
     }
 
-     if(this.activeComponent.type == "directory") {
-       this.loadDirectory(this.activeComponent.id,player.config.baseUrl+this.activeComponent.id);
+     if(currentMenuItemType == "directory") {
+       that.loadDirectory(currentMenuItemId,player.config.baseUrl+currentMenuItemId);
      }
 
-     if(this.activeComponent.type == "file") {
+     if(currentMenuItemType == "file") {
        var files = [];
-       files.push(this.files[this.activeComponent.id]);
-       this.displayPlayer(files,this.files[this.activeComponent.id].title);
+       files.push(that.files[currentMenuItemId]);
+       that.displayPlayer(files,that.files[currentMenuItemId].title);
      }
 
-     if(this.activeComponent.type == "playall") {
-       var files = this.directories[this.activeComponent.id].files;
-       this.displayPlayer(files,this.directories[this.activeComponent.id].title);
+     if(currentMenuItemType.type == "playall") {
+       var files = that.directories[currentMenuItemId].files;
+       this.displayPlayer(files,that.directories[currentMenuItemId].title);
      }
+  }
+
+  this.performEscAction = function() {
+    if(this.currentDisplayTpl == "directory") {
+      this.displayMainMenu();
+    }
   }
 
   this.initPlayer = function() {
-
     var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
           trackEnded: function() {
             that.audioJsWrapper.loadNextTrack(true);
@@ -200,31 +250,21 @@ var Player = function() {
           }
         });
 
-    // hide the player
-    //$('div.audiojs').hide();
-
     // Mark the first track
     $('#playList li').first().addClass('playing');
     that.audioJsWrapper = new AudioJsWrapper(audioJs);
     that.audioJsWrapper.loadTrack();
   }
 
-
-  this.performEscAction = function() {
-    if(this.currentDisplayTpl == "directory") {
-      this.displayMainMenu();
-    }
-  }
-
   this.loadSection = function(id) {
-    this.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/all");
+    that.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/all");
   }
 
   this.loadDirectory = function(id,url) {
     var dir = that.directories[id];
 
     if(dir.initialized  == false) {
-      this.loadPlexXml(url, function(data) {
+      that.loadPlexXml(url, function(data) {
         $('Directory',data).each(function(i) {
           var key = $(this).attr('key');
           var title = $(this).attr('title');
@@ -241,21 +281,13 @@ var Player = function() {
         that.displayDir(dir);
       });
     } else {
-      this.displayDir(dir);
+      that.displayDir(dir);
     }
   }
 
   this.displayDir = function(directory) {
-    this.displayContent("directory",directory,this.initCarousel);
-  }
-
-  this.setActiveComponent = function(jqSelector) {
-    var type = $(jqSelector).data("type");
-    var id = $(jqSelector).data("id");
-    this.activeComponent.type = type;
-    this.activeComponent.id = id;
-
-    console.error(this.activeComponent);
+    that.currentMenuItems = that.dirToMenuItem(directory);
+    that.displayContent("mainMenu",{},that.initMenu);
   }
 
   this.loadPlexXml = function(url, callback) {

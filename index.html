@@ -17,27 +17,32 @@
 
   </head>
   <body>
-    <div class="container" id="mainContainer">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="center-block" id="mainContainer">
+            <!-- CONTENT GOES HERE -->
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 
   <!-- HANDLEBAR TEMPLATES -->
   <!-- MAIN MENU -->
   <script id="main-tpl" type="text/x-handlebars-template">
-    <div class="carousel slide">
-      <div class="carousel-inner">
-        {{#each sections}}
-          <div class="item" data-type="section" data-id="{{{key}}}" data-interval="false">
-            <img data-src="holder.js/900x500/sky/text:{{title}}" alt="{{title}}" />
-          </div>
-        {{/each}}
-        <div class="item" data-type="settings" data-id="-1" data-interval="false">
-          <img data-src="holder.js/900x500/lava/text:Settings" alt="Settings" />
-        </div>
-      </div>
+    <div id="menuContainer">
     </div>
   </script>
   <!-- EO MAIN MENU -->
+
+  <!-- MENU ITEM -->
+  <script id="menuitem-tpl" type="text/x-handlebars-template">
+    <div id="menuItem" class="{{type}}">
+      <h4>{{title}}</h4>
+    </div>
+  </script>
+  <!-- EO MENU ITEM -->
 
   <!-- SETTINGS -->
   <script id="settings-tpl" type="text/x-handlebars-template">
@@ -50,46 +55,6 @@
     </div>
   </script>
   <!-- EO SETTINGS>
-
-  <!-- DIRECTORY -->
-  <script id="directory-tpl" type="text/x-handlebars-template">
-    <h1>{{title}} Dir: {{subDirs.length}}</h1>
-    <div class="carousel">
-      <div class="carousel-inner">
-        {{#each subDirs}}
-          <div class="item" data-type="directory" data-id="{{{key}}}" data-interval="false">
-            {{#if thumb}}
-              <img width="900" height="500" src="{{thumb}}" alt="{{title}}" />
-              <div class="carousel-caption">
-                <h3>{{title}}</h3>
-              </div>
-            {{else}}
-              <img data-src="holder.js/900x500/sky/text:{{title}}" alt="{{title}}" />
-            {{/if}}
-          </div>
-        {{/each}}
-
-        {{#if files}}
-        <div class="item" data-type="playall" data-id="{{{key}}}" data-interval="false">
-          <img data-src="holder.js/900x500/auto/lava/text:PlayAll ({{files.length}})" alt="PlayAll" />
-        </div>
-        {{/if}}
-        {{#each files}}
-          <div class="item" data-type="file" data-id="{{{id}}}" data-interval="false">
-            {{#if thumb}}
-              <img width="900" height="500" src="{{thumb}}" alt="{{title}}" />
-              <div class="carousel-caption">
-                <h3>{{title}}</h3>
-              </div>
-            {{else}}
-              <img data-src="holder.js/900x500/vine/text:{{title}}" alt="{{title}}" />
-            {{/if}}
-          </div>
-        {{/each}}
-      </div>
-    </div>
-  </script>
-  <!-- EO DIRECTORY -->
 
   <!-- PLAYER -->
   <script id="player-tpl" type="text/x-handlebars-template">
