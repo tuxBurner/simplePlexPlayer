@@ -38,7 +38,11 @@
 
   <!-- MENU ITEM -->
   <script id="menuitem-tpl" type="text/x-handlebars-template">
-    <div id="menuItem" class="{{type}}">
+    {{#if thumb}}
+      <div id="menuItem" class="{{type}}" style="background-image: url({{thumb}});">
+    {{else}}
+      <div id="menuItem" class="{{type}}">
+    {{/if}}
       <h4>{{title}}</h4>
     </div>
   </script>
@@ -46,13 +50,7 @@
 
   <!-- SETTINGS -->
   <script id="settings-tpl" type="text/x-handlebars-template">
-    <div class="carousel slide">
-      <div class="carousel-inner">
-        <div class="item" data-type="settings" data-id="-1" data-interval="false">
-          <img data-src="holder.js/900x500/lava/text:Settings" alt="Settings" />
-        </div>
-      </div>
-    </div>
+    SETTINGS
   </script>
   <!-- EO SETTINGS>
 
@@ -69,7 +67,7 @@
           {{#if thumb}}
             <img width="64" height="64" src="{{thumb}}" alt="{{title}}" />
           {{else}}
-            <img data-src="holder.js/64x64/vine/" alt="{{title}}" />
+            <i class="fa fa-file-audio-o  fa-3x"></i>
           {{/if}}
           </a>
          <div class="media-body">
@@ -92,9 +90,7 @@
 
   <!-- JS LIBARIES -->
   <script src="scripts/jquery-1.11.1.min.js"> </script>
-
   <script src="audiojs/audio.min.js"></script>
-  <script src="scripts/holder.js"></script>
   <script src="scripts/handlebars-v1.3.0.js"> </script>
   <script src="bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
   <script src="scripts/player.js"> </script>

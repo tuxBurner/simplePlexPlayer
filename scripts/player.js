@@ -152,14 +152,13 @@ var Player = function() {
     }
     if(dir.files.length > 0) {
 
-      menuItems.push({"title" : "Play All", "id" : dir.key, "type" : "playAll"});
+      menuItems.push({"title" : "Play All", "id" : dir.key, "type" : "playall"});
 
       for(idx in dir.files) {
         var file = dir.files[idx];
         menuItems.push({"title" : file.title, "id" : file.id, "type" : "file", "thumb" : file.thumb});
       }
     }
-
     return menuItems;
   }
 
@@ -202,7 +201,6 @@ var Player = function() {
     var content = this.templates[tplName](data);
     this.currentDisplayTpl = tplName;
     $('#mainContainer').html(content);
-    Holder.run();
     if(callBack !== undefined) {
       callBack();
     }
@@ -228,7 +226,7 @@ var Player = function() {
        that.displayPlayer(files,that.files[currentMenuItemId].title);
      }
 
-     if(currentMenuItemType.type == "playall") {
+     if(currentMenuItemType == "playall") {
        var files = that.directories[currentMenuItemId].files;
        this.displayPlayer(files,that.directories[currentMenuItemId].title);
      }

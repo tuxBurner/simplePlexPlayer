@@ -22,3 +22,29 @@ div.audiojs {
     -o-transition: none;
     transition: none;
 }
+
+#menuItem {
+  width: 800px;
+  height: 600px;
+  background-size: 800px 600px
+}
+
+#menuItem.section {
+  background-color: #428bca;
+}
+
+#menuItem.settings {
+  background-color: #d9534f;
+}
+
+#menuItem.directory {
+  background-color: #428bca;
+}
+
+#menuItem.playall {
+  background-color: #f0ad4e;
+}
+
+#menuItem.file {
+  background-color: #5cb85c;
+}
