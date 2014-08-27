@@ -79,6 +79,12 @@ var AudioJsWrapper = function(audioJs) {
     var percent = Math.round(percentage*100);
     $('#playList li.playing .progress .progress-bar').css("width",percent+"%").html(playedString);
   }
+
+  this.stop = function() {
+    if(this.audioJs.playing == true) {
+      this.audioJs.pause();
+    }
+  }
 }
 
 var Tools =  function() {}
@@ -170,7 +176,7 @@ var Player = function() {
     }
     if(dir.files.length > 1) {
 
-      menuItems.push({"title" : "Play All", "id" : dir.key, "type" : "playall"});
+      menuItems.push({"title" : "Play All", "id" : dir.key, "type" : "playall", "thumb" : dir.thumb});
     }
     for(idx in dir.files) {
       var file = dir.files[idx];
@@ -266,21 +272,21 @@ var Player = function() {
     var currentMenu = that.menuStack.pop();
 
     // destroy this ? or hold a audiojs instance all the time which would be smarter i guess
-    if(that.audioJsWrapper != null) {
-    }
+    that.audioJsWrapper.stop();
+
 
     switch(currentMenu.type) {
       case "playall":
         that.loadDirectory(currentMenu.id,player.config.baseUrl+currentMenu.id);
         break;
         case "file":
-          case "directory":
-            that.loadDirectory(currentMenu.parent,player.config.baseUrl+currentMenu.parent,currentMenu.id);
-            break;
-            default:
-              that.displayMainMenu();
-            }
-          }
+        case "directory":
+          that.loadDirectory(currentMenu.parent,player.config.baseUrl+currentMenu.parent,currentMenu.id);
+          break;
+        default:
+          that.displayMainMenu();
+    }
+  }
 
           this.initPlayer = function() {
             // Mark the first track
@@ -321,19 +327,14 @@ var Player = function() {
             that.displayContent("mainMenu",{},function() {that.initMenu(highlightMenuItem) });
           }
 
-          this.loadPlexXml = function(url, callback) {
-            $.get(url)
-            .done(function(data) {
-              $xml = $(data);
-              callback($xml);
-            })
-            .fail(function() {
-              alert("error");
-            });
-
-          }
-
-          this.toXml = function(xmlString) {
-            return $.parseXML(xmlString);
-          }
-        }
+  this.loadPlexXml = function(url, callback) {
+    $.get(url)
+      .done(function(data) {
+        $xml = $(data);
+        callback($xml);
+      })
+      .fail(function() {
+        alert("error");
+      });
+  }
+}

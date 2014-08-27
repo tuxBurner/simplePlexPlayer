@@ -28,7 +28,11 @@ $(function() {
           }
         // enter button
         } else if(e.which == 13) {
+          if(player.currentDisplayTpl != "player") {
             player.performAction();
+          } else {
+            player.audioJsWrapper.audioJs.playPause();
+          }
         } else if(e.which == 27) {
           player.performEscAction();
         }

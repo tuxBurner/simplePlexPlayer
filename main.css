@@ -26,7 +26,7 @@ div.audiojs {
 #menuItem {
   width: 800px;
   height: 600px;
-  background-size: 800px 600px;
+  background-size: 100% 100%;
   text-align: center;
   border: 1px solid #C3C3C3;
 }
