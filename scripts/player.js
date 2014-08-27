@@ -71,6 +71,11 @@ var AudioJsWrapper = function(audioJs) {
     $('#playList .progress').hide();
     $('#playList li.playing').removeClass('playing');
     $(next).addClass('playing');
+
+    $('#playListWrapper').animate({
+        scrollTop:$(next).offset().top
+    },'fast');
+
     this.loadTrack();
   }
 
