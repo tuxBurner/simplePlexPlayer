@@ -16,11 +16,11 @@ div.audiojs {
 
 /* disable transitions on the progress bars */
 .progress .progress-bar {
-    -webkit-transition: none;
-    -moz-transition: none;
-    -ms-transition: none;
-    -o-transition: none;
-    transition: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
 }
 
 #menuItem {
@@ -33,6 +33,14 @@ div.audiojs {
 #menuItem h3 {
   color: #333;
   opacity: 0.8;
+}
+
+
+#menuItem .breadcrumb {
+  position: relative;
+  top: 478px;
+  opacity: 0.8;
+
 }
 
 #menuItem.section {
@@ -52,13 +60,14 @@ div.audiojs {
 }
 
 #menuItem.playall:before {
-        position:absolute;
-        font-family: FontAwesome;
-        top:350px;
-        left:600px;
-        font-size: 200px;
-        content: "\f122"; <--- this is your text. You can also use UTF-8 character codes as I do here
-    }
+  position:absolute;
+  font-family: FontAwesome;
+  top:350px;
+  left:600px;
+  color: #FFFFFF;
+  font-size: 200px;
+  content: "\f122"; <--- this is your text. You can also use UTF-8 character codes as I do here
+}
 
 #menuItem.file {
   background-color: #5cb85c;

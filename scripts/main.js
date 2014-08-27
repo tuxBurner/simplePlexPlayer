@@ -28,7 +28,7 @@ $(function() {
           }
         // enter button
         } else if(e.which == 13) {
-          player.performAction();
+            player.performAction();
         } else if(e.which == 27) {
           player.performEscAction();
         }
