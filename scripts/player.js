@@ -166,8 +166,17 @@ var Player = function() {
     return menuItems;
   }
 
-  this.initMenu = function() {
-    that.currentMenuIdx = 0;
+  this.initMenu = function(highlightMenuItem) {
+    if(highlightMenuItem === undefined) {
+      that.currentMenuIdx = 0;
+    } else {
+      for(idx in that.currentMenuItems) {
+        if(that.currentMenuItems[idx].id == highlightMenuItem) {
+          that.currentMenuIdx = idx;
+          break;  
+        }
+      }
+    }
     that.displayMenuItem();
   }
 
@@ -198,12 +207,12 @@ var Player = function() {
   }
 
   this.displayPlayer = function(files,title) {
-    that.displayContent("player",{"files": files, "title" : title, "menuStack" : that.menuStack},this.initPlayer);
+    that.displayContent("player",{"files": files, "title" : title, "menuStack" : that.menuStack},that.initPlayer);
   }
 
   this.displayContent = function(tplName,data,callBack) {
-    var content = this.templates[tplName](data);
-    this.currentDisplayTpl = tplName;
+    var content = that.templates[tplName](data);
+    that.currentDisplayTpl = tplName;
     $('#mainContainer').html(content);
     if(callBack !== undefined) {
       callBack();
@@ -248,8 +257,7 @@ var Player = function() {
         break;
       case "file":
       case "directory":
-        console.error(currentMenu.parent);
-        that.loadDirectory(currentMenu.id,player.config.baseUrl+currentMenu.parent);
+        that.loadDirectory(currentMenu.parent,player.config.baseUrl+currentMenu.parent,currentMenu.id);
         break;
       default:
         that.displayMainMenu();
@@ -276,9 +284,8 @@ var Player = function() {
     that.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/all");
   }
 
-  this.loadDirectory = function(id,url) {
+  this.loadDirectory = function(id,url,highlightMenuItem) {
     var dir = that.directories[id];
-
     if(dir.initialized  == false) {
       that.loadPlexXml(url, function(data) {
         $('Directory',data).each(function(i) {
@@ -294,16 +301,16 @@ var Player = function() {
         });
         // we parsed this so mark it
         dir.initialized = true;
-        that.displayDir(dir);
+        that.displayDir(dir,highlightMenuItem);
       });
     } else {
-      that.displayDir(dir);
+      that.displayDir(dir,highlightMenuItem);
     }
   }
 
-  this.displayDir = function(directory) {
+  this.displayDir = function(directory,highlightMenuItem) {
     that.currentMenuItems = that.dirToMenuItem(directory);
-    that.displayContent("mainMenu",{},that.initMenu);
+    that.displayContent("mainMenu",{},function() {that.initMenu(highlightMenuItem) });
   }
 
   this.loadPlexXml = function(url, callback) {

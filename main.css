@@ -28,6 +28,7 @@ div.audiojs {
   height: 600px;
   background-size: 800px 600px;
   text-align: center;
+  border: 1px solid #C3C3C3;
 }
 
 #menuItem h3 {
@@ -63,7 +64,7 @@ div.audiojs {
   background-color: #d9534f;
 }
 
-#menuItem.settingss:before {
+#menuItem.settings:before {
   position:absolute;
   font-family: FontAwesome;
   top:350px;
