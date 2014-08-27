@@ -38,12 +38,20 @@
 
   <!-- MENU ITEM -->
   <script id="menuitem-tpl" type="text/x-handlebars-template">
-    {{#if thumb}}
-      <div id="menuItem" class="{{type}}" style="background-image: url({{thumb}});">
+    {{#if menuItem.thumb}}
+      <div id="menuItem" class="{{menuItem.type}}" style="background-image: url({{menuItem.thumb}});">
     {{else}}
-      <div id="menuItem" class="{{type}}">
+      <div id="menuItem" class="{{menuItem.type}}">
     {{/if}}
-      <h4>{{title}}</h4>
+      <h3 class="well">{{menuItem.title}}</h3>
+
+      {{#if menuStack}}
+      <ol class="breadcrumb">
+        {{#each menuStack}}
+          <li>{{title}}</li>
+        {{/each}}
+      </ol>
+      {{/if}}
     </div>
   </script>
   <!-- EO MENU ITEM -->

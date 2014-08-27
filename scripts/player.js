@@ -10,6 +10,8 @@ var Directory = function(key,title,thumb,parent) {
   this.addSubDir = function(key,title,thumb,player) {
     if(thumb !== undefined) {
       thumb = player.config.baseUrl+thumb;
+    } else {
+      thumb = this.thumb;
     }
     var dir = new Directory(key,title,thumb,this.key);
     this.subDirs.push(dir);
@@ -112,13 +114,16 @@ var Player = function() {
   this.currentMenuItems = [];
   this.currentMenuIdx = 0;
 
+  this.menuStack = [];
+
+
   this.init = function() {
     this.initTemplats();
     this.loadPlexXml(player.config.baseUrl+"/library/sections", function(data) {
       for(idx in player.config.allowedSections) {
         var sectionId = player.config.allowedSections[idx];
         $('Directory[key="'+sectionId+'"]',data).each(function(i) {
-          that.sections[sectionId] = new Directory(sectionId,$(this).attr('title'),-1,undefined,player);
+          that.sections[sectionId] = new Directory(sectionId,$(this).attr('title'),undefined,-1);
           that.directories[sectionId] = that.sections[sectionId];
         });
       }
@@ -148,16 +153,15 @@ var Player = function() {
     var menuItems = [];
     for(idx in dir.subDirs) {
       var subDir = dir.subDirs[idx];
-      menuItems.push({"title" : subDir.title, "id" : subDir.key, "type" : "directory", "thumb" : subDir.thumb});
+      menuItems.push({"title" : subDir.title, "id" : subDir.key, "type" : "directory", "thumb" : subDir.thumb, "parent" : dir.key});
     }
-    if(dir.files.length > 0) {
+    if(dir.files.length > 1) {
 
       menuItems.push({"title" : "Play All", "id" : dir.key, "type" : "playall"});
-
-      for(idx in dir.files) {
-        var file = dir.files[idx];
-        menuItems.push({"title" : file.title, "id" : file.id, "type" : "file", "thumb" : file.thumb});
-      }
+    }
+    for(idx in dir.files) {
+      var file = dir.files[idx];
+      menuItems.push({"title" : file.title, "id" : file.id, "type" : "file", "thumb" : file.thumb, "parent" : dir.key});
     }
     return menuItems;
   }
@@ -169,7 +173,7 @@ var Player = function() {
 
   this.displayMenuItem = function() {
     var menuItem = that.currentMenuItems[that.currentMenuIdx];
-    var content = that.templates["menuitem"](menuItem);
+    var content = that.templates["menuitem"]({"menuItem" : menuItem, "menuStack" : that.menuStack});
     $('#menuContainer').html(content);
   };
 
@@ -209,8 +213,12 @@ var Player = function() {
 
   this.performAction = function() {
 
-    var currentMenuItemType = that.currentMenuItems[that.currentMenuIdx].type;
-    var currentMenuItemId = that.currentMenuItems[that.currentMenuIdx].id;
+    var higlightedMenu = that.currentMenuItems[that.currentMenuIdx];
+
+    var currentMenuItemType = higlightedMenu.type;
+    var currentMenuItemId = higlightedMenu.id;
+
+    that.menuStack.push(higlightedMenu);
 
     if(currentMenuItemType == "section") {
       that.loadSection(currentMenuItemId);
@@ -233,8 +241,18 @@ var Player = function() {
   }
 
   this.performEscAction = function() {
-    if(this.currentDisplayTpl == "directory") {
-      this.displayMainMenu();
+    var currentMenu = that.menuStack.pop();
+    switch(currentMenu.type) {
+      case "playall":
+        that.loadDirectory(currentMenu.id,player.config.baseUrl+currentMenu.id);
+        break;
+      case "file":
+      case "directory":
+        console.error(currentMenu.parent);
+        that.loadDirectory(currentMenu.id,player.config.baseUrl+currentMenu.parent);
+        break;
+      default:
+        that.displayMainMenu();
     }
   }
 

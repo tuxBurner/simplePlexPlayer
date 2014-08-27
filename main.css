@@ -26,7 +26,13 @@ div.audiojs {
 #menuItem {
   width: 800px;
   height: 600px;
-  background-size: 800px 600px
+  background-size: 800px 600px;
+  text-align: center;
+}
+
+#menuItem h3 {
+  color: #333;
+  opacity: 0.8;
 }
 
 #menuItem.section {
@@ -44,6 +50,15 @@ div.audiojs {
 #menuItem.playall {
   background-color: #f0ad4e;
 }
+
+#menuItem.playall:before {
+        position:absolute;
+        font-family: FontAwesome;
+        top:350px;
+        left:600px;
+        font-size: 200px;
+        content: "\f122"; <--- this is your text. You can also use UTF-8 character codes as I do here
+    }
 
 #menuItem.file {
   background-color: #5cb85c;
