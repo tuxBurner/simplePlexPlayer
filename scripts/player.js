@@ -83,9 +83,9 @@ var AudioJsWrapper = function(audioJs) {
 
 var Tools =  function() {}
 Tools.readableDuration = function(duration) {
-    var m = Math.floor(duration / 60);
-    var s = Math.floor(duration % 60);
-    return ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
+  var m = Math.floor(duration / 60);
+  var s = Math.floor(duration % 60);
+  return ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
 }
 
 var Player = function() {
@@ -118,8 +118,21 @@ var Player = function() {
 
 
   this.init = function() {
-    this.initTemplats();
-    this.loadPlexXml(player.config.baseUrl+"/library/sections", function(data) {
+
+    // initialize the player
+    var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
+      trackEnded: function() {
+        that.audioJsWrapper.loadNextTrack(true);
+      },
+      updatePlayhead: function(percentage) {
+        that.audioJsWrapper.updatePercentage(percentage);
+      }
+    });
+
+    that.audioJsWrapper = new AudioJsWrapper(audioJs);
+
+    that.initTemplats();
+    that.loadPlexXml(player.config.baseUrl+"/library/sections", function(data) {
       for(idx in player.config.allowedSections) {
         var sectionId = player.config.allowedSections[idx];
         $('Directory[key="'+sectionId+'"]',data).each(function(i) {
@@ -132,7 +145,7 @@ var Player = function() {
   }
 
   this.initTemplats = function() {
-    this.templates = {
+    that.templates = {
       "mainMenu" : Handlebars.compile($("#main-tpl").html()),
       "player" : Handlebars.compile($("#player-tpl").html()),
       "menuitem" : Handlebars.compile($("#menuitem-tpl").html())
@@ -173,7 +186,7 @@ var Player = function() {
       for(idx in that.currentMenuItems) {
         if(that.currentMenuItems[idx].id == highlightMenuItem) {
           that.currentMenuIdx = idx;
-          break;  
+          break;
         }
       }
     }
@@ -233,99 +246,94 @@ var Player = function() {
       that.loadSection(currentMenuItemId);
     }
 
-     if(currentMenuItemType == "directory") {
-       that.loadDirectory(currentMenuItemId,player.config.baseUrl+currentMenuItemId);
-     }
+    if(currentMenuItemType == "directory") {
+      that.loadDirectory(currentMenuItemId,player.config.baseUrl+currentMenuItemId);
+    }
 
-     if(currentMenuItemType == "file") {
-       var files = [];
-       files.push(that.files[currentMenuItemId]);
-       that.displayPlayer(files,that.files[currentMenuItemId].title);
-     }
+    if(currentMenuItemType == "file") {
+      var files = [];
+      files.push(that.files[currentMenuItemId]);
+      that.displayPlayer(files,that.files[currentMenuItemId].title);
+    }
 
-     if(currentMenuItemType == "playall") {
-       var files = that.directories[currentMenuItemId].files;
-       this.displayPlayer(files,that.directories[currentMenuItemId].title);
-     }
+    if(currentMenuItemType == "playall") {
+      var files = that.directories[currentMenuItemId].files;
+      that.displayPlayer(files,that.directories[currentMenuItemId].title);
+    }
   }
 
   this.performEscAction = function() {
     var currentMenu = that.menuStack.pop();
+
+    // destroy this ? or hold a audiojs instance all the time which would be smarter i guess
+    if(that.audioJsWrapper != null) {
+    }
+
     switch(currentMenu.type) {
       case "playall":
         that.loadDirectory(currentMenu.id,player.config.baseUrl+currentMenu.id);
         break;
-      case "file":
-      case "directory":
-        that.loadDirectory(currentMenu.parent,player.config.baseUrl+currentMenu.parent,currentMenu.id);
-        break;
-      default:
-        that.displayMainMenu();
-    }
-  }
-
-  this.initPlayer = function() {
-    var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
-          trackEnded: function() {
-            that.audioJsWrapper.loadNextTrack(true);
-          },
-          updatePlayhead: function(percentage) {
-            that.audioJsWrapper.updatePercentage(percentage);
+        case "file":
+          case "directory":
+            that.loadDirectory(currentMenu.parent,player.config.baseUrl+currentMenu.parent,currentMenu.id);
+            break;
+            default:
+              that.displayMainMenu();
+            }
           }
-        });
 
-    // Mark the first track
-    $('#playList li').first().addClass('playing');
-    that.audioJsWrapper = new AudioJsWrapper(audioJs);
-    that.audioJsWrapper.loadTrack();
-  }
-
-  this.loadSection = function(id) {
-    that.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/all");
-  }
-
-  this.loadDirectory = function(id,url,highlightMenuItem) {
-    var dir = that.directories[id];
-    if(dir.initialized  == false) {
-      that.loadPlexXml(url, function(data) {
-        $('Directory',data).each(function(i) {
-          var key = $(this).attr('key');
-          var title = $(this).attr('title');
-          if(title != "All tracks") {
-            dir.addSubDir(key,title,$(this).attr('thumb'),that);
+          this.initPlayer = function() {
+            // Mark the first track
+            $('#playList li').first().addClass('playing');
+            that.audioJsWrapper.loadTrack();
           }
-        });
 
-        $('Track',data).each(function(i) {
-          dir.addFile($(this),that);
-        });
-        // we parsed this so mark it
-        dir.initialized = true;
-        that.displayDir(dir,highlightMenuItem);
-      });
-    } else {
-      that.displayDir(dir,highlightMenuItem);
-    }
-  }
+          this.loadSection = function(id) {
+            that.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/all");
+          }
 
-  this.displayDir = function(directory,highlightMenuItem) {
-    that.currentMenuItems = that.dirToMenuItem(directory);
-    that.displayContent("mainMenu",{},function() {that.initMenu(highlightMenuItem) });
-  }
+          this.loadDirectory = function(id,url,highlightMenuItem) {
+            var dir = that.directories[id];
+            if(dir.initialized  == false) {
+              that.loadPlexXml(url, function(data) {
+                $('Directory',data).each(function(i) {
+                  var key = $(this).attr('key');
+                  var title = $(this).attr('title');
+                  if(title != "All tracks") {
+                    dir.addSubDir(key,title,$(this).attr('thumb'),that);
+                  }
+                });
 
-  this.loadPlexXml = function(url, callback) {
-    $.get(url)
-    .done(function(data) {
-      $xml = $(data);
-      callback($xml);
-    })
-    .fail(function() {
-      alert("error");
-    });
+                $('Track',data).each(function(i) {
+                  dir.addFile($(this),that);
+                });
+                // we parsed this so mark it
+                dir.initialized = true;
+                that.displayDir(dir,highlightMenuItem);
+              });
+            } else {
+              that.displayDir(dir,highlightMenuItem);
+            }
+          }
 
-  }
+          this.displayDir = function(directory,highlightMenuItem) {
+            that.currentMenuItems = that.dirToMenuItem(directory);
+            that.displayContent("mainMenu",{},function() {that.initMenu(highlightMenuItem) });
+          }
 
-  this.toXml = function(xmlString) {
-    return $.parseXML(xmlString);
-  }
-}
+          this.loadPlexXml = function(url, callback) {
+            $.get(url)
+            .done(function(data) {
+              $xml = $(data);
+              callback($xml);
+            })
+            .fail(function() {
+              alert("error");
+            });
+
+          }
+
+          this.toXml = function(xmlString) {
+            return $.parseXML(xmlString);
+          }
+        }
