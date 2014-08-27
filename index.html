@@ -66,6 +66,13 @@
   <script id="player-tpl" type="text/x-handlebars-template">
     <div id="audioJsWrapper">
       <h1>{{title}}</h1>
+
+      <ol class="breadcrumb">
+        {{#each menuStack}}
+          <li>{{title}}</li>
+        {{/each}}
+      </ol>
+
       <audio id="audioJsAudio"></audio>
 
       <ul class="media-list" id="playList">

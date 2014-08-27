@@ -198,7 +198,7 @@ var Player = function() {
   }
 
   this.displayPlayer = function(files,title) {
-    this.displayContent("player",{"files": files, "title" : title},this.initPlayer);
+    that.displayContent("player",{"files": files, "title" : title, "menuStack" : that.menuStack},this.initPlayer);
   }
 
   this.displayContent = function(tplName,data,callBack) {

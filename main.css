@@ -55,6 +55,17 @@ div.audiojs {
   background-color: #428bca;
 }
 
+#menuItem.directory:before {
+  position:absolute;
+  font-family: FontAwesome;
+  top:350px;
+  left:600px;
+  color: #C3C3C3;
+  font-size: 200px;
+  content: "\f07c"; <--- this is your text. You can also use UTF-8 character codes as I do here
+}
+
+
 #menuItem.playall {
   background-color: #f0ad4e;
 }
@@ -71,4 +82,14 @@ div.audiojs {
 
 #menuItem.file {
   background-color: #5cb85c;
+}
+
+#menuItem.file:before {
+  position:absolute;
+  font-family: FontAwesome;
+  top:350px;
+  left:600px;
+  color: #C3C3C3;
+  font-size: 200px;
+  content: "\f1c7"; <--- this is your text. You can also use UTF-8 character codes as I do here
 }
