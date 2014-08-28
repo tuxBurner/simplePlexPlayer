@@ -65,44 +65,24 @@ var Player = function(config) {
     that.displayContent("mainMenu",{},that.initMenu);
   }
 
-  this.dirToMenuItem = function(dir) {
-    var menuItems = [];
-    for(idx in dir.subDirs) {
-      var subDir = dir.subDirs[idx];
-      menuItems.push(new MenuItem(subDir,"directory",dir.id));
-    }
-    if(dir.files.length > 1) {
-      menuItems.push(new MenuItem({"title" : "Play All", "id" : dir.id, "thumb" : dir.thumb},"playall"));
-    }
-    for(idx in dir.files) {
-      var file = dir.files[idx];
-      menuItems.push(new MenuItem(file,"file",dir.id));
-    }
-    return menuItems;
-  }
 
   this.initMenu = function(highlightMenuItem) {
-
+    // do we have a path in the hash url ?
     if(that.loadToStack.length > 0) {
       highlightMenuItem = that.loadToStack[0];
     }
 
     if(highlightMenuItem === undefined) {
-      that.currentMenuIdx = 0;
+      that.menuHandler.currentMenuIdx = 0;
     } else {
-      for(idx in that.currentMenuItems) {
-        if(that.currentMenuItems[idx].id == highlightMenuItem) {
-          that.currentMenuIdx = idx;
-          break;
-        }
-      }
+      that.menuHandler.setMenuIdxByMenuItem(highlightMenuItem);
     }
     that.displayMenuItem();
   }
 
   this.displayMenuItem = function() {
     var menuItem = that.menuHandler.getCurrentMenuItem();
-    var content = that.templates["menuitem"]({"menuItem" : menuItem, "menuStack" : that.menuStack});
+    var content = that.templates["menuitem"]({"menuItem" : menuItem, "menuStack" : that.menuHandler.menuStack});
     $('#menuContainer').html(content);
 
     if(that.loadToStack.length > 0) {
@@ -112,27 +92,13 @@ var Player = function(config) {
   };
 
   this.nextMenuItem = function(nextItem) {
-    if(that.currentMenuItems.length <= 1) {
-      return;
+    if(that.menuHandler.nextMenuItem(true) == true) {
+      that.displayMenuItem();
     }
-
-    if(nextItem == true) {
-      that.currentMenuIdx++;
-      if(that.currentMenuIdx == that.currentMenuItems.length) {
-        that.currentMenuIdx = 0;
-      }
-    } else {
-      that.currentMenuIdx--;
-      if(that.currentMenuIdx < 0) {
-        that.currentMenuIdx = that.currentMenuItems.length-1;
-      }
-    }
-
-    that.displayMenuItem();
   }
 
   this.displayPlayer = function(files,title) {
-    that.displayContent("player",{"files": files, "title" : title, "menuStack" : that.menuStack},that.initPlayer);
+    that.displayContent("player",{"files": files, "title" : title, "menuStack" : that.menuHandler.menuStack},that.initPlayer);
   }
 
   this.displayContent = function(tplName,data,callBack) {
@@ -176,26 +142,20 @@ var Player = function(config) {
 
 
   this.performEscAction = function() {
-
-    if(that.menuStack.length == 0) {
+    var removedMenuItem = that.menuHandler.removeLastMenuItemFromStack();
+    if(removedMenuItem == null) {
       return;
     }
 
-    var currentMenu = that.menuStack.pop();
-
-    that.menuStackToUrlHash();
-
-    // destroy this ? or hold a audiojs instance all the time which would be smarter i guess
     that.audioJsWrapper.stop();
 
-
-    switch(currentMenu.type) {
+    switch(removedMenuItem.type) {
       case "playall":
-        that.loadDirectory(currentMenu.id,false);
+        that.loadDirectory(removedMenuItem.id,false);
         break;
         case "file":
         case "directory":
-          that.loadDirectory(currentMenu.parent,false,currentMenu.id);
+          that.loadDirectory(removedMenuItem.parent,false,removedMenuItem.id);
           break;
         default:
           that.displayMainMenu();
@@ -241,7 +201,7 @@ var Player = function(config) {
           }
 
           this.displayDir = function(directory,highlightMenuItem) {
-            that.currentMenuItems = that.dirToMenuItem(directory);
+            that.menuHandler.initDirectoryMenu(directory);
             that.displayContent("mainMenu",{},function() {that.initMenu(highlightMenuItem) });
           }
 
