@@ -18,7 +18,7 @@ div.audiojs {
 #audioJsWrapper .playListWrapper {
   width: 795px;
   height: 460px;
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 #audioJsWrapper #playList li .progress {
