@@ -43,10 +43,30 @@ var File = function(id,title,mp3,thumb,readableDuration) {
   this.duration = readableDuration;
 }
 
+var MenuItem = function(obj,type,parentId) {
+  this.id = obj.id;
+  this.title = obj.title;
+  this.type = type;
+  this.thumb = obj.thumb;
+  this.parent = parentId;
+}
 
-var AudioJsWrapper = function(audioJs) {
+
+var AudioJsWrapper = function() {
+
+  var that = this;
+
+  // initialize the player
+  var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
+    trackEnded: function() {
+      that.loadNextTrack(true);
+    },
+    updatePlayhead: function(percentage) {
+      that.updatePercentage(percentage);
+    }
+  });
+
   this.audioJs = audioJs;
-
   this.total = undefined;
 
   this.loadTrack =  function() {
@@ -103,14 +123,14 @@ var AudioJsWrapper = function(audioJs) {
   }
 
   this.fwd = function(fwd) {
-    var newVal = player.audioJsWrapper.audioJs.element.currentTime;
+    var newVal = that.audioJs.element.currentTime;
     if(fwd ==  true) {
       newVal+=20;
     } else {
       newVal-=20;
     }
-    
-    this.audioJs.element.currentTime = newVal;
+
+    that.audioJs.element.currentTime = newVal;
   }
 }
 
@@ -121,13 +141,91 @@ Tools.readableDuration = function(duration) {
   return ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
 }
 
+var KeyBoardEventHandler = function(player) {
+
+  this.player = player;
+  this.lastTimeStamp = null;
+  this.eventTriggered = 0;
+
+  var that = this;
+
+  $(document).bind('keydown', function(e) {
+    that.handleKeyDown(e);
+  });
+  $(document).bind('keyup',function(e) {
+    that.handleKeyUp(e);
+  });
+
+  this.handleKeyDown = function(e) {
+    if(that.lastTimeStamp != null) {
+      var diff = e.timeStamp - that.lastTimeStamp;
+      if(diff >= 250) {
+        that.eventTriggered++;
+        that.lastTimeStamp = e.timeStamp;
+        if(that.player.currentDisplayTpl == "player") {
+          if(e.which == 39) {
+            that.player.audioJsWrapper.fwd(true);
+          }
+          if(e.which == 37) {
+            that.player.audioJsWrapper.fwd(false);
+          }
+        }
+      }
+    } else {
+      that.lastTimeStamp = e.timeStamp;
+    }
+  }
+
+  this.handleKeyUp = function(e) {
+    // reset last timestamp
+    that.lastTimeStamp = null;
+
+    // right button
+    if(e.which == 39){
+      if(that.player.currentDisplayTpl != "player") {
+        that.player.nextMenuItem(true);
+      }
+      if(that.player.currentDisplayTpl == "player") {
+        if(that.eventTriggered == 0) {
+          that.player.audioJsWrapper.loadNextTrack(true);
+        }
+      }
+    // left button
+    } else if(e.which == 37){
+      if(that.player.currentDisplayTpl != "player") {
+        that.player.nextMenuItem(false);
+      }
+      if(that.player.currentDisplayTpl == "player") {
+        if(that.player.currentDisplayTpl == "player") {
+          if(that.eventTriggered == 0) {
+            that.player.audioJsWrapper.loadNextTrack(false);
+          }
+        }
+      }
+    // enter button
+    } else if(e.which == 13) {
+      if(that.player.currentDisplayTpl != "player") {
+        that.player.performAction();
+      } else {
+        that.player.audioJsWrapper.audioJs.playPause();
+      }
+    } else if(e.which == 27) {
+      that.player.performEscAction();
+    }
+
+    // make sure that triggeredCounter is 0
+    that.eventTriggered = 0;
+
+  }
+}
+
 var Player = function() {
 
   var that = this;
 
   this.templates = {};
 
-  this.audioJsWrapper = null;
+  this.audioJsWrapper = new AudioJsWrapper();
 
   this.config = {
     // path to the the plex server
@@ -146,30 +244,17 @@ var Player = function() {
 
   this.currentMenuItems = [];
   this.currentMenuIdx = 0;
-
   this.menuStack = [];
 
   this.loadToStack = [];
+  this.keyBoardHandler = new KeyBoardEventHandler(that);
 
 
   this.init = function() {
-
-    // initialize the player
-    var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
-      trackEnded: function() {
-        that.audioJsWrapper.loadNextTrack(true);
-      },
-      updatePlayhead: function(percentage) {
-        that.audioJsWrapper.updatePercentage(percentage);
-      }
-    });
-
-    that.audioJsWrapper = new AudioJsWrapper(audioJs);
-
     that.initTemplats();
-    that.loadPlexXml(player.config.baseUrl+"/library/sections", function(data) {
-      for(idx in player.config.allowedSections) {
-        var sectionId = player.config.allowedSections[idx];
+    that.loadPlexXml(that.config.baseUrl+"/library/sections", function(data) {
+      for(idx in that.config.allowedSections) {
+        var sectionId = that.config.allowedSections[idx];
         $('Directory[key="'+sectionId+'"]',data).each(function(i) {
           that.sections[sectionId] = new Directory(sectionId,$(this).attr('title'),undefined,-1);
           that.directories[sectionId] = that.sections[sectionId];
@@ -187,6 +272,14 @@ var Player = function() {
     });
   }
 
+  this.handleKeyDown = function() {
+
+  }
+
+  this.handleKeyUp =  function() {
+
+  }
+
   this.initTemplats = function() {
     that.templates = {
       "mainMenu" : Handlebars.compile($("#main-tpl").html()),
@@ -199,9 +292,9 @@ var Player = function() {
     that.currentMenuItems = [];
     for(idx in that.sections) {
       var section = that.sections[idx];
-      that.currentMenuItems.push({"title" : section.title, "id" : section.id, "type" : "section"});
+      that.currentMenuItems.push(new MenuItem(section,"section",-1));
     }
-    that.currentMenuItems.push({"title" : "Settings", "id" : "-1" , "type" : "settings"});
+    /*that.currentMenuItems.push({"title" : "Settings", "id" : "-1" , "type" : "settings"});*/
     that.displayContent("mainMenu",{},that.initMenu);
   }
 
@@ -209,14 +302,14 @@ var Player = function() {
     var menuItems = [];
     for(idx in dir.subDirs) {
       var subDir = dir.subDirs[idx];
-      menuItems.push({"title" : subDir.title, "id" : subDir.id, "type" : "directory", "thumb" : subDir.thumb, "parent" : dir.id});
+      menuItems.push(new MenuItem(subDir,"directory",dir.id));
     }
     if(dir.files.length > 1) {
-      menuItems.push({"title" : "Play All", "id" : dir.id, "type" : "playall", "thumb" : dir.thumb});
+      menuItems.push(new MenuItem({"title" : "Play All", "id" : dir.id, "thumb" : dir.thumb},"playall"));
     }
     for(idx in dir.files) {
       var file = dir.files[idx];
-      menuItems.push({"title" : file.title, "id" : file.id, "type" : "file", "thumb" : file.thumb, "parent" : dir.id});
+      menuItems.push(new MenuItem(file,"file",dir.id));
     }
     return menuItems;
   }
@@ -330,6 +423,11 @@ var Player = function() {
   }
 
   this.performEscAction = function() {
+
+    if(that.menuStack.length == 0) {
+      return;
+    }
+
     var currentMenu = that.menuStack.pop();
 
     that.menuStackToUrlHash();
