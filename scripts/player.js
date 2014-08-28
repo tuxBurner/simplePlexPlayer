@@ -52,7 +52,9 @@ var MenuItem = function(obj,type,parentId) {
 }
 
 
-var AudioJsWrapper = function() {
+var AudioJsWrapper = function(skipSeconds) {
+
+  this.skipSeconds = skipSeconds;
 
   var that = this;
 
@@ -122,12 +124,13 @@ var AudioJsWrapper = function() {
     }
   }
 
-  this.fwd = function(fwd) {
+  this.fwd = function(fwd,eventCounter) {
     var newVal = that.audioJs.element.currentTime;
+    var amount = (eventCounter < that.skipSeconds.fastTrigger) ? that.skipSeconds.slow : that.skipSeconds.fast;
     if(fwd ==  true) {
-      newVal+=20;
+      newVal+=amount;
     } else {
-      newVal-=20;
+      newVal-=amount;
     }
 
     that.audioJs.element.currentTime = newVal;
@@ -164,10 +167,10 @@ var KeyBoardEventHandler = function(player) {
         that.lastTimeStamp = e.timeStamp;
         if(that.player.currentDisplayTpl == "player") {
           if(e.which == 39) {
-            that.player.audioJsWrapper.fwd(true);
+            that.player.audioJsWrapper.fwd(true,that.eventTriggered);
           }
           if(e.which == 37) {
-            that.player.audioJsWrapper.fwd(false);
+            that.player.audioJsWrapper.fwd(false,that.eventTriggered);
           }
         }
       }
@@ -219,20 +222,15 @@ var KeyBoardEventHandler = function(player) {
   }
 }
 
-var Player = function() {
+var Player = function(config) {
 
   var that = this;
 
   this.templates = {};
 
-  this.audioJsWrapper = new AudioJsWrapper();
+  this.audioJsWrapper = new AudioJsWrapper(config.skipSeconds);
 
-  this.config = {
-    // path to the the plex server
-    "baseUrl" :  "http://192.168.0.133:32400",
-    // allowed sections to play you can get them from http://192.168.0.133:32400/library/sections
-    "allowedSections" : [4]
-  }
+  this.config = config;
 
   this.sections = {};
 
