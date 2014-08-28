@@ -56,7 +56,6 @@ var AudioJsWrapper = function(audioJs) {
   }
 
   this.loadNextTrack = function(nextTitle) {
-
     var next = null;
 
     var scrollPos = $('#playListWrapper').data("scrollpos");
@@ -101,6 +100,17 @@ var AudioJsWrapper = function(audioJs) {
     if(this.audioJs.playing == true) {
       this.audioJs.pause();
     }
+  }
+
+  this.fwd = function(fwd) {
+    var newVal = player.audioJsWrapper.audioJs.element.currentTime;
+    if(fwd ==  true) {
+      newVal+=20;
+    } else {
+      newVal-=20;
+    }
+    
+    this.audioJs.element.currentTime = newVal;
   }
 }
 
