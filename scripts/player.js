@@ -1,21 +1,21 @@
-var Directory = function(key,title,thumb,parent) {
+var Directory = function(id,title,thumb,parent) {
   this.title = title;
-  this.key = key;
+  this.id = id;
   this.thumb = thumb;
   this.subDirs = [];
   this.files = [];
   this.parent = parent;
   this.initialized = false;
 
-  this.addSubDir = function(key,title,thumb,player) {
+  this.addSubDir = function(id,title,thumb,player) {
     if(thumb !== undefined) {
       thumb = player.config.baseUrl+thumb;
     } else {
       thumb = this.thumb;
     }
-    var dir = new Directory(key,title,thumb,this.key);
+    var dir = new Directory(id,title,thumb,this.id);
     this.subDirs.push(dir);
-    player.directories[key] = dir;
+    player.directories[id] = dir;
   }
 
   this.addFile = function(fileXml,player) {
@@ -67,14 +67,33 @@ var AudioJsWrapper = function(audioJs) {
       next = $('#playList li.playing').prev();
       if(next.length == 0) next = $('#playList li').last();
     }
+
+
+
     // hide all progress bars
     $('#playList .progress').hide();
     $('#playList li.playing').removeClass('playing');
     $(next).addClass('playing');
 
-    $('#playListWrapper').animate({
-        scrollTop:$(next).offset().top
-    },'fast');
+
+    var scrollPos = $('#playListWrapper').data("scrollpos");
+    var scrollOffset = $(next).outerHeight(true);
+    scrollPos = (nextTitle == true) ? scrollPos + scrollOffset : scrollPos - scrollOffset;
+    var totalHeight = document.getElementById('playListWrapper').scrollHeight;
+    console.error("Calc"+scrollPos);
+
+    if(scrollPos >= totalHeight) {
+      scrollPos = 0;
+    }
+    if(scrollPos < 0) {
+      scrollPos = totalHeight;
+    }
+
+    console.error("Corrected"+scrollPos);
+
+    // scroll the container
+    $('#playListWrapper').scrollTop(scrollPos)
+    $('#playListWrapper').data("scrollpos",scrollPos);
 
     this.loadTrack();
   }
@@ -127,6 +146,8 @@ var Player = function() {
 
   this.menuStack = [];
 
+  this.loadToStack = [];
+
 
   this.init = function() {
 
@@ -151,6 +172,16 @@ var Player = function() {
           that.directories[sectionId] = that.sections[sectionId];
         });
       }
+
+      // check if we have to load from the has
+      if(window.location.hash != "") {
+        that.loadToStack = window.location.hash.split(",");
+
+        // first is the section
+        that.loadToStack[0] = that.loadToStack[0].substring(1);
+        console.error(that.loadToStack);
+
+      }
       that.displayMainMenu();
     });
   }
@@ -167,7 +198,7 @@ var Player = function() {
     that.currentMenuItems = [];
     for(idx in that.sections) {
       var section = that.sections[idx];
-      that.currentMenuItems.push({"title" : section.title, "id" : section.key, "type" : "section"});
+      that.currentMenuItems.push({"title" : section.title, "id" : section.id, "type" : "section"});
     }
     that.currentMenuItems.push({"title" : "Settings", "id" : "-1" , "type" : "settings"});
     that.displayContent("mainMenu",{},that.initMenu);
@@ -177,20 +208,24 @@ var Player = function() {
     var menuItems = [];
     for(idx in dir.subDirs) {
       var subDir = dir.subDirs[idx];
-      menuItems.push({"title" : subDir.title, "id" : subDir.key, "type" : "directory", "thumb" : subDir.thumb, "parent" : dir.key});
+      menuItems.push({"title" : subDir.title, "id" : subDir.id, "type" : "directory", "thumb" : subDir.thumb, "parent" : dir.id});
     }
     if(dir.files.length > 1) {
-
-      menuItems.push({"title" : "Play All", "id" : dir.key, "type" : "playall", "thumb" : dir.thumb});
+      menuItems.push({"title" : "Play All", "id" : dir.id, "type" : "playall", "thumb" : dir.thumb});
     }
     for(idx in dir.files) {
       var file = dir.files[idx];
-      menuItems.push({"title" : file.title, "id" : file.id, "type" : "file", "thumb" : file.thumb, "parent" : dir.key});
+      menuItems.push({"title" : file.title, "id" : file.id, "type" : "file", "thumb" : file.thumb, "parent" : dir.id});
     }
     return menuItems;
   }
 
   this.initMenu = function(highlightMenuItem) {
+
+    if(that.loadToStack.length > 0) {
+      highlightMenuItem = that.loadToStack[0];
+    }
+
     if(highlightMenuItem === undefined) {
       that.currentMenuIdx = 0;
     } else {
@@ -208,6 +243,11 @@ var Player = function() {
     var menuItem = that.currentMenuItems[that.currentMenuIdx];
     var content = that.templates["menuitem"]({"menuItem" : menuItem, "menuStack" : that.menuStack});
     $('#menuContainer').html(content);
+
+    if(that.loadToStack.length > 0) {
+      that.loadToStack.shift();
+      that.performAction();
+    }
   };
 
   this.nextMenuItem = function(nextItem) {
@@ -253,12 +293,15 @@ var Player = function() {
 
     that.menuStack.push(higlightedMenu);
 
+    that.menuStackToUrlHash();
+
+
     if(currentMenuItemType == "section") {
       that.loadSection(currentMenuItemId);
     }
 
     if(currentMenuItemType == "directory") {
-      that.loadDirectory(currentMenuItemId,player.config.baseUrl+currentMenuItemId);
+      that.loadDirectory(currentMenuItemId,false);
     }
 
     if(currentMenuItemType == "file") {
@@ -273,8 +316,22 @@ var Player = function() {
     }
   }
 
+  this.menuStackToUrlHash = function() {
+    var hash = "";
+    if(that.menuStack.length > 0) {
+      var sep = "";
+      for(idx in that.menuStack) {
+        hash+=sep+that.menuStack[idx].id;
+        sep = ",";
+      }
+    }
+    window.location.hash = hash;
+  }
+
   this.performEscAction = function() {
     var currentMenu = that.menuStack.pop();
+
+    that.menuStackToUrlHash();
 
     // destroy this ? or hold a audiojs instance all the time which would be smarter i guess
     that.audioJsWrapper.stop();
@@ -282,11 +339,11 @@ var Player = function() {
 
     switch(currentMenu.type) {
       case "playall":
-        that.loadDirectory(currentMenu.id,player.config.baseUrl+currentMenu.id);
+        that.loadDirectory(currentMenu.id,false);
         break;
         case "file":
         case "directory":
-          that.loadDirectory(currentMenu.parent,player.config.baseUrl+currentMenu.parent,currentMenu.id);
+          that.loadDirectory(currentMenu.parent,false,currentMenu.id);
           break;
         default:
           that.displayMainMenu();
@@ -300,18 +357,22 @@ var Player = function() {
           }
 
           this.loadSection = function(id) {
-            that.loadDirectory(id,player.config.baseUrl+"/library/sections/"+id+"/all");
+            that.loadDirectory(id,true);
           }
 
-          this.loadDirectory = function(id,url,highlightMenuItem) {
+          this.loadDirectory = function(id,section,highlightMenuItem) {
+
+            var url = (section == true) ? "/library/sections/"+id+"/all" : "/library/metadata/"+id+"/children";
+            url = that.config.baseUrl+url;
+
             var dir = that.directories[id];
             if(dir.initialized  == false) {
               that.loadPlexXml(url, function(data) {
                 $('Directory',data).each(function(i) {
-                  var key = $(this).attr('key');
+                  var id = $(this).attr('ratingKey');
                   var title = $(this).attr('title');
                   if(title != "All tracks") {
-                    dir.addSubDir(key,title,$(this).attr('thumb'),that);
+                    dir.addSubDir(id,title,$(this).attr('thumb'),that);
                   }
                 });
 
