@@ -1,0 +1,112 @@
+//out: main.css
+
+// vars
+@containerWidth: 800px;
+@containerHeight: 600px;
+@menuItemIconWidth: 200px;
+@opacity: 0.8;
+
+// hide the audiojs player
+div.audiojs {
+  display: none;
+}
+
+
+// this is the general probs for a container
+.containerProbs {
+  width: @containerWidth;
+  height: @containerHeight;
+  background-size: 100% 100%;
+  text-align: center;
+  border: 1px solid #C3C3C3;
+}
+
+#audioJsWrapper {
+
+  .containerProbs;
+
+  .playListWrapper {
+    width: @containerWidth - 5;
+    height: @containerHeight - 140;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  #playList {
+    li .progress {
+      display: none;
+    }
+
+    li.playing {
+      background-color: #E1E1E1;
+      .progress {
+        display: block;
+      }
+    }
+
+    .progress .progress-bar {
+      -webkit-transition: none;
+      -moz-transition: none;
+      -ms-transition: none;
+      -o-transition: none;
+      transition: none;
+    }
+
+  }
+
+}
+
+#menuItem {
+
+  .containerProbs;
+
+  h3 {
+    color: #333;
+    opacity: @opacity;
+    margin-top: 0;
+  }
+
+  .breadcrumb {
+    position: relative;
+    top: @containerHeight - 124;
+    opacity: @opacity;
+  }
+
+  //
+  &:before {
+    position:absolute;
+    font-family: FontAwesome;
+    top:@containerHeight - 255;
+    left:@containerWidth - @menuItemIconWidth;
+    color: #C3C3C3;
+    font-size: @menuItemIconWidth;
+  }
+
+  &.section {
+    background-color: #428bca;
+    &:before {
+      content: "\f07c";
+    }
+  }
+
+  &.directory {
+    background-color: #428bca;
+    &:before {
+      content: "\f07c";
+    }
+  }
+
+  &.playall {
+    background-color: #f0ad4e;
+    &:before {
+      content: "\f122";
+    }
+  }
+
+  &.file {
+    background-color: #5cb85c;
+    &:before {
+      content: "\f1c7";
+    }
+  }
+}

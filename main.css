@@ -1,130 +1,88 @@
-/* highlight played item */
-li.playing {
-  background-color: #E1E1E1;
-}
-
-/* hide the audiojs player */
 div.audiojs {
   display: none;
 }
-
-
-/* hide the progress bars for the player */
-#playList li .progress {
-  display: none;
-}
-
-#playList li.playing .progress {
-  display: block;
-}
-
-/* disable transitions on the progress bars */
-.progress .progress-bar {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -ms-transition: none;
-  -o-transition: none;
-  transition: none;
-}
-
-#menuItem, #audioJsWrapper {
+.containerProbs {
   width: 800px;
   height: 600px;
   background-size: 100% 100%;
   text-align: center;
   border: 1px solid #C3C3C3;
 }
-
+#audioJsWrapper {
+  width: 800px;
+  height: 600px;
+  background-size: 100% 100%;
+  text-align: center;
+  border: 1px solid #C3C3C3;
+}
 #audioJsWrapper .playListWrapper {
   width: 795px;
   height: 460px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
-
+#audioJsWrapper #playList li .progress {
+  display: none;
+}
+#audioJsWrapper #playList li.playing {
+  background-color: #E1E1E1;
+}
+#audioJsWrapper #playList li.playing .progress {
+  display: block;
+}
+#audioJsWrapper #playList .progress .progress-bar {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+#menuItem {
+  width: 800px;
+  height: 600px;
+  background-size: 100% 100%;
+  text-align: center;
+  border: 1px solid #C3C3C3;
+}
 #menuItem h3 {
   color: #333;
   opacity: 0.8;
+  margin-top: 0;
 }
-
-
 #menuItem .breadcrumb {
   position: relative;
-  top: 478px;
+  top: 476px;
   opacity: 0.8;
-
 }
-
+#menuItem:before {
+  position: absolute;
+  font-family: FontAwesome;
+  top: 345px;
+  left: 600px;
+  color: #C3C3C3;
+  font-size: 200px;
+}
 #menuItem.section {
   background-color: #428bca;
 }
-
 #menuItem.section:before {
-  position:absolute;
-  font-family: FontAwesome;
-  top:350px;
-  left:600px;
-  color: #C3C3C3;
-  font-size: 200px;
-  content: "\f07c"; <--- this is your text. You can also use UTF-8 character codes as I do here
+  content: "\f07c";
 }
-
-
-
-#menuItem.settings {
-  background-color: #d9534f;
-}
-
-#menuItem.settings:before {
-  position:absolute;
-  font-family: FontAwesome;
-  top:350px;
-  left:600px;
-  color: #C3C3C3;
-  font-size: 200px;
-  content: "\f0ad"; <--- this is your text. You can also use UTF-8 character codes as I do here
-}
-
-
 #menuItem.directory {
   background-color: #428bca;
 }
-
 #menuItem.directory:before {
-  position:absolute;
-  font-family: FontAwesome;
-  top:350px;
-  left:600px;
-  color: #C3C3C3;
-  font-size: 200px;
-  content: "\f07c"; <--- this is your text. You can also use UTF-8 character codes as I do here
+  content: "\f07c";
 }
-
-
 #menuItem.playall {
   background-color: #f0ad4e;
 }
-
 #menuItem.playall:before {
-  position:absolute;
-  font-family: FontAwesome;
-  top:350px;
-  left:600px;
-  color: #FFFFFF;
-  font-size: 200px;
-  content: "\f122"; <--- this is your text. You can also use UTF-8 character codes as I do here
+  content: "\f122";
 }
-
 #menuItem.file {
   background-color: #5cb85c;
 }
-
 #menuItem.file:before {
-  position:absolute;
-  font-family: FontAwesome;
-  top:350px;
-  left:600px;
-  color: #C3C3C3;
-  font-size: 200px;
-  content: "\f1c7"; <--- this is your text. You can also use UTF-8 character codes as I do here
+  content: "\f1c7";
 }
