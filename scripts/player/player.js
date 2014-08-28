@@ -44,14 +44,6 @@ var Player = function(config) {
     });
   }
 
-  this.handleKeyDown = function() {
-
-  }
-
-  this.handleKeyUp =  function() {
-
-  }
-
   this.initTemplats = function() {
     that.templates = {
       "mainMenu" : Handlebars.compile($("#main-tpl").html()),
