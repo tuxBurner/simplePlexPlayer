@@ -51,7 +51,6 @@ var AudioJsWrapper = function(audioJs) {
 
   this.loadTrack =  function() {
     var trackSrc = $('#playList li.playing').attr('data-src');
-    $('#playList li.playing .progress').show();
     this.audioJs.load(trackSrc);
     this.audioJs.play();
   }
@@ -60,36 +59,30 @@ var AudioJsWrapper = function(audioJs) {
 
     var next = null;
 
+    var scrollPos = $('#playListWrapper').data("scrollpos");
+    var scrollOffset = 0;
+
     if(nextTitle == true) {
       next = $('#playList li.playing').next();
-      if(next.length == 0) next = $('#playList li').first();
+      if(next.length == 0) {
+        next = $('#playList li').first();
+        scrollPos = 0;
+      } else {
+        scrollPos+=$(next).outerHeight(true);
+      }
     } else {
       next = $('#playList li.playing').prev();
-      if(next.length == 0) next = $('#playList li').last();
+      if(next.length == 0) {
+        next = $('#playList li').last();
+        scrollPos=$('#playList').height()-$(next).outerHeight(true);;
+      } else {
+        scrollPos-=$('#playList li.playing').outerHeight(true);
+      }
     }
-
-
 
     // hide all progress bars
-    $('#playList .progress').hide();
     $('#playList li.playing').removeClass('playing');
     $(next).addClass('playing');
-
-
-    var scrollPos = $('#playListWrapper').data("scrollpos");
-    var scrollOffset = $(next).outerHeight(true);
-    scrollPos = (nextTitle == true) ? scrollPos + scrollOffset : scrollPos - scrollOffset;
-    var totalHeight = document.getElementById('playListWrapper').scrollHeight;
-    console.error("Calc"+scrollPos);
-
-    if(scrollPos >= totalHeight) {
-      scrollPos = 0;
-    }
-    if(scrollPos < 0) {
-      scrollPos = totalHeight;
-    }
-
-    console.error("Corrected"+scrollPos);
 
     // scroll the container
     $('#playListWrapper').scrollTop(scrollPos)
@@ -179,8 +172,6 @@ var Player = function() {
 
         // first is the section
         that.loadToStack[0] = that.loadToStack[0].substring(1);
-        console.error(that.loadToStack);
-
       }
       that.displayMainMenu();
     });

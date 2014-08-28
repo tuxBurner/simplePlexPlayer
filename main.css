@@ -10,8 +10,12 @@ div.audiojs {
 
 
 /* hide the progress bars for the player */
-.progress {
+#playList li .progress {
   display: none;
+}
+
+#playList li.playing .progress {
+  display: block;
 }
 
 /* disable transitions on the progress bars */
