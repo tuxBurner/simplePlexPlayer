@@ -162,7 +162,7 @@ var KeyBoardEventHandler = function(player) {
   this.handleKeyDown = function(e) {
     if(that.lastTimeStamp != null) {
       var diff = e.timeStamp - that.lastTimeStamp;
-      if(diff >= 250) {
+      if(diff >= that.player.config.skipSeconds.eventTimeOut) {
         that.eventTriggered++;
         that.lastTimeStamp = e.timeStamp;
         if(that.player.currentDisplayTpl == "player") {
