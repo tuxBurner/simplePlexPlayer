@@ -16,8 +16,10 @@ var Player = function(config) {
 
   this.currentDisplayTpl = ""
 
+  this.favMode = true;
 
   this.loadToStack = [];
+
   this.keyBoardHandler = new KeyBoardEventHandler(that);
   this.menuHandler = new MenuHandler();
 

@@ -12,11 +12,7 @@ var MenuHandler = function() {
   }
 
   this.initDirectoryMenu = function(dir) {
-    this.currentMenuItems = this.dirToMenuItem(dir);
-  }
 
-
-  this.dirToMenuItem = function(dir) {
     var menuItems = [];
     for(idx in dir.subDirs) {
       var subDir = dir.subDirs[idx];
@@ -29,8 +25,11 @@ var MenuHandler = function() {
       var file = dir.files[idx];
       menuItems.push(new MenuItem(file,"file",dir.id));
     }
-    return menuItems;
+
+    this.currentMenuItems = menuItems;
   }
+
+
 
 
   this.getCurrentMenuItem = function() {
