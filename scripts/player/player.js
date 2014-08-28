@@ -24,7 +24,7 @@ var Player = function(config) {
 
   this.init = function() {
     that.initTemplats();
-    that.loadPlexXml(that.config.baseUrl+"/library/sections", function(data) {
+    Tools.loadPlexXml(that.config.baseUrl+"/library/sections", function(data) {
       for(idx in that.config.allowedSections) {
         var sectionId = that.config.allowedSections[idx];
         $('Directory[key="'+sectionId+'"]',data).each(function(i) {
@@ -92,7 +92,8 @@ var Player = function(config) {
   };
 
   this.nextMenuItem = function(nextItem) {
-    if(that.menuHandler.nextMenuItem(true) == true) {
+    var drawNewMenuItem = that.menuHandler.nextMenuItem(nextItem);
+    if(drawNewMenuItem == true) {
       that.displayMenuItem();
     }
   }
@@ -179,7 +180,7 @@ var Player = function(config) {
 
             var dir = that.directories[id];
             if(dir.initialized  == false) {
-              that.loadPlexXml(url, function(data) {
+              Tools.loadPlexXml(url, function(data) {
                 $('Directory',data).each(function(i) {
                   var id = $(this).attr('ratingKey');
                   var title = $(this).attr('title');
@@ -205,14 +206,5 @@ var Player = function(config) {
             that.displayContent("mainMenu",{},function() {that.initMenu(highlightMenuItem) });
           }
 
-  this.loadPlexXml = function(url, callback) {
-    $.get(url)
-      .done(function(data) {
-        $xml = $(data);
-        callback($xml);
-      })
-      .fail(function() {
-        alert("error");
-      });
-  }
+
 }
