@@ -76,7 +76,7 @@ var Player = function(config) {
 
   this.displayMenuItem = function() {
     var menuItem = that.menuHandler.getCurrentMenuItem();
-    var content = that.templates["menuitem"]({"menuItem" : menuItem, "menuStack" : that.menuHandler.menuStack});
+    var content = that.templates["menuitem"]({"menuItem" : menuItem, "menuStack" : that.menuHandler.menuStack, "position" : that.menuHandler.currentMenuIdx+1, "itemsCount" : that.menuHandler.currentMenuItems.length});
     $('#menuContainer').html(content);
 
     if(that.loadToStack.length > 0) {

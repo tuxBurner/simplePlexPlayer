@@ -66,7 +66,7 @@ var MenuHandler = function() {
   this.setMenuIdxByMenuItem = function(highlightMenuItem) {
     for(idx in this.currentMenuItems) {
       if(this.currentMenuItems[idx].id == highlightMenuItem) {
-        this.currentMenuIdx = idx;
+        this.currentMenuIdx = new Number(idx);
         break;
       }
     }
