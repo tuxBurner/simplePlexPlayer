@@ -1,3 +1,4 @@
+var player = null;
 $(function() {
 
   var config = {
@@ -19,6 +20,6 @@ $(function() {
     }
   }
 
-  var player = new Player(config);
+  player = new Player(config);
   player.init();
 })
