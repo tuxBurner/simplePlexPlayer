@@ -6,6 +6,20 @@
 @menuItemIconWidth: 200px;
 @opacity: 0.8;
 
+body {
+  min-width: @containerWidth;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden;
+}
+
+.container {
+  width: @containerWidth;
+  max-width: none !important;
+  padding: 0px;
+  margin: 0px;
+}
+
 // hide the audiojs player
 div.audiojs {
   display: none;
@@ -77,7 +91,7 @@ div.audiojs {
     position:absolute;
     font-family: FontAwesome;
     top:@containerHeight - 270;
-    left:@containerWidth - @menuItemIconWidth;
+    left:@containerWidth - @menuItemIconWidth - 20;
     color: #C3C3C3;
     font-size: @menuItemIconWidth;
   }

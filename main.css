@@ -1,3 +1,15 @@
+body {
+  min-width: 800px;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden;
+}
+.container {
+  width: 800px;
+  max-width: none !important;
+  padding: 0px;
+  margin: 0px;
+}
 div.audiojs {
   display: none;
 }
@@ -5,6 +17,7 @@ div.audiojs {
   width: 800px;
   height: 600px;
   background-size: 100% 100%;
+  background-repeat: no-repeat;
   text-align: center;
   border: 1px solid #C3C3C3;
 }
@@ -12,6 +25,7 @@ div.audiojs {
   width: 800px;
   height: 600px;
   background-size: 100% 100%;
+  background-repeat: no-repeat;
   text-align: center;
   border: 1px solid #C3C3C3;
 }
@@ -41,6 +55,7 @@ div.audiojs {
   width: 800px;
   height: 600px;
   background-size: 100% 100%;
+  background-repeat: no-repeat;
   text-align: center;
   border: 1px solid #C3C3C3;
 }
@@ -58,7 +73,7 @@ div.audiojs {
   position: absolute;
   font-family: FontAwesome;
   top: 330px;
-  left: 600px;
+  left: 580px;
   color: #C3C3C3;
   font-size: 200px;
 }
