@@ -1,0 +1,119 @@
+http://www.itbasic.de/raspberry-pi-browser-nach-systemstart-im-fullscreen-starten/
+sudo apt-get install gstreamer0.10-plugins-base gstreamer0.10-plugins-good gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly
+
+-- KEYBOARD --
+http://www.raspberrypi.org/forums/viewtopic.php?f=78&t=29962
+https://github.com/dozencrows/pikeyd.git
+git clone  https://github.com/dozencrows/pikeyd.git
+cd pikeyd/
+git checkout rotary
+make
+sudo ./pikeyd -pu
+
+Verkabelung: gpio und ground
+
+
+npm config set registry http://registry.npmjs.org/
+npm install rpi-gpio
+wget http://nodejs.org/dist/v0.10.2/node-v0.10.2-linux-arm-pi.tar.gz
+
+
+-- EASY GPIO MANAGER FOR TESTING --
+
+git clone https://github.com/quick2wire/quick2wire-gpio-admin.git
+cd  quick2wire-gpio-admin/
+make
+sudo make install
+
+-- MIDORI ORIGIN ACCESS --
+~/.config/midori/config
+enable-universal-access-from-file-uris=true
+
+
+-- CONFIGS --
+
+
+/etc/network/interfaces
+auto lo
+
+iface lo inet loopback
+#iface eth0 inet dhcp
+
+auto wlan0
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+#wpa-ap-scan 1
+#wpa-scan-ssid 1
+wpa-ssid "suckOnMe"
+wpa-psk "PSKHERE"
+#wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+#iface default inet dhcp
+
+
+/home/pi/startPlayer.sh
+#!/bin/sh
+unclutter &
+matchbox-window-manager & :
+xset -dpms
+xset s off
+while true; do
+/usr/bin/midori -e Fullscreen -a /home/pi/simplePlexPlayer/index.html
+done
+
+
+/boot/config.txt
+# uncomment if you get no picture on HDMI for a default "safe" mode
+#hdmi_safe=1
+
+# uncomment this if your display has a black border of unused pixels visible
+# and your display can output without overscan
+disable_overscan=1
+
+# uncomment the following to adjust overscan. Use positive numbers if console
+# goes off screen, and negative if there is too much border
+overscan_left=48
+overscan_right=16
+overscan_top=16
+overscan_bottom=16
+
+# uncomment to force a console size. By default it will be display's size minus
+# overscan.
+framebuffer_width=800
+framebuffer_height=600
+
+# uncomment if hdmi display is not detected and composite is being output
+#hdmi_force_hotplug=1
+
+# uncomment to force a specific HDMI mode (this will force VGA)
+#hdmi_group=1
+#hdmi_mode=1
+
+# uncomment to force a HDMI mode rather than DVI. This can make audio work in
+# DMT (computer monitor) modes
+#hdmi_drive=2
+
+# uncomment to increase signal to HDMI, if you have interference, blanking, or
+# no display
+#config_hdmi_boost=4
+
+# uncomment for composite PAL
+sdtv_mode=2
+sdtv_aspect=3
+
+#uncomment to overclock the arm. 700 MHz is the default.
+arm_freq=900
+
+# for more options see http://elinux.org/RPi_config.txt
+
+# NOOBS Auto-generated Settings:
+#hdmi_force_hotplug=1
+config_hdmi_boost=4
+#overscan_left=24
+#overscan_right=24
+#overscan_top=16
+#overscan_bottom=16
+disable_overscan=1
+core_freq=250
+sdram_freq=450
+over_voltage=2
+gpu_mem=128
