@@ -17,14 +17,23 @@ gpio.on('export', function(channel) {
   console.log('Channel set: ' + channel);
 });
 
+/**
+* turns the display on
+*/
 var turnDisplayOn = function(res) {
   writeValToPin(true,res)
 }
 
+/**
+* turns the display off
+*/
 var turnDisplayOff = function(res) {
   writeValToPin(false,res);
 }
 
+/**
+* writes the value to the relay pin
+*/
 var writeValToPin = function(value,res) {
   gpio.write(conf.displayOnOfPin, value, function(err) {
     if (err) {
@@ -41,7 +50,6 @@ var writeValToPin = function(value,res) {
   });
 }
 
-
 /**
 * #### THE EXPRESS STUFF ####
 */
@@ -57,6 +65,7 @@ app.get('/display/off', function(req, res){
 
 var server = app.listen(conf.serverPort, function() {
     console.log('Listening on port %d', server.address().port);
+    // setup the gpio pin
     gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
 });
 
