@@ -8,7 +8,7 @@ var conf = require('./config.json');
 /**
 * #### THE GPIO STUFF ####
 **/
-var gpio   = require('rpi-gpio');
+var gpio = require('rpi-gpio');
 
 /**
 DEBUG when channel is set
@@ -17,8 +17,28 @@ gpio.on('export', function(channel) {
   console.debug('Channel set: ' + channel);
 });
 
-var DisplayHandler = require('./displayRelayHandler.js');
-var displayHandler = new DisplayHandler(conf.displayOnOfPin,gpio);
+gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT);
+
+var turnDisplayOn = function() {
+  writeValToPin(false);
+}
+
+var turnDisplayOff = function() {
+  writeValToPin(true);
+}
+
+var writeValToPin = function(value) {
+  gpio.write(conf.displayOnOfPin, value, function(err) {
+    if (err) {
+      console.error(err);
+    }
+  });
+}
+
+// make sure display is turned on
+turnDisplayOn();
+
+
 
 /**
 * #### THE EXPRESS STUFF ####
