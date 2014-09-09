@@ -12,10 +12,11 @@ sudo ./pikeyd -pu
 
 Verkabelung: gpio und ground
 
-
-npm config set registry http://registry.npmjs.org/
-npm install rpi-gpio
+-- BACKEND --
 wget http://nodejs.org/dist/v0.10.2/node-v0.10.2-linux-arm-pi.tar.gz
+entpacken
+cd backend im projekt
+sudo /home/pi/backend/node-v0.10.2-linux-arm-pi/bin/node server.js
 
 
 -- EASY GPIO MANAGER FOR TESTING --
