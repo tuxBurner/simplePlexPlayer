@@ -17,7 +17,7 @@ gpio.on('export', function(channel) {
   console.debug('Channel set: ' + channel);
 });
 
-gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT);
+gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
 
 var turnDisplayOn = function() {
   writeValToPin(false);
@@ -34,11 +34,6 @@ var writeValToPin = function(value) {
     }
   });
 }
-
-// make sure display is turned on
-turnDisplayOn();
-
-
 
 /**
 * #### THE EXPRESS STUFF ####
