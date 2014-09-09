@@ -17,23 +17,30 @@ gpio.on('export', function(channel) {
   console.log('Channel set: ' + channel);
 });
 
-gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
-
-var turnDisplayOn = function() {
-  writeValToPin(true);
+var turnDisplayOn = function(res) {
+  writeValToPin(true,res)
 }
 
-var turnDisplayOff = function() {
-  writeValToPin(false);
+var turnDisplayOff = function(res) {
+  writeValToPin(false,res);
 }
 
-var writeValToPin = function(value) {
+var writeValToPin = function(value,res) {
   gpio.write(conf.displayOnOfPin, value, function(err) {
     if (err) {
       console.error(err);
+      if(res !== null) {
+        res.send("FAILURE");
+      }
+    } else {
+      console.log();
+      if(res !== null) {
+        res.send("OK");
+      }
     }
   });
 }
+
 
 /**
 * #### THE EXPRESS STUFF ####
@@ -41,15 +48,16 @@ var writeValToPin = function(value) {
 var express = require('express');
 var app = express();
 app.get('/display/on', function(req, res){
-  turnDisplayOn();
+  turnDisplayOn(res);
 });
 
 app.get('/display/off', function(req, res){
-  turnDisplayOff();
+  turnDisplayOff(res);
 });
 
 var server = app.listen(conf.serverPort, function() {
     console.log('Listening on port %d', server.address().port);
+    gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
 });
 
 
