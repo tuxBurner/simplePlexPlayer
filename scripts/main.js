@@ -19,7 +19,7 @@ $(function() {
       "action" : 13
     },
     "backenUrl" : "http://localhost:8080",
-    "sleepTimeOut" : 10
+    "sleepTimeOut" : 600
   }
 
   player = new Player(config);
