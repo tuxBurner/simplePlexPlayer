@@ -20,11 +20,11 @@ gpio.on('export', function(channel) {
 gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
 
 var turnDisplayOn = function() {
-  writeValToPin(false);
+  writeValToPin(true);
 }
 
 var turnDisplayOff = function() {
-  writeValToPin(true);
+  writeValToPin(false);
 }
 
 var writeValToPin = function(value) {
