@@ -16,6 +16,7 @@ Verkabelung: gpio und ground
 wget http://nodejs.org/dist/v0.10.2/node-v0.10.2-linux-arm-pi.tar.gz
 entpacken
 cd backend im projekt
+npm install
 sudo /home/pi/backend/node-v0.10.2-linux-arm-pi/bin/node server.js
 
 
