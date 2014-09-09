@@ -216,7 +216,7 @@ var Player = function(config) {
 
   this.handleTimeOut = function() {
     // turn off the player
-    that.audioJsWrapper.stop();
+    //that.audioJsWrapper.stop();
 
     // turn off the display
     $.get(that.config.backenUrl+"/display/off");
