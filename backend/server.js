@@ -14,7 +14,7 @@ var gpio = require('rpi-gpio');
 DEBUG when channel is set
 */
 gpio.on('export', function(channel) {
-  console.debug('Channel set: ' + channel);
+  console.log('Channel set: ' + channel);
 });
 
 gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
