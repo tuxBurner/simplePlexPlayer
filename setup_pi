@@ -29,6 +29,7 @@ sudo make install
 
 -- MIDORI ORIGIN ACCESS --
 ~/.config/midori/config
+[settings]
 enable-universal-access-from-file-uris=true
 
 
@@ -59,7 +60,7 @@ matchbox-window-manager & :
 xset -dpms
 xset s off
 while true; do
-/usr/bin/midori -e Fullscreen -a /home/pi/simplePlexPlayer/index.html
+/usr/bin/midori -e Fullscreen -a /home/pi/simplePlexPlayer/index.html -c ~/.config/midori
 done
 
 
