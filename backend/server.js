@@ -41,11 +41,11 @@ var writeValToPin = function(value) {
 var express = require('express');
 var app = express();
 app.get('/display/on', function(req, res){
-  displayHandler.turnDisplayOn();
+  turnDisplayOn();
 });
 
 app.get('/display/off', function(req, res){
-  displayHandler.turnDisplayOff();
+  turnDisplayOff();
 });
 
 var server = app.listen(conf.serverPort, function() {
