@@ -1,8 +1,8 @@
 module.exports =  function(gpioPin,gpio) {
-  this.gpioPin = gpioPin;
-  this.gpio = gpio;
+  this._gpioPin = gpioPin;
+  this._gpio = gpio;
 
-  gpio.setup(gpioPin, gpio.DIR_OUT);
+  this._gpio.setup(this._gpioPin,this._gpio.DIR_OUT);
 
 
   this.turnDisplayOn = function() {
@@ -22,5 +22,5 @@ module.exports =  function(gpioPin,gpio) {
   }
 
   // make sure display is turned on
-  this.turnDisplayOn();
+  //this.turnDisplayOn();
 }
