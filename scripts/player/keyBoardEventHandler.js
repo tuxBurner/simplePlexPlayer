@@ -73,5 +73,8 @@ var KeyBoardEventHandler = function(player) {
     // make sure that triggeredCounter is 0
     that.eventTriggered = 0;
 
+    // user interaction means new sleeptimeout
+    that.player.startTimeOut();
+
   }
 }

@@ -23,6 +23,8 @@ var Player = function(config) {
   this.keyBoardHandler = new KeyBoardEventHandler(that);
   this.menuHandler = new MenuHandler();
 
+  this.timeOut = null;
+
 
   this.init = function() {
     that.initTemplats();
@@ -44,7 +46,12 @@ var Player = function(config) {
       }
       that.displayMainMenu();
     });
+
+    if(that.config.sleepTimeOut !== undefined) {
+      that.startTimeOut();
+    }
   }
+
 
   this.initTemplats = function() {
     that.templates = {
@@ -107,7 +114,6 @@ var Player = function(config) {
 
 
   this.performAction = function() {
-
     var higlightedMenu = that.menuHandler.getCurrentMenuItem();
 
     var currentMenuItemType = higlightedMenu.type;
@@ -199,6 +205,22 @@ var Player = function(config) {
             that.menuHandler.initDirectoryMenu(directory);
             that.displayContent("mainMenu",{},function() {that.initMenu(highlightMenuItem) });
           }
+
+  this.startTimeOut = function() {
+    clearTimeout(that.timeOut)
+    that.timeOut = setTimeout(that.handleTimeOut, that.config.sleepTimeOut * 1000);
+
+    // make sure the display is on
+    $.get(that.config.backenUrl+"/display/on");
+  }
+
+  this.handleTimeOut = function() {
+    // turn off the player
+    that.audioJsWrapper.stop();
+
+    // turn off the display
+    $.get(that.config.backenUrl+"/display/off");
+  }
 
 
 }
