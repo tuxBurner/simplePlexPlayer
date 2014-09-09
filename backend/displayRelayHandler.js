@@ -2,7 +2,7 @@ module.exports =  function(gpioPin,gpio) {
   this.gpioPin = gpioPin;
   this.gpio = gpio;
 
-  this.gpio.setup(gpioPin, gpio.DIR_OUT);
+  gpio.setup(gpioPin, gpio.DIR_OUT);
 
 
   this.turnDisplayOn = function() {
