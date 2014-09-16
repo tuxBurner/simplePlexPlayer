@@ -37,6 +37,13 @@ var KeyBoardEventHandler = function(player) {
   }
 
   this.handleKeyUp = function(e) {
+
+    // display off well pushing any button just turns it on nothing else
+    if(that.player.displayOff == true) {
+      that.player.startTimeOut();
+      return;
+    }
+
     // reset last timestamp
     that.lastTimeStamp = null;
     switch(e.which) {

@@ -25,6 +25,8 @@ var Player = function(config) {
 
   this.timeOut = null;
 
+  this.displayOff = false;
+
 
   this.init = function() {
     that.initTemplats();
@@ -207,6 +209,9 @@ var Player = function(config) {
           }
 
   this.startTimeOut = function() {
+
+    that.displayOff = false;
+
     clearTimeout(that.timeOut)
     that.timeOut = setTimeout(that.handleTimeOut, that.config.sleepTimeOut * 1000);
 
@@ -215,8 +220,7 @@ var Player = function(config) {
   }
 
   this.handleTimeOut = function() {
-    // turn off the player
-    //that.audioJsWrapper.stop();
+    that.displayOff = true;
 
     // turn off the display
     $.get(that.config.backenUrl+"/display/off");
