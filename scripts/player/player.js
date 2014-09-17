@@ -210,13 +210,15 @@ var Player = function(config) {
 
   this.startTimeOut = function() {
 
+    if(that.displayOff == true) {
+      // make sure the display is on
+      $.get(that.config.backenUrl+"/display/on");
+    }
+
     that.displayOff = false;
 
     clearTimeout(that.timeOut)
     that.timeOut = setTimeout(that.handleTimeOut, that.config.sleepTimeOut * 1000);
-
-    // make sure the display is on
-    $.get(that.config.backenUrl+"/display/on");
   }
 
   this.handleTimeOut = function() {
