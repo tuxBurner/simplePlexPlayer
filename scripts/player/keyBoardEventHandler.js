@@ -45,7 +45,7 @@ var KeyBoardEventHandler = function(player) {
     }
 
 
-    if(that.rotaryMode == true) {
+    if(that.rotaryMode == true && (that.keyMapping.left == e.which || that.keyMapping.right == e.which)) {
       if(that.player.currentDisplayTpl == "player") {
 
          if(that.lastTimeStamp == null) {
