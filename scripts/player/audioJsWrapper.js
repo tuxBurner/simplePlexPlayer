@@ -49,6 +49,7 @@ var AudioJsWrapper = function(skipSeconds) {
 
     // hide all progress bars
     $('#playList li.playing .playtime').text('00:00');
+    $('#playList li.playing .playprogress').css("width","0%");
     $('#playList li.playing').removeClass('playing');
     $(next).addClass('playing');
 
@@ -62,7 +63,6 @@ var AudioJsWrapper = function(skipSeconds) {
   this.updatePercentage = function(percentage) {
     var playedString = Tools.readableDuration(this.audioJs.duration * percentage);
     var percent = Math.round(percentage*100);
-    //$('#playList li.playing .progress .progress-bar').css("width",percent+"%").html(playedString);
     $('#playList li.playing .playprogress').css("width",percent+"%");
     $('#playList li.playing .playtime').text(playedString);
   }
