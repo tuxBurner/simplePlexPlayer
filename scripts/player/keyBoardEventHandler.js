@@ -5,6 +5,7 @@ var KeyBoardEventHandler = function(player) {
   this.eventTriggered = 0;
   this.keyMapping = player.config.keyMapping;
   this.rotaryMode = player.config.rotaryInput;
+  this.rotaryEventTimeout = player.config.rotaryEventTimeout;
 
   var that = this;
 
@@ -47,7 +48,6 @@ var KeyBoardEventHandler = function(player) {
 
     if(that.rotaryMode == true && (that.keyMapping.left == e.which || that.keyMapping.right == e.which)) {
       if(that.player.currentDisplayTpl == "player") {
-
          if(that.lastTimeStamp == null) {
           that.lastTimeStamp = e.timeStamp;
           return;
@@ -55,7 +55,7 @@ var KeyBoardEventHandler = function(player) {
 
         // get the diff
         var diff = e.timeStamp - that.lastTimeStamp;
-        if(diff < 300) {
+        if(diff < that.rotaryEventTimeout) {
           that.eventTriggered++;
           that.playerForward(e);
           that.lastTimeStamp = e.timeStamp;
