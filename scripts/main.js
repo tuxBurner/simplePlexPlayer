@@ -18,6 +18,7 @@ $(function() {
       "back" : 27,
       "action" : 13
     },
+    "rotaryInput" : true,
     "backenUrl" : "http://localhost:8080",
     "sleepTimeOut" : 600
   }

@@ -4,6 +4,7 @@ var KeyBoardEventHandler = function(player) {
   this.lastTimeStamp = null;
   this.eventTriggered = 0;
   this.keyMapping = player.config.keyMapping;
+  this.rotaryMode = player.config.rotaryInput;
 
   var that = this;
 
@@ -15,20 +16,19 @@ var KeyBoardEventHandler = function(player) {
   });
 
   this.handleKeyDown = function(e) {
+
+    // we cant use this when in rotary mode
+    if(that.rotaryMode == true) {
+      return;
+    }
+
     if(that.lastTimeStamp != null) {
       var diff = e.timeStamp - that.lastTimeStamp;
       if(diff >= that.player.config.skipSeconds.eventTimeOut) {
         that.eventTriggered++;
         that.lastTimeStamp = e.timeStamp;
         if(that.player.currentDisplayTpl == "player") {
-          switch(e.which) {
-            case that.keyMapping.left:
-              that.player.audioJsWrapper.fwd(false,that.eventTriggered);
-              break;
-            case that.keyMapping.right:
-              that.player.audioJsWrapper.fwd(true,that.eventTriggered);
-              break;
-          }
+          that.playerForward(e);
         }
       }
     } else {
@@ -44,8 +44,30 @@ var KeyBoardEventHandler = function(player) {
       return;
     }
 
+
+    if(that.rotaryMode == true) {
+      if(that.player.currentDisplayTpl == "player") {
+
+         if(that.lastTimeStamp == null) {
+          that.lastTimeStamp = e.timeStamp;
+          return;
+        }
+
+        // get the diff
+        var diff = e.timeStamp - that.lastTimeStamp;
+        if(diff < 300) {
+          that.eventTriggered++;
+          that.playerForward(e);
+          that.lastTimeStamp = e.timeStamp;
+          return;
+
+        }
+      }
+    }
+
     // reset last timestamp
     that.lastTimeStamp = null;
+
     switch(e.which) {
       case that.keyMapping.left:
         if(that.player.currentDisplayTpl != "player") {
@@ -83,5 +105,16 @@ var KeyBoardEventHandler = function(player) {
     // user interaction means new sleeptimeout
     that.player.startTimeOut();
 
+  }
+
+  this.playerForward = function(e) {
+    switch(e.which) {
+      case that.keyMapping.left:
+        that.player.audioJsWrapper.fwd(false,that.eventTriggered);
+      break;
+      case that.keyMapping.right:
+        that.player.audioJsWrapper.fwd(true,that.eventTriggered);
+      break;
+    }
   }
 }
