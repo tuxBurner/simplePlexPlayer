@@ -7,16 +7,32 @@ var KeyBoardEventHandler = function(player) {
   this.rotaryMode = player.config.rotaryInput;
   this.rotaryEventTimeout = player.config.rotaryEventTimeout;
 
+  this.actionDown = false;
+  this.backDown = false;
+
   var that = this;
 
   $(document).bind('keydown', function(e) {
     that.handleKeyDown(e);
   });
+
   $(document).bind('keyup',function(e) {
     that.handleKeyUp(e);
   });
 
   this.handleKeyDown = function(e) {
+    switch(e.which) {
+      case that.keyMapping.action:
+        that.actionDown = true;
+      break;
+      case that.keyMapping.back:
+        that.backDown = true;
+      break;
+    }
+
+    if(that.backDown == true && that.actionDown == true) {
+      window.location.reload;
+    }
 
     // we cant use this when in rotary mode
     if(that.rotaryMode == true) {
@@ -85,9 +101,11 @@ var KeyBoardEventHandler = function(player) {
         }
         break;
       case that.keyMapping.back:
+        that.backDown = false;
         that.player.performEscAction();
         break;
       case that.keyMapping.action:
+        that.actionDown = false;
         if(that.player.currentDisplayTpl != "player") {
           that.player.performAction();
         } else {

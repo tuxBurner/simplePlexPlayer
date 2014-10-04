@@ -43,13 +43,16 @@
     {{else}}
       <div id="menuItem" class="{{menuItem.type}}">
     {{/if}}
-      <h3 class="well">{{menuItem.title}} <span class="label label-primary">{{position}} - {{itemsCount}}</span></h3>
+      <h3 class="well">{{menuItem.title}}</h3>
 
       {{#if menuStack}}
       <ol class="breadcrumb">
         {{#each menuStack}}
           <li>{{title}}</li>
         {{/each}}
+        <li>
+          <span class="label label-primary">{{position}} - {{itemsCount}}</span>
+        </li>
       </ol>
       {{/if}}
     </div>
