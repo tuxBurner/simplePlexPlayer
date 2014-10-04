@@ -45,16 +45,17 @@
     {{/if}}
       <h3 class="well">{{menuItem.title}}</h3>
 
-      {{#if menuStack}}
+
       <ol class="breadcrumb">
-        {{#each menuStack}}
-          <li>{{title}}</li>
-        {{/each}}
+        {{#if menuStack}}
+          {{#each menuStack}}
+            <li>{{title}}</li>
+          {{/each}}
+        {{/if}}
         <li>
           <span class="label label-primary">{{position}} - {{itemsCount}}</span>
         </li>
       </ol>
-      {{/if}}
     </div>
   </script>
   <!-- EO MENU ITEM -->
