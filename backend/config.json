@@ -3,9 +3,16 @@
   "sdisplayOnOfPin" : 15,
   "sources" : [
     {
-      "name" : "localDir",
+      "name" : "localDirs",
       "type" : "dir",
       "path" : "/home/tuxburner/Desktop/hoerspiele/"
+    },
+    {
+      "name" : "plexHoerspiele",
+      "type" : "plex",
+      "section" : 4,
+      "server"  : "192.168.0.133",
+      "port" : 32400
     }
   ]
 }

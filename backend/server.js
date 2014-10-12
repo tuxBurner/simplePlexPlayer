@@ -13,6 +13,8 @@ if(conf.displayOnOfPin !== undefined) {
 var sources = {};
 
 var LocalSource = require('./LocalSource.js');
+var PlexSource = require('./PlexSource.js');
+
 for(idx in conf.sources) {
   var sourceConf = conf.sources[idx];
    
@@ -21,7 +23,10 @@ for(idx in conf.sources) {
   switch (sourceConf.type) {
     case "dir": {
       source = new LocalSource(sourceConf);
-   
+      break;
+    }
+    case "plex" : {
+      source = new PlexSource(sourceConf);
       break;
     }
   }
@@ -78,8 +83,14 @@ app.get('/sources/:sourceName/*', function(req,res) {
         if(parent.audioFiles[pathInfo] === undefined) {
           res.status(500).send('Source '+pathInfo+" not found !");
         } else {
-          res.sendFile(parent.audioFiles[pathInfo].path);
-          return;
+          var file = parent.audioFiles[pathInfo];
+          if(file.stream == false) {
+            res.sendFile(file.path);
+            return;
+          } else {
+            res.redirect(file.path);
+            return;
+          }
         }
       } else {
          parent = parent.subFolders[pathInfo];

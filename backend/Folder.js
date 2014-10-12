@@ -1,11 +1,12 @@
 /**
 * Describes a folder or a section from a source like local or plex
 */
-function Folder(name) {
+function Folder(name,path,thumb) {
 
   var that = this;
-
   this.name = name;
+  this.path = path;
+  this.thumb = thumb;
 
   this.subFolders = {};
 
