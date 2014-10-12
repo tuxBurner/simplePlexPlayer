@@ -15,8 +15,12 @@ function Folder(name,path,thumb) {
 
   this.addSubFolder = function(folder){
     that.subFolders[folder.name] = folder;
-    if(that.thumb != '' && folder.thumb != '') {
+    if(that.thumb == '' && folder.thumb != '') {
       that.thumb = folder.thumb;
+    }
+   
+    if(that.thumb != '' && folder.thumb == '') {
+      folder.thumb = that.thumb;
     }
   }
 
@@ -25,9 +29,20 @@ function Folder(name,path,thumb) {
   }
 
   this.toJSON = function() {
+
+    var subFolders = [];
+    for(idx  in this.subFolders) {
+      subFolders.push({ "name" : idx, "thumb" : this.subFolders[idx].thumb });
+    }
+
+    var audioFiles = [];
+    for(idx  in this.audioFiles) {
+      audioFiles.push({ "name" : idx, "thumb" : this.audioFiles[idx].thumb });
+    }
+
     var json = {
-      "subFolders" : Object.keys(this.subFolders),
-      "audioFiles" : this.audioFiles
+      "subFolders" : subFolders,//Object.keys(this.subFolders),
+      "audioFiles" : audioFiles
     }
     return json;
   }
