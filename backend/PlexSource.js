@@ -55,12 +55,18 @@ function PlexSource(conf) {
   }
 
   this.creatFolderFromEntry = function(entry,parentFolder) {
-  	var title = entry.attributes.title.replace('/','-');
-  	var thumb = (entry.attributes.thumb !== undefined) ? that.plexHttpUrl+entry.attributes.thumb : '';
-  	var folder = new Folder(title,entry.attributes.key,thumb);
-  	parentFolder.addSubFolder(folder);
 
-    that.queryPlex(folder.path,folder) 
+    var title = entry.attributes.title.replace('/','-');
+    var folder = null;
+  	if(parentFolder.subFolders[title] === undefined) {
+  	  var thumb = (entry.attributes.thumb !== undefined) ? that.plexHttpUrl+entry.attributes.thumb : '';
+  	  folder = new Folder(title,entry.attributes.key,thumb);  	
+  	  parentFolder.addSubFolder(folder);
+  	} else {
+  		folder = parentFolder.subFolders[title];
+  	}
+
+    that.queryPlex(entry.attributes.key,folder) 
 
   }
 
