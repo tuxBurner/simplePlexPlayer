@@ -11,8 +11,7 @@ function PlexSource(conf) {
   var that = this;
   this.conf = conf;
   this.client = new PlexAPI(conf.server);
-
-  var reported = {}
+  this.plexHttpUrl = "http://"+conf.server+":"+conf.port;
 
   this.rootFolder = new Folder(conf.name);
 
@@ -33,9 +32,6 @@ function PlexSource(conf) {
             that.addAudioToFolder(entry,parentFolder);
             break;
     	  default:
-    	    /*console.error("##################################################");
-            console.error(entry);
-    	    console.error(entry.attributes.type);*/
     	    break;
     	}
       }   
@@ -51,8 +47,8 @@ function PlexSource(conf) {
   		    return;
   		}
   		var part = media.part[0]
-  		var path = "http://"+that.conf.server+":"+that.conf.port+part.attributes.key;	
-  		var audioFile = new AudioFile(entry.attributes.title,path,parent.thumb);
+  		var path = that.plexHttpUrl+part.attributes.key;	
+  		var audioFile = new AudioFile(entry.attributes.title,path,folder.thumb);
   		audioFile.stream = true;
   		folder.addFile(audioFile);
     }
@@ -60,7 +56,8 @@ function PlexSource(conf) {
 
   this.creatFolderFromEntry = function(entry,parentFolder) {
   	var title = entry.attributes.title.replace('/','-');
-  	var folder = new Folder(title,entry.attributes.key,entry.attributes.thumb);
+  	var thumb = (entry.attributes.thumb !== undefined) ? that.plexHttpUrl+entry.attributes.thumb : '';
+  	var folder = new Folder(title,entry.attributes.key,thumb);
   	parentFolder.addSubFolder(folder);
 
     that.queryPlex(folder.path,folder) 

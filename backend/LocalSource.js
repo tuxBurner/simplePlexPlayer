@@ -46,9 +46,11 @@ function LocalSource(conf) {
       }
     }
 
-    if(folder.audioFiles.length == 0) {
+    if(Object.keys(folder.audioFiles).length == 0) {
       return;
     } 
+
+
 
     // check where to add the folder
     var parentFolder  = that.rootFolder;
@@ -64,7 +66,10 @@ function LocalSource(conf) {
       parentFolder = parentFolder.subFolders[parentFolderName];
     }
 
-    parentFolder.addSubFolder(folder);
+    // dont add the parent folder itself 
+    if(folderName != '') {
+      parentFolder.addSubFolder(folder);
+    } 
   }
 
   that.loadSource();

@@ -15,6 +15,9 @@ function Folder(name,path,thumb) {
 
   this.addSubFolder = function(folder){
     that.subFolders[folder.name] = folder;
+    if(that.thumb != '' && folder.thumb != '') {
+      that.thumb = folder.thumb;
+    }
   }
 
   this.addFile = function(audioFile) {
@@ -24,7 +27,7 @@ function Folder(name,path,thumb) {
   this.toJSON = function() {
     var json = {
       "subFolders" : Object.keys(this.subFolders),
-      "audioFiles" : Object.keys(this.audioFiles)
+      "audioFiles" : this.audioFiles
     }
     return json;
   }

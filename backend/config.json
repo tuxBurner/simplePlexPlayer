@@ -3,7 +3,7 @@
   "sdisplayOnOfPin" : 15,
   "sources" : [
     {
-      "name" : "localDirs",
+      "name" : "localDir",
       "type" : "dir",
       "path" : "/home/tuxburner/Desktop/hoerspiele/"
     },
