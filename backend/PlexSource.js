@@ -63,7 +63,8 @@ function PlexSource(conf) {
   	  folder = new Folder(title,entry.attributes.key,thumb);  	
   	  parentFolder.addSubFolder(folder);
   	} else {
-  		folder = parentFolder.subFolders[title];
+      console.log("Folder:"+title+" already exists mix in sub entries"); 		
+  	  folder = parentFolder.subFolders[title];
   	}
 
     that.queryPlex(entry.attributes.key,folder) 
