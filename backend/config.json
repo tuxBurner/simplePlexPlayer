@@ -1,4 +1,11 @@
 {
   "serverPort": 8080,
-  "displayOnOfPin" : 15
+  "sdisplayOnOfPin" : 15,
+  "sources" : [
+    {
+      "name" : "localDir",
+      "type" : "dir",
+      "path" : "/home/tuxburner/Desktop/hoerspiele/"
+    }
+  ]
 }

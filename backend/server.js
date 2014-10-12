@@ -5,68 +5,94 @@
 // require stuff
 var conf = require('./config.json');
 
-/**
-* #### THE GPIO STUFF ####
-**/
-var gpio = require('rpi-gpio');
-
-/**
-DEBUG when channel is set
-*/
-gpio.on('export', function(channel) {
-  console.log('Channel set: ' + channel);
-});
-
-/**
-* turns the display on
-*/
-var turnDisplayOn = function(res) {
-  writeValToPin(true,res)
+var rpiGpio = null;
+if(conf.displayOnOfPin !== undefined) {
+  rpiGpio = require('./rpigpio.js');
 }
 
-/**
-* turns the display off
-*/
-var turnDisplayOff = function(res) {
-  writeValToPin(false,res);
-}
+var sources = {};
 
-/**
-* writes the value to the relay pin
-*/
-var writeValToPin = function(value,res) {
-  gpio.write(conf.displayOnOfPin, value, function(err) {
-    if (err) {
-      console.error(err);
-      if(res !== null) {
-        res.send("FAILURE");
-      }
-    } else {
-      console.log();
-      if(res !== null) {
-        res.send("OK");
-      }
+var LocalSource = require('./LocalSource.js');
+for(idx in conf.sources) {
+  var sourceConf = conf.sources[idx];
+   
+  var source = null; 
+
+  switch (sourceConf.type) {
+    case "dir": {
+      source = new LocalSource(sourceConf);
+   
+      break;
     }
-  });
+  }
+
+  if(source != null) {
+    sources[source.conf.name] = source; 
+  }
 }
+
 
 /**
 * #### THE EXPRESS STUFF ####
 */
 var express = require('express');
 var app = express();
-app.get('/display/on', function(req, res){
-  turnDisplayOn(res);
+
+if(rpiGpio !== null) {
+  app.get('/display/on', function(req, res){
+    rpiGpio.turnDisplayOn(res);
+  });
+
+  app.get('/display/off', function(req, res){
+    rpiGpio.turnDisplayOff(res);
+  });
+}
+
+/**
+* #### SOURCES ENDPOINTS ####
+*/
+// get the sources
+app.get('/sources', function(req,res) {
+  res.json(Object.keys(sources));
 });
 
-app.get('/display/off', function(req, res){
-  turnDisplayOff(res);
+app.get('/sources/:sourceName', function(req,res) {
+  if(sources[req.params.sourceName] === undefined) {
+     res.status(500).send('Source '+req.params.sourceName+" not found !");
+  } else {
+    res.json(sources[req.params.sourceName].rootFolder);
+  }
 });
+
+app.get('/sources/:sourceName/*', function(req,res) {
+  if(sources[req.params.sourceName] === undefined) {
+     res.status(500).send('Source '+req.params.sourceName+" not found !");
+  } else {
+    var pathParts = req.params[0].split('/');
+
+    var parent = sources[req.params.sourceName].rootFolder;
+
+    for(idx in pathParts) {
+      var pathInfo = pathParts[idx];
+      if(parent.subFolders[pathInfo] === undefined) {
+        if(parent.audioFiles[pathInfo] === undefined) {
+          res.status(500).send('Source '+pathInfo+" not found !");
+        } else {
+          res.sendFile(parent.audioFiles[pathInfo].path);
+          return;
+        }
+      } else {
+         parent = parent.subFolders[pathInfo];
+      }
+    }
+    res.json(parent);
+  }
+});
+
+
 
 var server = app.listen(conf.serverPort, function() {
     console.log('Listening on port %d', server.address().port);
-    // setup the gpio pin
-    gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
 });
 
 
@@ -77,9 +103,10 @@ process.on( 'SIGINT', function() {
   console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
   // some other closing procedures go here
 
-  // clean all gpio pins
-  gpio.destroy(function() {
-       console.log('All pins unexported');
-        return process.exit(0);
-  });
+  if(rpiGpio !== null) {
+    rpiGpio.close();
+  }
+
+  process.exit();
+
 });
