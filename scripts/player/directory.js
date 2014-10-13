@@ -7,28 +7,20 @@ var Directory = function(id,title,thumb,parent) {
   this.parent = parent;
   this.initialized = false;
 
-  this.addSubDir = function(id,title,thumb,player) {
-    if(thumb !== undefined) {
-      thumb = player.config.baseUrl+thumb;
-    } else {
-      thumb = this.thumb;
-    }
+  this.addSubDir = function(title,thumb,player) {
+    var id = this.id+'/'+title
+
     var dir = new Directory(id,title,thumb,this.id);
     this.subDirs.push(dir);
     player.directories[id] = dir;
   }
 
-  this.addFile = function(fileXml,player) {
-    var mediaXml = $(fileXml).find("Media");
-    var partXml = $(fileXml).find("Part");
+  this.addFile = function(audioFile,player) {
+    //var readableDuration = Tools.readableDuration((duration / 1000));
+    var id = this.id+'/'+audioFile.name;
+    var mp3Url = player.config.baseUrl+'/sources/'+id;
 
-    var duration = $(mediaXml).attr('duration');
-    var title = $(fileXml).attr('title');
-    var id = $(partXml).attr('id');
-    var mp3Url = player.config.baseUrl+"/library/parts/"+id+"/file.mp3";
-
-    var readableDuration = Tools.readableDuration((duration / 1000));
-    var file = new File(id,title,mp3Url,this.thumb,readableDuration);
+    var file = new AudioFile(id,audioFile.name,mp3Url,audioFile.thumb,1000);
 
     this.files.push(file);
     player.files[id] = file;

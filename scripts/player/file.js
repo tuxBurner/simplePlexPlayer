@@ -1,4 +1,4 @@
-var File = function(id,title,mp3,thumb,readableDuration) {
+var AudioFile = function(id,title,mp3,thumb,readableDuration) {
   this.id = id;
   this.title = title;
   this.thumb = thumb;

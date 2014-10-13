@@ -18,8 +18,8 @@ var PlexSource = require('./PlexSource.js');
 
 for(idx in conf.sources) {
   var sourceConf = conf.sources[idx];
-   
-  var source = null; 
+
+  var source = null;
 
   switch (sourceConf.type) {
     case "dir": {
@@ -33,7 +33,7 @@ for(idx in conf.sources) {
   }
 
   if(source != null) {
-    sources[source.conf.name] = source; 
+    sources[source.conf.name] = source;
   }
 }
 
@@ -59,14 +59,14 @@ if(rpiGpio !== null) {
 */
 // get the sources
 app.get('/sources', function(req,res) {
-  res.json(Object.keys(sources));
+  res.jsonp(Object.keys(sources));
 });
 
 app.get('/sources/:sourceName', function(req,res) {
   if(sources[req.params.sourceName] === undefined) {
      res.status(500).send('Source '+req.params.sourceName+" not found !");
   } else {
-    res.json(sources[req.params.sourceName].rootFolder);
+    res.jsonp(sources[req.params.sourceName].rootFolder);
   }
 });
 
@@ -97,7 +97,7 @@ app.get('/sources/:sourceName/*', function(req,res) {
          parent = parent.subFolders[pathInfo];
       }
     }
-    res.json(parent);
+    res.jsonp(parent);
   }
 });
 

@@ -24,8 +24,8 @@ function PlexSource(conf) {
       for(idx in entries) {
     	var entry = entries[idx];
     	switch(entry.attributes.type) {
-          case "album" : 
-    	  case "artist" : 
+          case "album" :
+    	  case "artist" :
     	    that.creatFolderFromEntry(entry,parentFolder);
     	    break;
     	  case "track" :
@@ -34,7 +34,7 @@ function PlexSource(conf) {
     	  default:
     	    break;
     	}
-      }   
+      }
     }, function (err) {
       throw new Error("Could not connect to server");
     });
@@ -47,8 +47,9 @@ function PlexSource(conf) {
   		    return;
   		}
   		var part = media.part[0]
-  		var path = that.plexHttpUrl+part.attributes.key;	
-  		var audioFile = new AudioFile(entry.attributes.title,path,folder.thumb);
+  		var path = that.plexHttpUrl+part.attributes.key;
+      var title = entry.attributes.title.replace('/','-');
+  		var audioFile = new AudioFile(title,path,folder.thumb);
   		audioFile.stream = true;
   		folder.addFile(audioFile);
     }
@@ -59,15 +60,15 @@ function PlexSource(conf) {
     var title = entry.attributes.title.replace('/','-');
     var folder = null;
   	if(parentFolder.subFolders[title] === undefined) {
-  	  var thumb = (entry.attributes.thumb !== undefined) ? that.plexHttpUrl+entry.attributes.thumb : '';
-  	  folder = new Folder(title,entry.attributes.key,thumb);  	
+  	  var thumb = (entry.attributes.thumb !== undefined) ? that.plexHttpUrl+entry.attributes.thumb : parentFolder.thumb;
+  	  folder = new Folder(title,entry.attributes.key,thumb);
   	  parentFolder.addSubFolder(folder);
   	} else {
-      console.log("Folder:"+title+" already exists mix in sub entries"); 		
+      console.log("Folder:"+title+" already exists mix in sub entries");
   	  folder = parentFolder.subFolders[title];
   	}
 
-    that.queryPlex(entry.attributes.key,folder) 
+    that.queryPlex(entry.attributes.key,folder)
 
   }
 

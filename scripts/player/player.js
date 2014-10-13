@@ -30,13 +30,11 @@ var Player = function(config) {
 
   this.init = function() {
     that.initTemplats();
-    Tools.loadPlexXml(that.config.baseUrl+"/library/sections", function(data) {
-      for(idx in that.config.allowedSections) {
-        var sectionId = that.config.allowedSections[idx];
-        $('Directory[key="'+sectionId+'"]',data).each(function(i) {
-          that.sections[sectionId] = new Directory(sectionId,$(this).attr('title'),undefined,-1);
-          that.directories[sectionId] = that.sections[sectionId];
-        });
+    Tools.callBackend(that.config.baseUrl+"/sources", function(data) {
+      for(idx in data) {
+        var source = data[idx];
+        that.sections[source] = new Directory(source,source,undefined,-1);
+        that.directories[source] = that.sections[source];
       }
 
       // check if we have to load from the has
@@ -175,25 +173,25 @@ var Player = function(config) {
             that.loadDirectory(id,true);
           }
 
+          /**
+          * Load directory from sever
+          */
           this.loadDirectory = function(id,section,highlightMenuItem) {
-
-            var url = (section == true) ? "/library/sections/"+id+"/all" : "/library/metadata/"+id+"/children";
+            var url = "/sources/"+id;
             url = that.config.baseUrl+url;
 
             var dir = that.directories[id];
             if(dir.initialized  == false) {
-              Tools.loadPlexXml(url, function(data) {
-                $('Directory',data).each(function(i) {
-                  var id = $(this).attr('ratingKey');
-                  var title = $(this).attr('title');
-                  if(title != "All tracks") {
-                    dir.addSubDir(id,title,$(this).attr('thumb'),that);
-                  }
-                });
+              Tools.callBackend(url, function(data) {
+                for(idx in data.subFolders) {
+                  var subFolder = data.subFolders[idx];
+                  dir.addSubDir(subFolder.name,subFolder.thumb,that);
+                }
 
-                $('Track',data).each(function(i) {
-                  dir.addFile($(this),that);
-                });
+                for(idx in data.audioFiles) {
+                  var audioFile = data.audioFiles[idx];
+                  dir.addFile(audioFile,that);
+                }
                 // we parsed this so mark it
                 dir.initialized = true;
                 that.displayDir(dir,highlightMenuItem);

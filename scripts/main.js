@@ -3,9 +3,9 @@ $(function() {
 
   var config = {
     // path to the the plex server
-    "baseUrl" :  "http://192.168.0.133:32400",
+    "baseUrl" :  "http://localhost:8080",
     // allowed sections to play you can get them from http://192.168.0.133:32400/library/sections
-    "allowedSections" : [4],
+    //"allowedSections" : [4],
     "skipSeconds" : {
       "slow" : 10,
       "fast" : 20,

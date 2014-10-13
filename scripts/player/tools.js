@@ -5,12 +5,10 @@ Tools.readableDuration = function(duration) {
   return ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
 }
 
-Tools.loadPlexXml = function(url, callback) {
-  $.get(url)
-    .done(function(data) {
-      $xml = $(data);
-      callback($xml);
-    })
+Tools.callBackend = function(url, callback) {
+  $.get(url,function(data) {
+      callback(data);
+    },'jsonp')
     .fail(function() {
       alert("error");
     });

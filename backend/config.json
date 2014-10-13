@@ -4,7 +4,7 @@
   "sources" : [
     {
       "name" : "localDir",
-      "type" : "dir",
+      "type" : "dirs",
       "path" : "/home/tuxburner/Desktop/hoerspiele/"
     },
     {
