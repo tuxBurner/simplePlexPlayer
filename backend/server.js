@@ -102,6 +102,28 @@ app.get('/sources/:sourceName/*', function(req,res) {
 });
 
 
+/**
+* #### NETWORK STUFF ####
+*/
+var os=require('os');
+var ifaces=os.networkInterfaces();
+var iDevs = {};
+for (var dev in ifaces) {
+  var alias=0;
+  ifaces[dev].forEach(function(details){
+    if (details.family=='IPv4' && details.internal == false) {
+      var devName = dev+(alias?':'+alias:'');
+      iDevs[devName] = details.address;
+      ++alias;
+    }
+  });
+}
+
+app.get('/idevs', function(req,res) {
+  res.jsonp(iDevs);
+});
+
+
 
 var server = app.listen(conf.serverPort, function() {
     console.log('Listening on port %d', server.address().port);
