@@ -1,6 +1,6 @@
 {
   "serverPort": 8080,
-  "sdisplayOnOfPin" : 15,
+  "sdisplayOnOfPin" : 18,
   "sources" : [
     {
       "name" : "localDir",
