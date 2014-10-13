@@ -13,7 +13,7 @@ sudo ./pikeyd -pu
 Verkabelung: gpio und ground
 
 -- BACKEND --
-wget http://nodejs.org/dist/v0.10.2/node-v0.10.2-linux-arm-pi.tar.gz
+wget http://nodejs.org/dist/v0.10.8/node-v0.10.8-linux-arm-pi.tar.gz
 entpacken
 cd backend im projekt
 npm install

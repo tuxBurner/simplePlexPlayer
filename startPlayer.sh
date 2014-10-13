@@ -5,7 +5,7 @@ xset -dpms
 xset s off
 while true; do
 cd backend
-./node-v0.10.2-linux-arm-pi/bin/node server.js &
+./node-v0.10.8-linux-arm-pi/bin/node server.js &
 cd ..
 
 cd backend/pikeyd
