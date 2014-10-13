@@ -16,11 +16,11 @@ var Directory = function(id,title,thumb,parent) {
   }
 
   this.addFile = function(audioFile,player) {
-    //var readableDuration = Tools.readableDuration((duration / 1000));
+    var readableDuration = Tools.readableDuration((audioFile.duration / 1000));
     var id = this.id+'/'+audioFile.name;
-    var mp3Url = player.config.baseUrl+'/sources/'+id;
+    var mp3Url = player.config.baseUrl+'/sources/'+id.split('?').join('%3F');
 
-    var file = new AudioFile(id,audioFile.name,mp3Url,audioFile.thumb,1000);
+    var file = new AudioFile(id,audioFile.name,mp3Url,audioFile.thumb,readableDuration);
 
     this.files.push(file);
     player.files[id] = file;

@@ -49,7 +49,7 @@ function PlexSource(conf) {
   		var part = media.part[0]
   		var path = that.plexHttpUrl+part.attributes.key;
       var title = entry.attributes.title.replace('/','-');
-  		var audioFile = new AudioFile(title,path,folder.thumb);
+  		var audioFile = new AudioFile(title,path,folder.thumb,part.attributes.duration);
   		audioFile.stream = true;
   		folder.addFile(audioFile);
     }

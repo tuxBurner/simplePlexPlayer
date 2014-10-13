@@ -41,7 +41,7 @@ var AudioJsWrapper = function(skipSeconds) {
       next = $('#playList li.playing').prev();
       if(next.length == 0) {
         next = $('#playList li').last();
-        scrollPos=$('#playList').height()-$(next).outerHeight(true);;
+        scrollPos=$('#playList').height()-$(next).outerHeight(true);
       } else {
         scrollPos-=$('#playList li.playing').outerHeight(true);
       }

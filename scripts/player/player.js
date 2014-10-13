@@ -177,7 +177,8 @@ var Player = function(config) {
           * Load directory from sever
           */
           this.loadDirectory = function(id,section,highlightMenuItem) {
-            var url = "/sources/"+id;
+            var url = "/sources/"+id.split('?').join('%3F');
+
             url = that.config.baseUrl+url;
 
             var dir = that.directories[id];
