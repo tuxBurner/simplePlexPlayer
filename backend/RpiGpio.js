@@ -22,14 +22,14 @@ function RpiGpio(conf) {
   * turns the display on
   */
   this.turnDisplayOn = function(res) {
-    writeValToPin(true,res)
+    this.writeValToPin(true,res)
   }
 
   /**
   * turns the display off
   */
   this.turnDisplayOff = function(res) {
-    writeValToPin(false,res);
+    this.writeValToPin(false,res);
   }
 
   /**
