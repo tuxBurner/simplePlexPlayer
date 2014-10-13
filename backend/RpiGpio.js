@@ -4,8 +4,10 @@
 
 var gpio = require('rpi-gpio');
 
-function RpiGpio() {
+function RpiGpio(conf) {
 
+  this.conf = conf;     
+    
   /**
   * DEBUG when channel is set
   */
@@ -14,7 +16,7 @@ function RpiGpio() {
   });
 
   // setup the gpio pin
-  gpio.setup(conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
+  gpio.setup(this.conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
 
   /**
   * turns the display on
@@ -34,7 +36,7 @@ function RpiGpio() {
   * writes the value to the relay pin
   */
   this.writeValToPin = function(value,res) {
-    gpio.write(conf.displayOnOfPin, value, function(err) {
+    gpio.write(this.conf.displayOnOfPin, value, function(err) {
       if (err) {
         console.error(err);
         if(res !== null) {
@@ -61,4 +63,4 @@ function RpiGpio() {
   }
 }
 
-module.exports = new RpiGpio;
+module.exports = RpiGpio;
