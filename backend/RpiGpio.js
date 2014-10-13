@@ -16,7 +16,7 @@ function RpiGpio(conf) {
   });
 
   // setup the gpio pin
-  gpio.setup(this.conf.displayOnOfPin,gpio.DIR_OUT, turnDisplayOn);
+  gpio.setup(this.conf.displayOnOfPin,gpio.DIR_OUT, this.turnDisplayOn);
 
   /**
   * turns the display on
