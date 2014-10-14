@@ -94,10 +94,14 @@ app.get('/sources/:sourceName/*', function(req,res) {
           }
         }
       } else {
-         parent = parent.subFolders[pathInfo];
+        parent = parent.subFolders[pathInfo];
       }
     }
-    res.jsonp(parent);
+      
+    parent.loadSubData(function() {
+      res.jsonp(parent);
+    });  
+    
   }
 });
 

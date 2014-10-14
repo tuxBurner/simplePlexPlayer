@@ -7,12 +7,32 @@ function Folder(name,path,thumb) {
   this.name = name;
   this.path = path;
   this.thumb = thumb;
+  
+  // marks if this folder was already initialized    
+  this.initialized = false;    
+    
+  // the callback function for getting the data for this folder       
+  this.dataCallBack = null    
 
   this.subFolders = {};
 
   this.audioFiles = {};
 
-
+     
+  this.loadSubData = function(httpRespCallback) {
+    if(this.dataCallBack !== null && this.initialized == false) {   
+      this.dataCallBack(httpRespCallback);         
+      this.initialized = true;      
+      return;        
+    }
+      
+    
+    httpRespCallback();
+  }    
+  
+  /**
+  * Adds a subfolder to this folder    
+  */
   this.addSubFolder = function(folder){
     that.subFolders[folder.name] = folder;
     if(that.thumb == '' && folder.thumb != '') {
@@ -28,8 +48,10 @@ function Folder(name,path,thumb) {
     that.audioFiles[audioFile.name] = audioFile;
   }
 
+  /**
+  * Overrride the to Json method we dont need all of the data
+  */
   this.toJSON = function() {
-
     var subFolders = [];
     for(idx  in this.subFolders) {
       subFolders.push({ "name" : idx, "thumb" : this.subFolders[idx].thumb });
