@@ -5,11 +5,26 @@ Tools.readableDuration = function(duration) {
   return ((m<10?'0':'')+m+':'+(s<10?'0':'')+s);
 }
 
+/**
+* Helper for calling the backend via ajax
+*/
 Tools.callBackend = function(url, callback) {
-  $.get(url,function(data) {
+
+  $.blockUI({ message: '<h1><i class="fa fa-spinner fa-spin"></i> Just a moment...</h1>' });
+
+  $.ajax({
+    type: 'GET',
+    url: url,
+    cache: false,
+    crossDomain: true,
+    dataType: "jsonp",
+    timeout: 1500,
+    success: function(data, textStatus, XMLHttpRequest) {
+      $.unblockUI();
       callback(data);
-    },'jsonp')
-    .fail(function() {
-      alert("error");
-    });
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      setTimeout(function() {Tools.callBackend(url,callback)},3000);
+    }
+  });
 }
