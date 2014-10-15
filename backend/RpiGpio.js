@@ -6,8 +6,9 @@ var gpio = require('rpi-gpio');
 
 function RpiGpio(conf) {
 
-  this.conf = conf;     
-    
+  this.conf = conf;
+  var that = this;
+
   /**
   * DEBUG when channel is set
   */
@@ -16,7 +17,9 @@ function RpiGpio(conf) {
   });
 
   // setup the gpio pin
-  gpio.setup(this.conf.displayOnOfPin,gpio.DIR_OUT, this.turnDisplayOn);
+  gpio.setup(that.conf.displayOnOfPin,gpio.DIR_OUT, function() {
+    that.turnDisplayOn(null);
+  });
 
   /**
   * turns the display on
@@ -43,7 +46,7 @@ function RpiGpio(conf) {
           res.send("FAILURE");
         }
       } else {
-        console.log();
+        console.log("Set: "+value+" on pin:" +that.conf.displayOnOfPin);
         if(res !== null) {
           res.send("OK");
         }
@@ -58,7 +61,7 @@ function RpiGpio(conf) {
     // clean all gpio pins
     gpio.destroy(function() {
          console.log('All pins unexported');
-          return process.exit(0);
+         return process.exit(0);
     });
   }
 }

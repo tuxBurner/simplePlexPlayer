@@ -97,11 +97,11 @@ app.get('/sources/:sourceName/*', function(req,res) {
         parent = parent.subFolders[pathInfo];
       }
     }
-      
+
     parent.loadSubData(function() {
       res.jsonp(parent);
-    });  
-    
+    });
+
   }
 });
 
@@ -143,8 +143,7 @@ process.on( 'SIGINT', function() {
 
   if(rpiGpio !== null) {
     rpiGpio.close();
+  } else {
+    process.exit();
   }
-
-  process.exit();
-
 });
