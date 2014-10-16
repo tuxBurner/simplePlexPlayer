@@ -9,6 +9,8 @@ var MenuHandler = function() {
       var section = sections[idx];
       this.currentMenuItems.push(new MenuItem(section,"section",-1));
     }
+
+    this.currentMenuItems.push(new MenuItem({"title": "Optionen", "id" : "opts_main"},"options",-1));
   }
 
   this.initDirectoryMenu = function(dir) {
@@ -27,6 +29,10 @@ var MenuHandler = function() {
     }
 
     this.currentMenuItems = menuItems;
+  }
+
+  this.initOptionMenu = function(optionMenuId) {
+     
   }
 
 

@@ -5,7 +5,7 @@
     {
       "name" : "localDir",
       "type" : "dir",
-      "path" : "/home/tuxburner/Desktop/hoerspiele/"
+      "path" : "/home/tuxburner/Desktop/hoerspiele"
     },
     {
       "name" : "plexHoerspiele",

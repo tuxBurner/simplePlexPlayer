@@ -19,7 +19,7 @@ function PlexSource(conf) {
     that.queryPlex("/library/sections/"+conf.section+"/all",that.rootFolder);
   }
 
-  this.queryPlex = function(queryUrl,parentFolder,callback) {
+  this.queryPlex = function(queryUrl,parentFolder,callBack) {
     that.client.find(queryUrl).then(function (entries) {
       for(idx in entries) {
     	var entry = entries[idx];
@@ -35,9 +35,9 @@ function PlexSource(conf) {
     	    break;
     	}
       }
-        
-      if(callback !== undefined) {
-        callback(); 
+
+      if(callBack !== undefined) {
+        callBack();
       }
     }, function (err) {
       throw new Error("Could not connect to server");
@@ -63,16 +63,16 @@ function PlexSource(conf) {
     var title = entry.attributes.title.replace('/','-');
     var folder = null;
   	if(parentFolder.subFolders[title] === undefined) {
-  	  var thumb = (entry.attributes.thumb !== undefined) ?     that.plexHttpUrl+entry.attributes.thumb : parentFolder.thumb;
+  	  var thumb = (entry.attributes.thumb !== undefined) ?  that.plexHttpUrl+entry.attributes.thumb : parentFolder.thumb;
   	  folder = new Folder(title,entry.attributes.key,thumb);
   	  parentFolder.addSubFolder(folder);
   	} else {
       console.log("Folder:"+title+" already exists mix in sub entries");
   	  folder = parentFolder.subFolders[title];
   	}
-      
-      
-    folder.dataCallBack = function(httpRespCallback) {      
+
+    // register callback when the user requests this folder and it is not loaded already
+    folder.dataCallBack = function(httpRespCallback) {
       that.queryPlex(entry.attributes.key,folder,httpRespCallback)
     }
 

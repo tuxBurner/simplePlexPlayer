@@ -7,31 +7,31 @@ function Folder(name,path,thumb) {
   this.name = name;
   this.path = path;
   this.thumb = thumb;
-  
-  // marks if this folder was already initialized    
-  this.initialized = false;    
-    
-  // the callback function for getting the data for this folder       
-  this.dataCallBack = null    
+
+  // marks if this folder was already initialized
+  this.initialized = false;
+
+  // the callback function for getting the data for this folder
+  this.dataCallBack = null
 
   this.subFolders = {};
 
   this.audioFiles = {};
 
-     
+
   this.loadSubData = function(httpRespCallback) {
-    if(this.dataCallBack !== null && this.initialized == false) {   
+    if(this.dataCallBack !== null && this.initialized == false) {
+      this.initialized = true;
       this.dataCallBack(httpRespCallback);         
-      this.initialized = true;      
-      return;        
+      return;
     }
-      
-    
+
+
     httpRespCallback();
-  }    
-  
+  }
+
   /**
-  * Adds a subfolder to this folder    
+  * Adds a subfolder to this folder
   */
   this.addSubFolder = function(folder){
     that.subFolders[folder.name] = folder;

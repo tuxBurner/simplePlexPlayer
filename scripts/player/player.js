@@ -139,6 +139,10 @@ var Player = function(config) {
       var files = that.directories[currentMenuItemId].files;
       that.displayPlayer(files,that.directories[currentMenuItemId].title);
     }
+
+    if(currentMenuItemType == "options") {
+      
+    }
   }
 
 
