@@ -6,6 +6,7 @@ $(function() {
     "baseUrl" :  "http://localhost:8080",
     // allowed sections to play you can get them from http://192.168.0.133:32400/library/sections
     //"allowedSections" : [4],
+    "repeatAll" :  false,
     "skipSeconds" : {
       "slow" : 10,
       "fast" : 20,

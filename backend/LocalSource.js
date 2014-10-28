@@ -52,14 +52,14 @@ function LocalSource(conf) {
          }
 
          parentFolder.addFile(new AudioFile(dirContentName,absolutePath));
-         /*var stream = fs.createReadStream(absolutePath)
+         var stream = fs.createReadStream(absolutePath)
          var parser = mm(stream, { duration: true });
          parser.on('duration', function (result) {
             console.log(result);
           });
           parser.on('done', function (err) {
             stream.destroy();
-        });*/
+        });
       }
     }
 
@@ -68,6 +68,8 @@ function LocalSource(conf) {
     }
   }
 
+
+  // initialize the root folder when this is constructed
   that.loadSource();
 }
 

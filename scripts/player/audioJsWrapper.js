@@ -1,30 +1,36 @@
-var AudioJsWrapper = function(skipSeconds) {
+var AudioJsWrapper = function(skipSeconds,repeatAll) {
 
   this.skipSeconds = skipSeconds;
+
+  // repeat playlist when rech end ?
+  this.repeatAll = repeatAll;
 
   var that = this;
 
   // initialize the player
-  var audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
+  this.audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
     trackEnded: function() {
-      that.loadNextTrack(true);
+      that.loadNextTrack(true,that.repeatAll);
     },
     updatePlayhead: function(percentage) {
       that.updatePercentage(percentage);
     }
   });
 
-  this.audioJs = audioJs;
   this.total = undefined;
 
-  this.loadTrack =  function() {
+  this.loadTrack =  function(startPlaying) {
     var trackSrc = $('#playList li.playing').attr('data-src');
     this.audioJs.load(trackSrc);
-    this.audioJs.play();
+    if(startPlaying === undefined || startPlaying == true) {
+      this.audioJs.play();
+    }
   }
 
-  this.loadNextTrack = function(nextTitle) {
+  this.loadNextTrack = function(nextTitle,repeatOnEnd) {
     var next = null;
+
+    var playNextTrack = true;
 
     var scrollPos = $('#playListWrapper').data("scrollpos");
     var scrollOffset = 0;
@@ -34,6 +40,10 @@ var AudioJsWrapper = function(skipSeconds) {
       if(next.length == 0) {
         next = $('#playList li').first();
         scrollPos = 0;
+        // prevent of restarting the playlist when reached the end and settings are setted
+        if(repeatOnEnd !== undefined && repeatOnEnd == false) {
+          playNextTrack = false;
+        }
       } else {
         scrollPos+=$(next).outerHeight(true);
       }
@@ -57,10 +67,14 @@ var AudioJsWrapper = function(skipSeconds) {
     $('#playListWrapper').scrollTop(scrollPos)
     $('#playListWrapper').data("scrollpos",scrollPos);
 
-    this.loadTrack();
+    this.loadTrack(playNextTrack);
   }
 
   this.updatePercentage = function(percentage) {
+    if($('#playList li.playing .duration').html() == "") {
+      $('#playList li.playing .duration').html(Tools.readableDuration(this.audioJs.element.duration));
+    }
+
     var playedString = Tools.readableDuration(this.audioJs.duration * percentage);
     var percent = Math.round(percentage*100);
     $('#playList li.playing .playprogress').css("width",percent+"%");

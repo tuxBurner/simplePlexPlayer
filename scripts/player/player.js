@@ -4,7 +4,7 @@ var Player = function(config) {
 
   this.templates = {};
 
-  this.audioJsWrapper = new AudioJsWrapper(config.skipSeconds);
+  this.audioJsWrapper = new AudioJsWrapper(config.skipSeconds,config.repeatAll);
 
   this.config = config;
 
@@ -141,7 +141,7 @@ var Player = function(config) {
     }
 
     if(currentMenuItemType == "options") {
-      
+
     }
   }
 
