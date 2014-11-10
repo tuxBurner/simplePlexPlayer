@@ -5,37 +5,49 @@ var MenuHandler = function() {
 
   this.initMainMenu = function(sections) {
     this.currentMenuItems = [];
-    for(idx in sections) {
+    for (idx in sections) {
       var section = sections[idx];
-      this.currentMenuItems.push(new MenuItem(section,"section",-1));
+      this.currentMenuItems.push(new MenuItem(section, "section", -1));
     }
 
-    this.currentMenuItems.push(new MenuItem({"title": "Optionen", "id" : "opts_main"},"options",-1));
+    this.currentMenuItems.push(new MenuItem({
+      "title": "Optionen",
+      "id": "opts_main"
+    }, "options", -1));
   }
 
-  this.initDirectoryMenu = function(dir) {
 
+  /**
+   * Initializes a directory menu page
+   */
+  this.initDirectoryMenu = function(dir) {
     var menuItems = [];
-    for(idx in dir.subDirs) {
+    for (idx in dir.subDirs) {
       var subDir = dir.subDirs[idx];
-      menuItems.push(new MenuItem(subDir,"directory",dir.id));
+      menuItems.push(new MenuItem(subDir, "directory", dir.id));
     }
-    if(dir.files.length > 1) {
-      menuItems.push(new MenuItem({"title" : "Play All", "id" : dir.id, "thumb" : dir.thumb},"playall"));
+    if (dir.files.length > 1) {
+      menuItems.push(new MenuItem({
+        "title": "Play All",
+        "id": dir.id,
+        "thumb": dir.thumb
+      }, "playall"));
     }
-    for(idx in dir.files) {
+    for (idx in dir.files) {
       var file = dir.files[idx];
-      menuItems.push(new MenuItem(file,"file",dir.id));
+      menuItems.push(new MenuItem(file, "file", dir.id));
     }
 
     this.currentMenuItems = menuItems;
   }
 
+
+  /**
+   * Initializes an option menu by its id
+   */
   this.initOptionMenu = function(optionMenuId) {
-     
+    console.error(optionMenuId);
   }
-
-
 
 
   this.getCurrentMenuItem = function() {
@@ -43,7 +55,7 @@ var MenuHandler = function() {
   }
 
   this.removeLastMenuItemFromStack = function() {
-    if(this.menuStack.length == 0) {
+    if (this.menuStack.length == 0) {
       return null;
     }
     var removedMenuItem = this.menuStack.pop();
@@ -59,10 +71,10 @@ var MenuHandler = function() {
 
   this.menuStackToUrlHash = function() {
     var hash = "";
-    if(this.menuStack.length > 0) {
+    if (this.menuStack.length > 0) {
       var sep = "";
-      for(idx in this.menuStack) {
-        hash+=sep+this.menuStack[idx].id;
+      for (idx in this.menuStack) {
+        hash += sep + this.menuStack[idx].id;
         sep = ",";
       }
     }
@@ -70,8 +82,8 @@ var MenuHandler = function() {
   }
 
   this.setMenuIdxByMenuItem = function(highlightMenuItem) {
-    for(idx in this.currentMenuItems) {
-      if(this.currentMenuItems[idx].id == highlightMenuItem) {
+    for (idx in this.currentMenuItems) {
+      if (this.currentMenuItems[idx].id == highlightMenuItem) {
         this.currentMenuIdx = new Number(idx);
         break;
       }
@@ -79,19 +91,19 @@ var MenuHandler = function() {
   }
 
   this.nextMenuItem = function(nextItem) {
-    if(this.currentMenuItems.length <= 1) {
+    if (this.currentMenuItems.length <= 1) {
       return false;
     }
 
-    if(nextItem == true) {
+    if (nextItem == true) {
       this.currentMenuIdx++;
-      if(this.currentMenuIdx == this.currentMenuItems.length) {
+      if (this.currentMenuIdx == this.currentMenuItems.length) {
         this.currentMenuIdx = 0;
       }
     } else {
       this.currentMenuIdx--;
-      if(this.currentMenuIdx < 0) {
-        this.currentMenuIdx = this.currentMenuItems.length-1;
+      if (this.currentMenuIdx < 0) {
+        this.currentMenuIdx = this.currentMenuItems.length - 1;
       }
     }
 
