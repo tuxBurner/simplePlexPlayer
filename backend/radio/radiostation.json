@@ -1,0 +1,9 @@
+[{
+  "name": "radiobob",
+  "url": "http://streams.radiobob.de/bob-live/mp3-192/mediaplayerbob",
+  "thumb": "http://livestream.radiobob.de/includes/styles/standard/images/logo_big.png"
+}, {
+  "name": "hr-info",
+  "url": "http://hr-mp3-m-hrinfo.akacast.akamaistream.net/7/698/142135/v1/gnl.akacast.akamaistream.net/hr-mp3-m-hrinfo",
+  "thumb": "http://www.hr-online.de/website/radio/hr-info/images/logo_hrinfo_head.jpg"
+}]
