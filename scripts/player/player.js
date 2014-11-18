@@ -58,7 +58,9 @@ var Player = function(config) {
     that.templates = {
       "mainMenu": Handlebars.compile($("#main-tpl").html()),
       "player": Handlebars.compile($("#player-tpl").html()),
-      "menuitem": Handlebars.compile($("#menuitem-tpl").html())
+      "menuitem": Handlebars.compile($("#menuitem-tpl").html()),
+      // templates for the options
+      "options_sysinfo": Handlebars.compile($("#menuitem-tpl").html())
     }
   }
 
@@ -84,18 +86,18 @@ var Player = function(config) {
 
   this.displayMenuItem = function() {
     var menuItem = that.menuHandler.getCurrentMenuItem();
-    var content = that.templates["menuitem"]({
+
+    that.displayContent("menuitem", {
       "menuItem": menuItem,
       "menuStack": that.menuHandler.menuStack,
       "position": that.menuHandler.currentMenuIdx + 1,
       "itemsCount": that.menuHandler.currentMenuItems.length
+    }, function() {
+      if (that.loadToStack.length > 0) {
+        that.loadToStack.shift();
+        that.performAction();
+      }
     });
-    $('#menuContainer').html(content);
-
-    if (that.loadToStack.length > 0) {
-      that.loadToStack.shift();
-      that.performAction();
-    }
   };
 
   this.nextMenuItem = function(nextItem) {
@@ -151,7 +153,7 @@ var Player = function(config) {
     }
 
     if (currentMenuItemType == "options") {
-
+      that.displayOptions(currentMenuItemId);
     }
   }
 
@@ -213,6 +215,21 @@ var Player = function(config) {
       });
     } else {
       that.displayDir(dir, highlightMenuItem);
+    }
+  }
+
+  /**
+   * Display the current options
+   */
+  this.displayOptions = function(currentMenuItemId) {
+    // we just want to display the option menu items ?
+    if (currentMenuItemId == "opts_main") {
+      that.menuHandler.initOptionMenu();
+      that.displayContent("mainMenu", {}, function() {
+        that.initMenu()
+      });
+    } else {
+      Options.getOptionsMenuItems(currentMenuItemId);
     }
   }
 

@@ -43,10 +43,21 @@ var MenuHandler = function() {
 
 
   /**
-   * Initializes an option menu by its id
+   * Initializes the option menu
    */
-  this.initOptionMenu = function(optionMenuId) {
-    console.error(optionMenuId);
+  this.initOptionMenu = function() {
+    var optionMenuItems = []
+    optionMenuItems.push(new MenuItem({
+      "title": "Sys Infos",
+      "id": "opts_sysInfos"
+    }, "options", "opts_main"));
+
+    optionMenuItems.push(new MenuItem({
+      "title": "Wifi Settings",
+      "id": "opts_wifisettings"
+    }, "options", "opts_main"));
+
+    this.currentMenuItems = optionMenuItems;
   }
 
 
