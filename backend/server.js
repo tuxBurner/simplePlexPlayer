@@ -133,8 +133,11 @@ for (var dev in ifaces) {
   });
 }
 
-app.get('/idevs', function(req, res) {
-  res.jsonp(iDevs);
+app.get('/sysinfos', function(req, res) {
+  var sysInfos = {
+    "ifaces": iDevs
+  };
+  res.jsonp(sysInfos);
 });
 
 
