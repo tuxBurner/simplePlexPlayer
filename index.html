@@ -62,7 +62,16 @@
 
   <!-- SETTINGS -->
   <script id="options_sysinfo-tpl" type="text/x-handlebars-template">
-    SETTINGS
+      <div id="menuItem" class="options">
+      <h3 class="well">{{title}}</h3>
+      <ol class="breadcrumb">
+        {{#if menuStack}}
+          {{#each menuStack}}
+            <li>{{title}}</li>
+          {{/each}}
+        {{/if}}
+      </ol>
+    </div>
   </script>
   <!-- EO SETTINGS>
 
@@ -124,7 +133,7 @@
   <script src="scripts/player/keyBoardEventHandler.js"> </script>
   <script src="scripts/player/menuHandler.js"> </script>
   <script src="scripts/player/tools.js"> </script>
-  <script src="scripts/player/Options.js"> </script>
+  <script src="scripts/player/OptionsHandler.js"> </script>
   <script src="scripts/player/player.js"> </script>
   <!-- EO Player Stuff -->
   <script src="scripts/main.js"> </script>

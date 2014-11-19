@@ -21,6 +21,7 @@ var Player = function(config) {
   this.loadToStack = [];
 
   this.keyBoardHandler = new KeyBoardEventHandler(that);
+  this.optionsHandler = new OptionsHandler(that);
   this.menuHandler = new MenuHandler();
 
   this.timeOut = null;
@@ -60,7 +61,7 @@ var Player = function(config) {
       "player": Handlebars.compile($("#player-tpl").html()),
       "menuitem": Handlebars.compile($("#menuitem-tpl").html()),
       // templates for the options
-      "options_sysinfo": Handlebars.compile($("#menuitem-tpl").html())
+      "options_sysinfo": Handlebars.compile($("#options_sysinfo-tpl").html())
     }
   }
 
@@ -86,7 +87,6 @@ var Player = function(config) {
 
   this.displayMenuItem = function() {
     var menuItem = that.menuHandler.getCurrentMenuItem();
-
     that.displayContent("menuitem", {
       "menuItem": menuItem,
       "menuStack": that.menuHandler.menuStack,
@@ -229,7 +229,7 @@ var Player = function(config) {
         that.initMenu()
       });
     } else {
-      Options.getOptionsMenuItems(currentMenuItemId);
+      that.optionsHandler.getOptionsMenuItems(currentMenuItemId);
     }
   }
 
@@ -241,10 +241,9 @@ var Player = function(config) {
   }
 
   this.startTimeOut = function() {
-
     if (that.displayOff == true) {
       // make sure the display is on
-      $.get(that.config.backenUrl + "/display/on");
+      $.get(that.config.baseUrl + "/display/on");
     }
 
     that.displayOff = false;
@@ -258,7 +257,7 @@ var Player = function(config) {
     that.displayOff = true;
 
     // turn off the display
-    $.get(that.config.backenUrl + "/display/off");
+    $.get(that.config.baseUrl + "/display/off");
   }
 
 
