@@ -8,16 +8,17 @@
     var elem = this;
 
     var defaults = {
-      chars: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '<span class="glyphicon glyphicon-chevron-left"></span>', '<span class="glyphicon glyphicon-arrow-down"></span>'],
-      keys: {
+      "chars": ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '<span class="glyphicon glyphicon-chevron-left"></span>', '<span class="glyphicon glyphicon-arrow-down"></span>'],
+      "keys": {
         38: "nextChar",
         40: "prevChar",
         27: "cancle",
         13: "enter"
-      }
+      },
+      "blurHandler": null
     }
 
-    var opts = $.extend({}, $.fn.simpleOnScreenKeyb.defaults, options);
+    $.extend(defaults, $.fn.simpleOnScreenKeyb.defaults, options);
 
     var currCharPos = 0;
 
@@ -97,7 +98,10 @@
             elem.val(currText)
             break;
           case "cancle":
-            elem.blur();
+            if (defaults.blurHandler != null) {
+              defaults.blurHandler(elem);
+            }
+            //elem.blur ();
             break;
         }
       }

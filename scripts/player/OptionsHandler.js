@@ -28,7 +28,8 @@ var OptionsHandler = function(player) {
     that.player.keyBoardHandler.registerOverrideHandler(
       function(e) {
         if (e.which == that.player.keyBoardHandler.keyMapping.back) {
-
+          console.error($(document.activeElement));
+          $($(document.activeElement)).closest('form').find(':focusable').focus();
         }
       },
       function(e) {
@@ -41,8 +42,17 @@ var OptionsHandler = function(player) {
       });
       return optionsContent;
     }, function() {
-      $('#options_wifisettings_essid').simpleOnScreenKeyb();
-      $('#options_wifisettings_wpa').simpleOnScreenKeyb();
+      $('#options_wifisettings_essid').simpleOnScreenKeyb({
+        "blurHandler": function(elem) {
+          //$(elem).closest('form').find(':focusable').focus();
+        }
+      });
+      $('#options_wifisettings_wpa').simpleOnScreenKeyb({
+        "blurHandler": function(elem) {
+          //  $(elem).closest('form').find(':focusable').focus();
+        }
+      });
+
     });
   }
 
