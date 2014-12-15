@@ -14,7 +14,34 @@ var OptionsHandler = function(player) {
       case 'opts_sysInfos':
         that.displaySysInfos();
         break;
+      case 'opts_wifisettings':
+        that.displayWifiSettings();
+        break;
     }
+  }
+
+  /**
+   * This is called when the user selects wifisettings
+   */
+  this.displayWifiSettings = function() {
+
+    that.player.keyBoardHandler.registerOverrideHandler(
+      function(e) {
+        if (e.which == that.player.keyBoardHandler.keyMapping.back) {
+          that.player.keyBoardHandler.deRegisterOverrideHandler();
+          that.player.performEscAction();
+        }
+      },
+      function(e) {
+        return;
+      });
+
+    that.displayOptionsTpl('/sysinfos', 'Wifi Settings', function(data) {
+      var optionsContent = that.player.templates['options_wifisettings']({
+        "data": data
+      });
+      return optionsContent;
+    });
   }
 
   /**
@@ -33,8 +60,8 @@ var OptionsHandler = function(player) {
         return;
       });
 
-    that.displayOptionsTpl('/sysinfos', function(data) {
-      var optionsContent = that.player.templates['options_sysinfos']({
+    that.displayOptionsTpl('/sysinfos', 'Sys Infos', function(data) {
+      var optionsContent = that.player.templates['options_wifisettings']({
         "data": data
       });
       return optionsContent;
@@ -44,10 +71,10 @@ var OptionsHandler = function(player) {
   /**
    * This is called whe the user wants to display an options entrance
    */
-  this.displayOptionsTpl = function(url, optionsContentCallBack) {
+  this.displayOptionsTpl = function(url, title, optionsContentCallBack) {
     Tools.callBackend(that.player.config.baseUrl + url, function(data) {
       that.player.displayContent('options_wrapper', {
-        "title": "Sys Infos",
+        "title": title,
         "menuStack": that.player.menuHandler.menuStack,
         "optionsContent": optionsContentCallBack(data)
       });
