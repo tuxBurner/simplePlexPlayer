@@ -92,16 +92,22 @@
   <!-- OPTIONS WIFISETTINGS -->
   <script id="options_wifisettings-tpl" type="text/x-handlebars-template">
     <form>
-      <div class="form-group">
+      <div class="row">
+      <div class="form-group col-xs-10">
         <label for="options_wifisettings_essid">ESSID</label>
           <input type="text" class="form-control" id="options_wifisettings_essid" placeholder="Enter ESSID">
       </div>
-      <div class="form-group">
+      </div>
+      <div class="row">
+      <div class="form-group  col-xs-10">
         <label for="options_wifisettings_wpa">WPA</label>
         <input type="text" class="form-control" id="options_wifisettings_wpa" placeholder="Enter WPA">
       </div>
-      <button type="button" id="options_wifisettings_submit" class="btn btn-success">Submit</button>
-      <button type="button" id="options_wifisettings_cancel" class="btn btn-danger">Cancel</button>
+      </div>
+      <div class="row">
+        <button type="button" id="options_wifisettings_submit" class="btn btn-success btn-lg">Submit</button>
+        <button type="button" id="options_wifisettings_cancel" class="btn btn-danger btn-lg">Cancel</button>
+      </div>
     </form>
   </script>
   <!-- EO OPTIONS SYSINFOS -->
