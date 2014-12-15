@@ -20,6 +20,7 @@ var OptionsHandler = function(player) {
     }
   }
 
+
   /**
    * This is called when the user selects wifisettings
    */
@@ -28,8 +29,7 @@ var OptionsHandler = function(player) {
     that.player.keyBoardHandler.registerOverrideHandler(
       function(e) {
         if (e.which == that.player.keyBoardHandler.keyMapping.back) {
-          console.error($(document.activeElement));
-          $($(document.activeElement)).closest('form').find(':focusable').focus();
+          Tools.nextOnTabIndex($(document.activeElement)).focus();
         }
       },
       function(e) {
@@ -42,14 +42,15 @@ var OptionsHandler = function(player) {
       });
       return optionsContent;
     }, function() {
+
       $('#options_wifisettings_essid').simpleOnScreenKeyb({
         "blurHandler": function(elem) {
-          //$(elem).closest('form').find(':focusable').focus();
+
         }
       });
       $('#options_wifisettings_wpa').simpleOnScreenKeyb({
         "blurHandler": function(elem) {
-          //  $(elem).closest('form').find(':focusable').focus();
+
         }
       });
 
