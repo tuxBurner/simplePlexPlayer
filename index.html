@@ -65,7 +65,7 @@
       <div id="menuItem" class="options">
       <h3 class="well">{{title}}</h3>
 
-      <div>{{optionsContent}}</div>
+      <div>{{{optionsContent}}}</div>
 
       <ol class="breadcrumb">
         {{#if menuStack}}
@@ -80,7 +80,12 @@
 
   <!-- OPTIONS SYSINFOS -->
   <script id="options_sysinfos-tpl" type="text/x-handlebars-template">
-
+    <dl class="dl-horizontal">
+    {{#each data.ifaces}}
+      <dt>{{name}}</dt>
+      <dd>{{details.address}}</dd>
+      {{/each}}
+    </dl>
   </script>
   <!-- EO OPTIONS SYSINFOS -->
 

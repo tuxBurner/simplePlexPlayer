@@ -61,7 +61,8 @@ var Player = function(config) {
       "player": Handlebars.compile($("#player-tpl").html()),
       "menuitem": Handlebars.compile($("#menuitem-tpl").html()),
       // templates for the options
-      "options_wrapper": Handlebars.compile($("#options_wrapper-tpl").html())
+      "options_wrapper": Handlebars.compile($("#options_wrapper-tpl").html()),
+      "options_sysinfos": Handlebars.compile($("#options_sysinfos-tpl").html())
     }
   }
 

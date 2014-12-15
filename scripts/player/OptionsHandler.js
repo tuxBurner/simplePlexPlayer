@@ -20,10 +20,14 @@ var OptionsHandler = function(player) {
   this.displaySysInfos = function(url) {
     Tools.callBackend(that.player.config.baseUrl + '/sysinfos', function(data) {
 
+      var optionsContent = that.player.templates['options_sysinfos']({
+        "data": data
+      });
+
       that.player.displayContent('options_wrapper', {
-        "sysInfo": data,
         "title": "Sys Infos",
-        "menuStack": that.player.menuHandler.menuStack
+        "menuStack": that.player.menuHandler.menuStack,
+        "optionsContent": optionsContent
       });
     });
 

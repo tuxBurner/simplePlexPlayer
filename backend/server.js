@@ -121,13 +121,16 @@ app.get('/sources/:sourceName/*', function(req, res) {
  */
 var os = require('os');
 var ifaces = os.networkInterfaces();
-var iDevs = {};
+var iDevs = [];
 for (var dev in ifaces) {
   var alias = 0;
   ifaces[dev].forEach(function(details) {
     if (details.family == 'IPv4' && details.internal == false) {
       var devName = dev + (alias ? ':' + alias : '');
-      iDevs[devName] = details.address;
+      iDevs.push({
+        "name": devName,
+        "details": details
+      });
       ++alias;
     }
   });
