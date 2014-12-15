@@ -30,6 +30,17 @@ var OptionsHandler = function(player) {
       function(e) {
         if (e.which == that.player.keyBoardHandler.keyMapping.back) {
           Tools.nextOnTabIndex($(document.activeElement)).focus();
+          return;
+        }
+        if (e.which == that.player.keyBoardHandler.keyMapping.action) {
+          var elemId = $(document.activeElement).attr('id');
+          if (elemId == 'options_wifisettings_submit') {
+            alert("submit data to backend");
+          }
+          if (elemId == 'options_wifisettings_cancel') {
+            that.player.keyBoardHandler.deRegisterOverrideHandler();
+            that.player.performEscAction();
+          }
         }
       },
       function(e) {
@@ -61,7 +72,6 @@ var OptionsHandler = function(player) {
    * This is called when the user selects the display sysinfo options
    */
   this.displaySysInfos = function() {
-
     that.player.keyBoardHandler.registerOverrideHandler(
       function(e) {
         if (e.which == that.player.keyBoardHandler.keyMapping.back) {
@@ -74,7 +84,7 @@ var OptionsHandler = function(player) {
       });
 
     that.displayOptionsTpl('/sysinfos', 'Sys Infos', function(data) {
-      var optionsContent = that.player.templates['options_wifisettings']({
+      var optionsContent = that.player.templates['options_sysinfos']({
         "data": data
       });
       return optionsContent;
