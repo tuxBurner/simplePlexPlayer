@@ -25,7 +25,7 @@ var OptionsHandler = function(player) {
    * This is called when the user selects wifisettings
    */
   this.displayWifiSettings = function() {
-
+    // override the keyboard handler
     that.player.keyBoardHandler.registerOverrideHandler(
       function(e) {
         if (e.which == that.player.keyBoardHandler.keyMapping.back) {
@@ -42,19 +42,19 @@ var OptionsHandler = function(player) {
       });
       return optionsContent;
     }, function() {
-
-      $('#options_wifisettings_essid').simpleOnScreenKeyb({
-        "blurHandler": function(elem) {
-
+      // register keyboardhandler when the content is rendered
+      var options = {
+        "keys": {
+          39: "nextChar",
+          37: "prevChar",
+          27: "cancle",
+          13: "enter"
         }
-      });
-      $('#options_wifisettings_wpa').simpleOnScreenKeyb({
-        "blurHandler": function(elem) {
-
-        }
-      });
-
+      }
+      $('#options_wifisettings_essid').simpleOnScreenKeyb(options);
+      $('#options_wifisettings_wpa').simpleOnScreenKeyb(options);
     });
+
   }
 
   /**
