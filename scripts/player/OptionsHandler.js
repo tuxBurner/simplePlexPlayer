@@ -21,6 +21,18 @@ var OptionsHandler = function(player) {
    * This is called when the user selects the display sysinfo options
    */
   this.displaySysInfos = function() {
+
+    that.player.keyBoardHandler.registerOverrideHandler(
+      function(e) {
+        if (e.which == that.player.keyBoardHandler.keyMapping.back) {
+          that.player.keyBoardHandler.deRegisterOverrideHandler();
+          that.player.performEscAction();
+        }
+      },
+      function(e) {
+        return;
+      });
+
     that.displayOptionsTpl('/sysinfos', function(data) {
       var optionsContent = that.player.templates['options_sysinfos']({
         "data": data
