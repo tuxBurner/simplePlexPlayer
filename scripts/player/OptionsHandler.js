@@ -28,8 +28,7 @@ var OptionsHandler = function(player) {
     that.player.keyBoardHandler.registerOverrideHandler(
       function(e) {
         if (e.which == that.player.keyBoardHandler.keyMapping.back) {
-          that.player.keyBoardHandler.deRegisterOverrideHandler();
-          that.player.performEscAction();
+
         }
       },
       function(e) {
@@ -41,6 +40,9 @@ var OptionsHandler = function(player) {
         "data": data
       });
       return optionsContent;
+    }, function() {
+      $('#options_wifisettings_essid').simpleOnScreenKeyb();
+      $('#options_wifisettings_wpa').simpleOnScreenKeyb();
     });
   }
 
@@ -71,13 +73,13 @@ var OptionsHandler = function(player) {
   /**
    * This is called whe the user wants to display an options entrance
    */
-  this.displayOptionsTpl = function(url, title, optionsContentCallBack) {
+  this.displayOptionsTpl = function(url, title, optionsContentCallBack, displayCallBack) {
     Tools.callBackend(that.player.config.baseUrl + url, function(data) {
       that.player.displayContent('options_wrapper', {
         "title": title,
         "menuStack": that.player.menuHandler.menuStack,
         "optionsContent": optionsContentCallBack(data)
-      });
+      }, displayCallBack);
     });
 
   }
