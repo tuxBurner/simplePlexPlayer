@@ -36,10 +36,12 @@ var OptionsHandler = function(player) {
           var elemId = $(document.activeElement).attr('id');
           if (elemId == 'options_wifisettings_submit') {
             alert("submit data to backend");
+            return;
           }
           if (elemId == 'options_wifisettings_cancel') {
             that.player.keyBoardHandler.deRegisterOverrideHandler();
             that.player.performEscAction();
+            return;
           }
         }
       },
