@@ -6,6 +6,9 @@ var OptionsHandler = function(player) {
   this.player = player;
   that = this;
 
+  /**
+   * displays the current menu item
+   */
   this.getOptionsMenuItems = function(currentMenuItemId) {
     switch (currentMenuItemId) {
       case 'opts_sysInfos':
@@ -17,17 +20,24 @@ var OptionsHandler = function(player) {
   /**
    * This is called when the user selects the display sysinfo options
    */
-  this.displaySysInfos = function(url) {
-    Tools.callBackend(that.player.config.baseUrl + '/sysinfos', function(data) {
-
+  this.displaySysInfos = function() {
+    that.displayOptionsTpl('/sysinfos', function(data) {
       var optionsContent = that.player.templates['options_sysinfos']({
         "data": data
       });
+      return optionsContent;
+    });
+  }
 
+  /**
+   * This is called whe the user wants to display an options entrance
+   */
+  this.displayOptionsTpl = function(url, optionsContentCallBack) {
+    Tools.callBackend(that.player.config.baseUrl + url, function(data) {
       that.player.displayContent('options_wrapper', {
         "title": "Sys Infos",
         "menuStack": that.player.menuHandler.menuStack,
-        "optionsContent": optionsContent
+        "optionsContent": optionsContentCallBack(data)
       });
     });
 

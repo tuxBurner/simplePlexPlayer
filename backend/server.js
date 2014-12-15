@@ -120,27 +120,42 @@ app.get('/sources/:sourceName/*', function(req, res) {
  * #### NETWORK STUFF ####
  */
 var os = require('os');
-var ifaces = os.networkInterfaces();
-var iDevs = [];
-for (var dev in ifaces) {
-  var alias = 0;
-  ifaces[dev].forEach(function(details) {
-    if (details.family == 'IPv4' && details.internal == false) {
-      var devName = dev + (alias ? ':' + alias : '');
-      iDevs.push({
-        "name": devName,
-        "details": details
-      });
-      ++alias;
-    }
-  });
+
+/**
+ * Gather the network infos
+ */
+var gatherNetDevInfos = function() {
+  var ifaces = os.networkInterfaces();
+  var iDevs = [];
+  for (var dev in ifaces) {
+    var alias = 0;
+    ifaces[dev].forEach(function(details) {
+      if (details.family == 'IPv4' && details.internal == false) {
+        var devName = dev + (alias ? ':' + alias : '');
+        iDevs.push({
+          "name": devName,
+          "details": details
+        });
+        ++alias;
+      }
+    });
+  }
+  return iDevs;
+}
+
+/**
+ * collects all the sysinfos
+ */
+var gatherSysInfos = function() {
+  var sysInfos = {
+    "ifaces": gatherNetDevInfos()
+  };
+
+  return sysInfos;
 }
 
 app.get('/sysinfos', function(req, res) {
-  var sysInfos = {
-    "ifaces": iDevs
-  };
-  res.jsonp(sysInfos);
+  res.jsonp(gatherSysInfos());
 });
 
 
