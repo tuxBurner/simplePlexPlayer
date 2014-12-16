@@ -66,6 +66,7 @@ var OptionsHandler = function(player) {
       }
       $('#options_wifisettings_essid').simpleOnScreenKeyb(options);
       $('#options_wifisettings_wpa').simpleOnScreenKeyb(options);
+      Tools.nextOnTabIndex($(document.activeElement)).focus();
     });
 
   }
