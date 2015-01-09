@@ -2,6 +2,8 @@
  * This is the server handling some stuff
  */
 
+var fs = require('fs');
+
 // require stuff
 var conf = require('./config.json');
 
@@ -158,6 +160,22 @@ app.get('/sysinfos', function(req, res) {
   res.jsonp(gatherSysInfos());
 });
 
+app.get('/sysinfos/networkconfig',function(req,res) {
+  fs.readFile('./network/networkConf.tpl', 'utf8', function (err,data) {
+
+
+    var result = data.replace('<ssidGoesHere>',req.query.ssid);
+    result = result.replace('<wpaGoesHere>',req.query.wpa);
+
+    fs.writeFile(conf.networkCfgFile, result, function(err) {
+      if(!err) {
+        res.send("okay");
+      }
+    });
+
+
+  });
+});
 
 
 var server = app.listen(conf.serverPort, function() {
