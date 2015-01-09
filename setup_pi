@@ -41,6 +41,14 @@ sudo make install
 enable-universal-access-from-file-uris=true
 
 
+--- APD and network stuff ---
+aptitude install hostapd
+aptitude install dnsmasq
+
+/usr/sbin/dnsmasq -x /home/pi/simplePlexPlayer/dnsmasq.pid -u dnsmasq -C ./dnsmasq.conf
+/usr/sbin/hostapd -B -P /home/pi/simplePlexPlayer/hostapd.pid  ./hostapd.conf
+/sbin/ifconfig wlan0 192.168.9.1
+
 -- CONFIGS --
 
 
