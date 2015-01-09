@@ -1,9 +1,6 @@
 /**
  * This is the server handling some stuff
  */
-
-var fs = require('fs');
-
 // require stuff
 var conf = require('./config.json');
 
@@ -160,22 +157,60 @@ app.get('/sysinfos', function(req, res) {
   res.jsonp(gatherSysInfos());
 });
 
-app.get('/sysinfos/networkconfig',function(req,res) {
+var fs = require('fs');
+var exec = require('child_process').exec;
+
+/**
+ * writes the network conf
+ */
+app.get('/sysinfos/network/config',function(req,res) {
   fs.readFile('./network/networkConf.tpl', 'utf8', function (err,data) {
-
-
+    // replace the place holders
     var result = data.replace('<ssidGoesHere>',req.query.ssid);
     result = result.replace('<wpaGoesHere>',req.query.wpa);
-
+    // write the file
     fs.writeFile('./network/networkConf.cfg', result, function(err) {
       if(!err) {
-        res.send("okay");
+        execStopApMode(res);
       }
     });
-
-
   });
 });
+
+/**
+ * Starts the ap mode
+ */
+app.get('/sysinfos/network/startApMode', function(req,res) {
+  execStartApMode(res);
+});
+
+/**
+ * Stops the ap mode
+ */
+app.get('/sysinfos/network/stopApMode', function(req,res) {
+  execStopApMode(res);
+});
+
+/**
+ * Stops the ap mode of the machine and starts normal networking
+ * @param res
+ */
+var execStopApMode = function(res) {
+  exec("./network/stopApMode.sh "+conf.networkCfgFile, function (error, stdout, stderr) {
+    res.send("okay");
+  });
+};
+
+
+/**
+ * Stops the ap mode of the machine and starts normal networking
+ * @param res
+ */
+var execStartApMode = function(res) {
+  exec("./network/startApMode.sh "+conf.networkCfgFile, function (error, stdout, stderr) {
+    res.send("okay");
+  });
+};
 
 
 var server = app.listen(conf.serverPort, function() {

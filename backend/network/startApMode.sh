@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPTPATH=`dirname $0`
+cd $SCRIPTPATH
+
 # already in ap mode ?  well do nothing
 if [ -f ./apMode ]
 then

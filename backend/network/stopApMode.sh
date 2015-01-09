@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPTPATH=`dirname $0`
+cd $SCRIPTPATH
+
 #check if the ./networkConf.cfg  exists.
 if [ ! -f ./networkConf.cfg ]
 then
