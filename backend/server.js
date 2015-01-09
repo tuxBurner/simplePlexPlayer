@@ -167,7 +167,7 @@ app.get('/sysinfos/networkconfig',function(req,res) {
     var result = data.replace('<ssidGoesHere>',req.query.ssid);
     result = result.replace('<wpaGoesHere>',req.query.wpa);
 
-    fs.writeFile(conf.networkCfgFile, result, function(err) {
+    fs.writeFile('./network/networkConf.cfg', result, function(err) {
       if(!err) {
         res.send("okay");
       }
