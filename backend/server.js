@@ -146,14 +146,22 @@ var gatherNetDevInfos = function() {
  * collects all the sysinfos
  */
 var gatherSysInfos = function() {
+
+  // check if is in ap mode or not
+  var inApMode = fs.existsSync('./network/apMode');
+
   var sysInfos = {
-    "ifaces": gatherNetDevInfos()
+    "ifaces": gatherNetDevInfos(),
+    "inApMode": inApMode
   };
 
   return sysInfos;
 }
 
-app.get('/sysinfos', function(req, res) {
+/**
+ * Gathe the sys informations
+ */
+app.get('/sys/infos', function(req, res) {
   res.jsonp(gatherSysInfos());
 });
 
@@ -163,7 +171,7 @@ var exec = require('child_process').exec;
 /**
  * writes the network conf
  */
-app.get('/sysinfos/network/config',function(req,res) {
+app.get('/sys/network/config',function(req,res) {
   fs.readFile('./network/networkConf.tpl', 'utf8', function (err,data) {
     // replace the place holders
     var result = data.replace('<ssidGoesHere>',req.query.ssid);
@@ -180,14 +188,14 @@ app.get('/sysinfos/network/config',function(req,res) {
 /**
  * Starts the ap mode
  */
-app.get('/sysinfos/network/startApMode', function(req,res) {
+app.get('/sys/network/apMode/start', function(req,res) {
   execStartApMode(res);
 });
 
 /**
  * Stops the ap mode
  */
-app.get('/sysinfos/network/stopApMode', function(req,res) {
+app.get('/sys/network/apMode/stop', function(req,res) {
   execStopApMode(res);
 });
 
