@@ -93,6 +93,10 @@ div.audiojs {
 #menuItem.options .popover-title {
   display: none;
 }
+#menuItem.options .btn:focus {
+  color: #000000;
+  font-weight: bold;
+}
 #menuItem.section {
   background-color: #428bca;
 }

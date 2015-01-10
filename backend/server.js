@@ -205,7 +205,7 @@ app.get('/sys/network/apMode/stop', function(req,res) {
  */
 var execStopApMode = function(res) {
   exec("./network/stopApMode.sh "+conf.networkCfgFile, function (error, stdout, stderr) {
-    res.send("okay");
+    res.jsonp({"status": "okay"});
   });
 };
 
@@ -216,7 +216,7 @@ var execStopApMode = function(res) {
  */
 var execStartApMode = function(res) {
   exec("./network/startApMode.sh "+conf.networkCfgFile, function (error, stdout, stderr) {
-    res.send("okay");
+    res.jsonp({"status": "okay"});
   });
 };
 

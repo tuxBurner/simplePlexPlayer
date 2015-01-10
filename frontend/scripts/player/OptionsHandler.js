@@ -35,8 +35,16 @@ var OptionsHandler = function(player) {
         if (e.which == that.player.keyBoardHandler.keyMapping.action) {
           var elemId = $(document.activeElement).attr('id');
           if (elemId == 'options_wifisettings_submit') {
-            alert("submit data to backend");
-            return;
+
+            var ssid = $('#options_wifisettings_essid').val();
+            var wpa = $('#options_wifisettings_wpa').val();
+
+            var url = '/sys/network/config?wpa='+wpa+'&ssid='+ssid;
+
+            Tools.callBackend(that.player.config.baseUrl + url, function(data) {
+              that.player.keyBoardHandler.deRegisterOverrideHandler();
+              that.player.performEscAction();
+            });
           }
           if (elemId == 'options_wifisettings_cancel') {
             that.player.keyBoardHandler.deRegisterOverrideHandler();
