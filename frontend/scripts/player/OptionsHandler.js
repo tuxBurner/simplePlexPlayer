@@ -35,7 +35,6 @@ var OptionsHandler = function(player) {
         if (e.which == that.player.keyBoardHandler.keyMapping.action) {
           var elemId = $(document.activeElement).attr('id');
           if (elemId == 'options_wifisettings_submit') {
-
             var ssid = $('#options_wifisettings_essid').val();
             var wpa = $('#options_wifisettings_wpa').val();
 
@@ -45,7 +44,15 @@ var OptionsHandler = function(player) {
               that.player.keyBoardHandler.deRegisterOverrideHandler();
               that.player.performEscAction();
             });
+            return;
           }
+          if(elemId == 'options_wifisettings_switchapmode') {
+            Tools.callBackend(that.player.config.baseUrl + '/sys/network/apMode/switch', function(data) {
+              window.location.reload();
+            });
+            return;
+          }
+
           if (elemId == 'options_wifisettings_cancel') {
             that.player.keyBoardHandler.deRegisterOverrideHandler();
             that.player.performEscAction();

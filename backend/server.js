@@ -200,6 +200,19 @@ app.get('/sys/network/apMode/stop', function (req, res) {
 });
 
 /**
+ * Switch the ap mode
+ */
+app.get('/sys/network/apMode/switch', function (req, res) {
+  var inApMode = fs.existsSync('./network/apMode');
+  if(inApMode == true) {
+    execStopApMode(res);
+  } else {
+    execStartApMode(res);
+  }
+});
+
+
+/**
  * Stops the ap mode of the machine and starts normal networking
  * @param res
  */
