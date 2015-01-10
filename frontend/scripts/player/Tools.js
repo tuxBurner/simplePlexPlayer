@@ -17,7 +17,8 @@ Tools.callBackend = function(url, callback) {
 
   $.blockUI({
     "message": '<h1><i class="fa fa-spinner fa-spin"></i> Just a moment...</h1>',
-    "ignoreIfBlocked": true
+    "ignoreIfBlocked": true,
+    "bindEvents": true
   });
 
   $.ajax({

@@ -149,9 +149,11 @@ var gatherSysInfos = function () {
 
   // check if is in ap mode or not
   var inApMode = fs.existsSync('./network/apMode');
+  var netCfg = require('./network/networkConf.json');
 
   var sysInfos = {
     "ifaces": gatherNetDevInfos(),
+    "netCfg" : netCfg,
     "inApMode": inApMode.toString()
   };
 
@@ -176,11 +178,16 @@ app.get('/sys/network/config', function (req, res) {
     // replace the place holders
     var result = data.replace('<ssidGoesHere>', req.query.ssid);
     result = result.replace('<wpaGoesHere>', req.query.wpa);
-    // write the file
-    fs.writeFile('./network/networkConf.cfg', result, function (err) {
-      if (!err) {
-        execStopApMode(res);
-      }
+
+    var cfg = {"ssid" :  req.query.ssid, "wpa":  req.query.wpa};
+
+    fs.writeFile('./network/networkConf.json', JSON.stringify(cfg) , function (err) {
+      // write the file
+      fs.writeFile('./network/networkConf.cfg', result, function (err) {
+        if (!err) {
+          execStopApMode(res);
+        }
+      });
     });
   });
 });
