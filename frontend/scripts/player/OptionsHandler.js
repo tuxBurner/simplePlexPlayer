@@ -49,7 +49,7 @@ var OptionsHandler = function(player) {
         return;
       });
 
-    that.displayOptionsTpl('/sysinfos', 'Wifi Settings', function(data) {
+    that.displayOptionsTpl('/sys/infos', 'Wifi Settings', function(data) {
       var optionsContent = that.player.templates['options_wifisettings']({
         "data": data
       });

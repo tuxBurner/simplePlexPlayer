@@ -84,8 +84,14 @@ div.audiojs {
 #menuItem.options:before {
   content: "\f0ad";
 }
-#menuItem.options .dl-horizontal {
+#menuItem.options .dl-horizontal,
+#menuItem.options .form-control,
+#menuItem.options label,
+#menuItem.options .popover {
   font-size: 24px;
+}
+#menuItem.options .popover-title {
+  display: none;
 }
 #menuItem.section {
   background-color: #428bca;
