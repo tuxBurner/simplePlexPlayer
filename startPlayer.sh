@@ -1,6 +1,6 @@
 #!/bin/sh
 unclutter &
-matchbox-window-manager & :
+matchbox-window-manager -use_titlebar no & :
 xset -dpms
 xset s off
 while true; do
@@ -14,6 +14,8 @@ cd backend/pikeyd
 cd ../..
 
 cd frontend
-/usr/bin/midori -c ~/.config/midori -e Fullscreen -a ./index.html
+#/usr/bin/midori -c ~/.config/midori -e Fullscreen -a ./index.html
+mkdir ephy-profile
+epiphany-browser --profile=./ephy-profile -a ./index.html
 cd ../
 done

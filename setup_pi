@@ -16,6 +16,10 @@ Verkabelung: gpio und ground
 -- usb automount --
 apt-get install usbmount
 
+-- pressing keys in x --
+ sudo aptitude install xautomation
+  DISPLAY=:0 echo key F11 | xte
+
 -- nvm --
 http://www.whaleblubber.ca/install-node-js-nvm/
 curl https://raw.github.com/creationix/nvm/master/install.sh | sh
