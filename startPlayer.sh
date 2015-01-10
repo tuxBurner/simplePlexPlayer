@@ -13,5 +13,7 @@ cd backend/pikeyd
 ./pikeyd -pu -d
 cd ../..
 
-/usr/bin/midori -c ~/.config/midori -e Fullscreen -a ./frontend/index.html
+cd frontend
+/usr/bin/midori -c ~/.config/midori -e Fullscreen -a ./index.html
+cd ../
 done
