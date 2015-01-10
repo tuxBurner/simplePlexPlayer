@@ -16,7 +16,7 @@ function RadioSource(conf) {
       throw new Error("Radio cfg file: " + conf.cfgFile + " does not exist");
     }
 
-    var stationsCfg = require(conf.cfgFile);
+    var stationsCfg = require('../../'+conf.cfgFile);
 
     for (idx in stationsCfg) {
       var station = stationsCfg[idx];

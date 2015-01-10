@@ -15,7 +15,7 @@
     "port": 32400
   }, {
     "name": "radio",
-    "type": "radios",
-    "cfgFile": "./../radio/radiostation.json"
+    "type": "radio",
+    "cfgFile": "./radio/radiostation.json"
   }]
 }
