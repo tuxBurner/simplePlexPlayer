@@ -24,20 +24,20 @@ for (idx in conf.sources) {
 
   switch (sourceConf.type) {
     case "dir":
-      {
-        source = new LocalSource(sourceConf);
-        break;
-      }
+    {
+      source = new LocalSource(sourceConf);
+      break;
+    }
     case "plex":
-      {
-        source = new PlexSource(sourceConf);
-        break;
-      }
+    {
+      source = new PlexSource(sourceConf);
+      break;
+    }
     case "radio":
-      {
-        source = new RadioSource(sourceConf);
-        break;
-      }
+    {
+      source = new RadioSource(sourceConf);
+      break;
+    }
   }
 
   if (source != null) {
@@ -54,11 +54,11 @@ var app = express();
 
 // only expose gpio stuff when having gpio
 if (rpiGpio !== null) {
-  app.get('/display/on', function(req, res) {
+  app.get('/display/on', function (req, res) {
     rpiGpio.turnDisplayOn(res);
   });
 
-  app.get('/display/off', function(req, res) {
+  app.get('/display/off', function (req, res) {
     rpiGpio.turnDisplayOff(res);
   });
 }
@@ -67,11 +67,11 @@ if (rpiGpio !== null) {
  * #### SOURCES ENDPOINTS ####
  */
 // get the sources
-app.get('/sources', function(req, res) {
+app.get('/sources', function (req, res) {
   res.jsonp(Object.keys(sources));
 });
 
-app.get('/sources/:sourceName', function(req, res) {
+app.get('/sources/:sourceName', function (req, res) {
   if (sources[req.params.sourceName] === undefined) {
     res.status(500).send('Source ' + req.params.sourceName + " not found !");
   } else {
@@ -79,7 +79,7 @@ app.get('/sources/:sourceName', function(req, res) {
   }
 });
 
-app.get('/sources/:sourceName/*', function(req, res) {
+app.get('/sources/:sourceName/*', function (req, res) {
   if (sources[req.params.sourceName] === undefined) {
     res.status(500).send('Source ' + req.params.sourceName + " not found !");
   } else {
@@ -107,7 +107,7 @@ app.get('/sources/:sourceName/*', function(req, res) {
       }
     }
 
-    parent.loadSubData(function() {
+    parent.loadSubData(function () {
       res.jsonp(parent);
     });
 
@@ -123,12 +123,12 @@ var os = require('os');
 /**
  * Gather the network infos
  */
-var gatherNetDevInfos = function() {
+var gatherNetDevInfos = function () {
   var ifaces = os.networkInterfaces();
   var iDevs = [];
   for (var dev in ifaces) {
     var alias = 0;
-    ifaces[dev].forEach(function(details) {
+    ifaces[dev].forEach(function (details) {
       if (details.family == 'IPv4' && details.internal == false) {
         var devName = dev + (alias ? ':' + alias : '');
         iDevs.push({
@@ -145,7 +145,7 @@ var gatherNetDevInfos = function() {
 /**
  * collects all the sysinfos
  */
-var gatherSysInfos = function() {
+var gatherSysInfos = function () {
 
   // check if is in ap mode or not
   var inApMode = fs.existsSync('./network/apMode');
@@ -161,7 +161,7 @@ var gatherSysInfos = function() {
 /**
  * Gathe the sys informations
  */
-app.get('/sys/infos', function(req, res) {
+app.get('/sys/infos', function (req, res) {
   res.jsonp(gatherSysInfos());
 });
 
@@ -171,14 +171,14 @@ var exec = require('child_process').exec;
 /**
  * writes the network conf
  */
-app.get('/sys/network/config',function(req,res) {
-  fs.readFile('./network/networkConf.tpl', 'utf8', function (err,data) {
+app.get('/sys/network/config', function (req, res) {
+  fs.readFile('./network/networkConf.tpl', 'utf8', function (err, data) {
     // replace the place holders
-    var result = data.replace('<ssidGoesHere>',req.query.ssid);
-    result = result.replace('<wpaGoesHere>',req.query.wpa);
+    var result = data.replace('<ssidGoesHere>', req.query.ssid);
+    result = result.replace('<wpaGoesHere>', req.query.wpa);
     // write the file
-    fs.writeFile('./network/networkConf.cfg', result, function(err) {
-      if(!err) {
+    fs.writeFile('./network/networkConf.cfg', result, function (err) {
+      if (!err) {
         execStopApMode(res);
       }
     });
@@ -188,14 +188,14 @@ app.get('/sys/network/config',function(req,res) {
 /**
  * Starts the ap mode
  */
-app.get('/sys/network/apMode/start', function(req,res) {
+app.get('/sys/network/apMode/start', function (req, res) {
   execStartApMode(res);
 });
 
 /**
  * Stops the ap mode
  */
-app.get('/sys/network/apMode/stop', function(req,res) {
+app.get('/sys/network/apMode/stop', function (req, res) {
   execStopApMode(res);
 });
 
@@ -203,25 +203,42 @@ app.get('/sys/network/apMode/stop', function(req,res) {
  * Stops the ap mode of the machine and starts normal networking
  * @param res
  */
-var execStopApMode = function(res) {
-  exec("./network/stopApMode.sh "+conf.networkCfgFile, function (error, stdout, stderr) {
+var execStopApMode = function (res) {
+  exec("./network/stopApMode.sh " + conf.networkCfgFile, function (error, stdout, stderr) {
+    res.jsonp({"status": "okay"});
+  });
+};
+
+/**
+ * Stops the ap mode of the machine and starts normal networking
+ * @param res
+ */
+var execStartApMode = function (res) {
+  exec("./network/startApMode.sh " + conf.networkCfgFile, function (error, stdout, stderr) {
     res.jsonp({"status": "okay"});
   });
 };
 
 
 /**
- * Stops the ap mode of the machine and starts normal networking
- * @param res
+ * This can be called to press a key in x
  */
-var execStartApMode = function(res) {
-  exec("./network/startApMode.sh "+conf.networkCfgFile, function (error, stdout, stderr) {
+app.get('/sys/key/:key', function (req, res) {
+  pressKeyInX(req.params.key, res);
+});
+
+/**
+ * Presses the given key in the x window
+ * @param key
+ */
+var pressKeyInX = function (key, res) {
+  exec('DISPLAY=:0 echo key ' + key + ' | xte', function (error, stdout, stderr) {
     res.jsonp({"status": "okay"});
   });
-};
+}
 
 
-var server = app.listen(conf.serverPort, function() {
+var server = app.listen(conf.serverPort, function () {
   console.log('Listening on port %d', server.address().port);
 });
 
@@ -229,7 +246,7 @@ var server = app.listen(conf.serverPort, function() {
 /**
  * #### HANDLE SHUTDOWN ####
  */
-process.on('SIGINT', function() {
+process.on('SIGINT', function () {
   console.log("\nGracefully shutting down from SIGINT (Ctrl-C)");
   // some other closing procedures go here
 
