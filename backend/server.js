@@ -149,7 +149,10 @@ var gatherSysInfos = function () {
 
   // check if is in ap mode or not
   var inApMode = fs.existsSync('./network/apMode');
-  var netCfg = require('./network/networkConf.json');
+
+
+  var data = fs.readFileSync('./network/networkConf.json', 'utf8');
+  var netCfg = JSON.parse(data);
 
   var sysInfos = {
     "ifaces": gatherNetDevInfos(),
@@ -158,6 +161,7 @@ var gatherSysInfos = function () {
   };
 
   return sysInfos;
+
 }
 
 /**
