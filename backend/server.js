@@ -219,7 +219,6 @@ var execStartApMode = function (res) {
   });
 };
 
-
 /**
  * This can be called to press a key in x
  */
@@ -232,7 +231,7 @@ app.get('/sys/key/:key', function (req, res) {
  * @param key
  */
 var pressKeyInX = function (key, res) {
-  exec('DISPLAY=:0 echo key ' + key + ' | xte', function (error, stdout, stderr) {
+  exec('./pressXKey '+key, function (error, stdout, stderr) {
     res.jsonp({"status": "okay"});
   });
 }
