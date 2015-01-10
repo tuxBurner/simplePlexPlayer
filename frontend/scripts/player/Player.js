@@ -134,6 +134,9 @@ var Player = function (config) {
   }
 
 
+  /**
+   * Performs an action on the current menu item
+   */
   this.performAction = function () {
     var higlightedMenu = that.menuHandler.getCurrentMenuItem();
 
@@ -167,6 +170,9 @@ var Player = function (config) {
   }
 
 
+  /**
+   * Performs an escap action on the current menu item
+   */
   this.performEscAction = function () {
     var removedMenuItem = that.menuHandler.removeLastMenuItemFromStack();
     if (removedMenuItem == null) {
@@ -183,7 +189,12 @@ var Player = function (config) {
       case "directory":
         that.loadDirectory(removedMenuItem.parent, false, removedMenuItem.id);
         break;
+      case "options":
+        window.location.hash = '';
+        that.displayMainMenu();
+        break;
       default:
+        window.location.hash = '';
         that.displayMainMenu();
     }
   }
