@@ -231,7 +231,7 @@ app.get('/sys/key/:key', function (req, res) {
  * @param key
  */
 var pressKeyInX = function (key, res) {
-  exec('./pressXKey '+key, function (error, stdout, stderr) {
+  exec('./pressXKey.sh '+key, function (error, stdout, stderr) {
     res.jsonp({"status": "okay"});
   });
 }
