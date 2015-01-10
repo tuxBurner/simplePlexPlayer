@@ -6,7 +6,7 @@
     "name": "Usb",
     "type": "dir",
     "path": "/media",
-    "disableCaching": "true"
+    "disableCaching": true
   }, {
     "name": "plexHoerspiele",
     "type": "plex",

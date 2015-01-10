@@ -14,17 +14,13 @@ var Directory = function(id, title, thumb,disableCaching, parent) {
   this.files = [];
   this.parent = parent;
   this.disableCaching = disableCaching;
-  this.initialized = false;
-
 
   /**
    * This is called to clean out the sub folders and files when caching is disabled on this folder
    */
   this.cleanSubs = function() {
-    if(this.disableCaching == true) {
       this.subDirs = [];
       this.files = [];
-    }
   }
 
   /**
