@@ -82,9 +82,11 @@
   <script id="options_sysinfos-tpl" type="text/x-handlebars-template">
     <dl class="dl-horizontal">
     {{#each data.ifaces}}
-      <dt>{{name}}</dt>
+      <dt>{{name}}:</dt>
       <dd>{{details.address}}</dd>
       {{/each}}
+      <dt>Access Point Mode:</dt>
+      <dd>{{data.inApMode}}</dd>
     </dl>
   </script>
   <!-- EO OPTIONS SYSINFOS -->

@@ -152,7 +152,7 @@ var gatherSysInfos = function() {
 
   var sysInfos = {
     "ifaces": gatherNetDevInfos(),
-    "inApMode": inApMode
+    "inApMode": inApMode.toString()
   };
 
   return sysInfos;

@@ -86,7 +86,7 @@ var OptionsHandler = function(player) {
         return;
       });
 
-    that.displayOptionsTpl('/sysinfos', 'Sys Infos', function(data) {
+    that.displayOptionsTpl('/sys/infos', 'Sys Infos', function(data) {
       var optionsContent = that.player.templates['options_sysinfos']({
         "data": data
       });
