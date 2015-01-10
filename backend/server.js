@@ -6,15 +6,15 @@ var conf = require('./config.json');
 
 var rpiGpio = null;
 if (conf.displayOnOfPin !== undefined) {
-  var RpiGpio = require('./RpiGpio.js');
+  var RpiGpio = require('./lib/RpiGpio.js');
   rpiGpio = new RpiGpio(conf);
 }
 
 var sources = {};
 
-var LocalSource = require('./LocalSource.js');
-var PlexSource = require('./PlexSource.js');
-var RadioSource = require('./RadioSource.js');
+var LocalSource = require('./lib/sources/LocalSource.js');
+var PlexSource = require('./lib/sources/PlexSource.js');
+var RadioSource = require('./lib/sources/RadioSource.js');
 
 // load all sources and instanstiate them
 for (idx in conf.sources) {

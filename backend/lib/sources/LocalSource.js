@@ -1,8 +1,8 @@
 var fs = require('fs');
 var mm = require('musicmetadata');
 var path = require('path');
-var Folder = require('./Folder.js');
-var AudioFile = require('./AudioFile.js');
+var Folder = require('./../Folder.js');
+var AudioFile = require('./../AudioFile.js');
 
 /**
  * Reads the local sources and holds them in a data structure

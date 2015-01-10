@@ -1,5 +1,5 @@
-var Folder = require('./Folder.js');
-var AudioFile = require('./AudioFile.js');
+var Folder = require('./../Folder.js');
+var AudioFile = require('./../AudioFile.js');
 var fs = require('fs');
 
 /**

@@ -1,7 +1,7 @@
 // see https://docs.google.com/document/d/19bTQr99oKn2pOpHcVtqidokbq9zup-K-mFy8JmII6uQ/edit
 
-var Folder = require('./Folder.js');
-var AudioFile = require('./AudioFile.js');
+var Folder = require('./../Folder.js');
+var AudioFile = require('./../AudioFile.js');
 var PlexAPI = require("plex-api");
 
 /**
