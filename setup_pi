@@ -13,6 +13,9 @@ sudo ./pikeyd -pu
 Verkabelung: gpio und ground
 
 
+-- usb automount --
+apt-get install usbmount
+
 -- nvm --
 http://www.whaleblubber.ca/install-node-js-nvm/
 curl https://raw.github.com/creationix/nvm/master/install.sh | sh
