@@ -1,7 +1,7 @@
 /**
-* Describes a folder or a section from a source like local or plex
-*/
-function Folder(name,path,thumb) {
+ * Describes a folder or a section from a source like local or plex
+ */
+function Folder(name, path, thumb) {
 
   var that = this;
   this.name = name;
@@ -11,6 +11,9 @@ function Folder(name,path,thumb) {
   // marks if this folder was already initialized
   this.initialized = false;
 
+  // when set to true the folder will be always initialized when requested
+  this.disableCaching = false;
+
   // the callback function for getting the data for this folder
   this.dataCallBack = null
 
@@ -18,22 +21,28 @@ function Folder(name,path,thumb) {
 
   this.audioFiles = {};
 
-
+  /**
+   * This is called when the user wants to
+   * @param httpRespCallback
+   */
   this.loadSubData = function(httpRespCallback) {
     if(this.dataCallBack !== null && this.initialized == false) {
-      this.initialized = true;
-      this.dataCallBack(httpRespCallback);         
+      if(this.disableCaching == true) {
+        this.subFolders = {};
+        this.audioFiles = {};
+      } else {
+        this.initialized = true;
+      }
+      this.dataCallBack(httpRespCallback);
       return;
     }
-
-
     httpRespCallback();
   }
 
   /**
-  * Adds a subfolder to this folder
-  */
-  this.addSubFolder = function(folder){
+   * Adds a subfolder to this folder
+   */
+  this.addSubFolder = function(folder) {
     that.subFolders[folder.name] = folder;
     if(that.thumb == '' && folder.thumb != '') {
       that.thumb = folder.thumb;
@@ -49,22 +58,23 @@ function Folder(name,path,thumb) {
   }
 
   /**
-  * Overrride the to Json method we dont need all of the data
-  */
+   * Overrride the to Json method we dont need all of the data
+   */
   this.toJSON = function() {
     var subFolders = [];
     for(idx  in this.subFolders) {
-      subFolders.push({ "name" : idx, "thumb" : this.subFolders[idx].thumb });
+      subFolders.push({"name": idx, "thumb": this.subFolders[idx].thumb});
     }
 
     var audioFiles = [];
     for(idx  in this.audioFiles) {
-      audioFiles.push({ "name" : idx, "thumb" : this.audioFiles[idx].thumb, "duration" : this.audioFiles[idx].duration });
+      audioFiles.push({"name": idx, "thumb": this.audioFiles[idx].thumb, "duration": this.audioFiles[idx].duration});
     }
 
     var json = {
-      "subFolders" : subFolders,//Object.keys(this.subFolders),
-      "audioFiles" : audioFiles
+      "subFolders": subFolders,
+      "audioFiles": audioFiles,
+      "disableCaching" : this.disableCaching
     }
     return json;
   }
