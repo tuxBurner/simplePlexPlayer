@@ -24,3 +24,7 @@ touch ./apMode
 
 # copy the correct cfg
 cp networkConfAp.cfg $1
+
+/usr/sbin/dnsmasq -u dnsmasq -C ./dnsmasq.conf
+/usr/sbin/hostapd -B ./hostapd.conf
+/etc/init.d/networking restart
