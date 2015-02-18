@@ -27,6 +27,13 @@ var KeyBoardEventHandler = function(player) {
    * handle key pressed down
    */
   this.handleKeyDown = function(e) {
+
+    var pageBlocked = $(window).data("blockUI.isBlocked");
+    if (pageBlocked === 1) {
+      return;
+    }
+
+
     // override the handling ?
     if (that.overrideHandler != null) {
       that.overrideHandler.handleKeyDown(e);
@@ -70,6 +77,11 @@ var KeyBoardEventHandler = function(player) {
    */
   this.handleKeyUp = function(e) {
 
+    var pageBlocked = $(window).data("blockUI.isBlocked");
+    if (pageBlocked === 1) {
+      return;
+    }
+
     // override the handling ?
     if (that.overrideHandler != null) {
       that.overrideHandler.handleKeyUp(e);
@@ -83,7 +95,9 @@ var KeyBoardEventHandler = function(player) {
     }
 
 
-    if (that.rotaryMode == true && (that.keyMapping.left == e.which || that.keyMapping.right == e.which) && that.player.currentDisplayTpl == "player") {
+    if (that.rotaryMode == true && (that.keyMapping.left == e.which || that
+        .keyMapping.right == e.which) && that.player.currentDisplayTpl ==
+      "player") {
       if (that.lastTimeStamp == null) {
         that.lastTimeStamp = e.timeStamp;
         return;
