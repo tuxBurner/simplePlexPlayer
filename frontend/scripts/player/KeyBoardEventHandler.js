@@ -113,7 +113,7 @@ var KeyBoardEventHandler = function(player) {
 
 
 		var currentMenuItem = MenuHandler.getCurrentMenuItem();
-		currentMenuItem.performAction(actionToPerform);
+		currentMenuItem.handleKeyEvent(actionToPerform);
 
 
 
@@ -159,12 +159,12 @@ var KeyBoardEventHandler = function(player) {
 				break;
 			case that.keyMapping.back:
 				that.backDown = false;
-				that.player.performEscAction();
+				//that.player.performEscAction();
 				break;
 			case that.keyMapping.action:
 				that.actionDown = false;
 				if (that.player.currentDisplayTpl != "player") {
-					that.player.performAction();
+					//	that.player.performAction();
 				} else {
 					that.player.audioJsWrapper.audioJs.playPause();
 				}

@@ -39,9 +39,9 @@
 <!-- MENU ITEM -->
 <script id="menuitem-tpl" type="text/x-handlebars-template">
   {{#if menuItem.thumb}}
-  <div id="menuItem" class="{{menuItem.type}}" style="background-image: url({{menuItem.thumb}});">
+  <div id="menuItem" class="{{menuItem.cssClass}}" style="background-image: url({{menuItem.thumb}});">
     {{else}}
-    <div id="menuItem" class="{{menuItem.type}}">
+    <div id="menuItem" class="{{menuItem.cssClass}}">
       {{/if}}
       <h3 class="well">{{menuItem.title}}</h3>
 

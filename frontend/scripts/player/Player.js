@@ -8,16 +8,12 @@ var Player = function(config) {
 
 	this.config = config;
 
-	// stores the menu items from the root menu
-	this.mainMenuItems = [];
 
 	this.currentDisplayTpl = ""
 
-	this.loadToStack = [];
 
 	this.keyBoardHandler = new KeyBoardEventHandler(that);
 	this.optionsHandler = new OptionsHandler(that);
-	//	this.menuHandler = new MenuHandler();
 
 	this.timeOut = null;
 
@@ -30,18 +26,7 @@ var Player = function(config) {
 	this.init = function() {
 		that.initTemplats();
 
-		// load all the sources from the backend
-		Tools.callBackend(that.config.baseUrl + "/sources", function(data) {
-			for (idx in data) {
-				var source = data[idx];
-				that.mainMenuItems.push(new SourceMenuItem(source, idx));
-			}
-
-
-			MenuHandler.setCurrentItems(that.mainMenuItems, that);
-
-		});
-
+		MenuTools.loadMainMenu();
 		if (that.config.sleepTimeOut !== undefined) {
 			that.startTimeOut();
 		}
@@ -65,50 +50,6 @@ var Player = function(config) {
 	}
 
 
-	/**
-	 * Initializes the main menu and displays it
-	 */
-	this.displayMainMenu = function() {
-		//that.menuHandler.initMainMenu(that.sections);
-		//that.displayContent("mainMenu", {}, that.initMenu);
-		//that.initMenu
-		that.mainMenuItems[0].displayContent(this);
-	}
-
-
-	this.initMenu = function(highlightMenuItem) {
-		if (highlightMenuItem === undefined) {
-			that.menuHandler.currentMenuIdx = 0;
-		} else {
-			that.menuHandler.setMenuIdxByMenuItem(highlightMenuItem);
-		}
-		that.displayMenuItem();
-	}
-
-	this.displayMenuItem = function() {
-		var menuItem = that.menuHandler.getCurrentMenuItem();
-
-		if (menuItem.displayCallBack !== undefined) {
-			menuItem.displayCallBack(that);
-			return;
-		}
-
-		that.displayContent("menuitem", {
-			"menuItem": menuItem,
-			"menuStack": that.menuHandler.menuStack,
-			"position": that.menuHandler.currentMenuIdx + 1,
-			"itemsCount": that.menuHandler.currentMenuItems.length
-		}, function() {
-
-		});
-	};
-
-	/*this.nextMenuItem = function(nextItem) {
-		var drawNewMenuItem = that.menuHandler.nextMenuItem(nextItem);
-		if (drawNewMenuItem == true) {
-			that.displayMenuItem();
-		}
-	}*/
 
 	this.displayPlayer = function(files, title) {
 		that.displayContent("player", {
@@ -131,43 +72,43 @@ var Player = function(config) {
 	/**
 	 * Performs an action on the current menu item
 	 */
-	this.performAction = function() {
-		var higlightedMenu = that.menuHandler.getCurrentMenuItem();
+	/*	this.performAction = function() {
+			var higlightedMenu = that.menuHandler.getCurrentMenuItem();
 
-		var currentMenuItemType = higlightedMenu.type;
-		var currentMenuItemId = higlightedMenu.id;
+			var currentMenuItemType = higlightedMenu.type;
+			var currentMenuItemId = higlightedMenu.id;
 
-		that.menuHandler.addMenuItemToStack(higlightedMenu);
+			that.menuHandler.addMenuItemToStack(higlightedMenu);
 
-		if (currentMenuItemType == "section") {
-			that.loadSection(currentMenuItemId);
-		}
+			if (currentMenuItemType == "section") {
+				that.loadSection(currentMenuItemId);
+			}
 
-		if (currentMenuItemType == "directory") {
-			that.loadDirectory(currentMenuItemId, false);
-		}
+			if (currentMenuItemType == "directory") {
+				that.loadDirectory(currentMenuItemId, false);
+			}
 
-		if (currentMenuItemType == "file") {
-			var files = [];
-			files.push(that.files[currentMenuItemId]);
-			that.displayPlayer(files, that.files[currentMenuItemId].title);
-		}
+			if (currentMenuItemType == "file") {
+				var files = [];
+				files.push(that.files[currentMenuItemId]);
+				that.displayPlayer(files, that.files[currentMenuItemId].title);
+			}
 
-		if (currentMenuItemType == "playall") {
-			var files = that.directories[currentMenuItemId].files;
-			that.displayPlayer(files, that.directories[currentMenuItemId].title);
-		}
+			if (currentMenuItemType == "playall") {
+				var files = that.directories[currentMenuItemId].files;
+				that.displayPlayer(files, that.directories[currentMenuItemId].title);
+			}
 
-		if (currentMenuItemType == "options") {
-			that.displayOptions(currentMenuItemId);
-		}
-	}
+			if (currentMenuItemType == "options") {
+				that.displayOptions(currentMenuItemId);
+			}
+		}*/
 
 
 	/**
 	 * Performs an escap action on the current menu item
 	 */
-	this.performEscAction = function() {
+	/*this.performEscAction = function() {
 		var removedMenuItem = that.menuHandler.removeLastMenuItemFromStack();
 		if (removedMenuItem == null) {
 			return;
@@ -191,7 +132,7 @@ var Player = function(config) {
 				window.location.hash = '';
 				that.displayMainMenu();
 		}
-	}
+	}*/
 
 	this.initPlayer = function() {
 		// Mark the first track
@@ -199,14 +140,14 @@ var Player = function(config) {
 		that.audioJsWrapper.loadTrack();
 	}
 
-	this.loadSection = function(id) {
-		that.loadDirectory(id, true);
-	}
+	//this.loadSection = function(id) {
+	//	that.loadDirectory(id, true);
+	//}
 
 	/**
 	 * Load directory from sever
 	 */
-	this.loadDirectory = function(id, section, highlightMenuItem) {
+	/*this.loadDirectory = function(id, section, highlightMenuItem) {
 		var url = "/sources/" + id.split('?').join('%3F');
 
 		url = that.config.baseUrl + url;
@@ -231,7 +172,7 @@ var Player = function(config) {
 			that.displayDir(dir, highlightMenuItem);
 		});
 
-	}
+	}*/
 
 	/**
 	 * Display the current options

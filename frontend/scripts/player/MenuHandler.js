@@ -3,15 +3,49 @@ MenuHandler.currentMenuItems = [];
 MenuHandler.currentMenuIdx = 0;
 MenuHandler.menuStack = [];
 
-MenuHandler.setCurrentItems = function(menuItems, player) {
-	MenuHandler.currentMenuItems = menuItems;
+MenuHandler.setCurrentItems = function(menuItems, highlightId) {
+	if (menuItems.length == 0) {
+		return;
+	}
+
+	if (MenuHandler.currentMenuItems.length > 0) {
+		var currentMenuItem = MenuHandler.getCurrentMenuItem();
+		MenuHandler.menuStack.push(currentMenuItem);
+	}
+
 	MenuHandler.currentMenuIdx = 0;
-	MenuHandler.displayMenuItem(player);
+	// hilight a menu in the current menus so find the idx in the array if set
+	if (highlightId !== undefined) {
+		for (idx in menuItems) {
+			if (menuItems[idx].id == highlightId) {
+				MenuHandler.currentMenuIdx = idx;
+				break;
+			}
+		}
+	}
+
+
+	MenuHandler.currentMenuItems = menuItems;
+
+	MenuHandler.displayMenuItem();
+}
+
+MenuHandler.loadParentContent = function() {
+	// this means we have to load the main menu
+	if (MenuHandler.menuStack.length < 2) {
+		alert("load the main menu");
+		return;
+	}
+
+	var parent = MenuHandler.menuStack.pop();
+	var parentParent = MenuHandler.menuStack[MenuHandler.menuStack.length - 1];
+
+	parentParent.loadSubMenuItems(parent.id);
 }
 
 MenuHandler.displayMenuItem = function() {
 	var itemToDisplay = MenuHandler.getCurrentMenuItem();
-	itemToDisplay.displayContent(player);
+	itemToDisplay.displayContent();
 }
 
 MenuHandler.getCurrentMenuItem = function() {
