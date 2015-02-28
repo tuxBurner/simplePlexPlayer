@@ -1,10 +1,8 @@
-var Player = function(config) {
+var Player = function() {
 
   var that = this;
 
-  this.config = config;
-
-  this.keyBoardHandler = new KeyBoardEventHandler(that);
+  this.keyBoardHandler = new KeyBoardEventHandler(this);
 
   this.timeOut = null;
 
@@ -18,31 +16,28 @@ var Player = function(config) {
 
 
     MenuTools.loadMainMenu();
-    if (that.config.sleepTimeOut !== undefined) {
+    if (Config.sleepTimeOut !== undefined) {
       that.startTimeOut();
     }
   }
 
-
-
   this.startTimeOut = function() {
     if (that.displayOff == true) {
       // make sure the display is on
-      $.get(that.config.baseUrl + "/display/on");
+      $.get(Config.baseUrl + "/display/on");
     }
 
     that.displayOff = false;
 
     clearTimeout(that.timeOut)
-    that.timeOut = setTimeout(that.handleTimeOut, that.config.sleepTimeOut *
-      1000);
+    that.timeOut = setTimeout(that.handleTimeOut, Config.sleepTimeOut * 1000);
   }
 
   this.handleTimeOut = function() {
     that.displayOff = true;
 
     // turn off the display
-    $.get(that.config.baseUrl + "/display/off");
+    $.get(Config.baseUrl + "/display/off");
   }
 
 
