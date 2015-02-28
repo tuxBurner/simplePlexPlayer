@@ -2,18 +2,9 @@ var Player = function(config) {
 
   var that = this;
 
-  this.templates = {};
-
-  //this.audioJsWrapper = new AudioJsWrapper(config.skipSeconds, config.repeatAll);
-
   this.config = config;
 
-
-  this.currentDisplayTpl = ""
-
-
   this.keyBoardHandler = new KeyBoardEventHandler(that);
-  this.optionsHandler = new OptionsHandler(that);
 
   this.timeOut = null;
 

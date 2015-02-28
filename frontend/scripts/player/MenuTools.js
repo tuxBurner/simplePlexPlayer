@@ -62,7 +62,6 @@ MenuTools.displayMenuItem = function(menuItem) {
 
 MenuTools.displayContent = function(tplName, data, callBack) {
 	var content = MenuTools.handleBarTpls[tplName](data);
-	that.currentDisplayTpl = tplName;
 	$('#mainContainer').html(content);
 }
 
