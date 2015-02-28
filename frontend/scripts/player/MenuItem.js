@@ -11,7 +11,7 @@ MenuTools.loadSourceEntrances = function(id, highlightId) {
 		}
 
 		if (data.audioFiles.length > 1) {
-			menuItems.push(new AudioAllFilesMenuItem(id));
+			menuItems.push(new AudioAllFilesMenuItem(id, data.audioFiles));
 		}
 
 		for (idx in data.audioFiles) {
@@ -189,12 +189,14 @@ AudioFileMenuItem.prototype = new MenuItem;
 
 var PlayerMenuItem = function(audioFile, parentId) {
 	this.audioFile = audioFile;
+	this.streamUrl = Config.baseUrl + '/sources/' + parentId.split('?').join('%3F');
 	this.id = parentId + "_player";
 	this.title = "Play: " + audioFile.name;
 	this.thumb = audioFile.thumb;
 
 	this.displayContent = function() {
 		MenuTools.displayMenuItem(this);
+		AudioPlayer.loadTrack(this.streamUrl);
 	}
 
 	this.handleKeyEvent = function(actionType) {
@@ -207,10 +209,11 @@ var PlayerMenuItem = function(audioFile, parentId) {
 			MenuHandler.displayNextItem(true);
 		}
 		if (actionType == "action") {
-			console.error(this.audioFile);
+			AudioPlayer.audioJs.playPause();
 		}
 
 		if (actionType == "back") {
+			AudioPlayer.stop();
 			this.performBack();
 		}
 	}
@@ -220,18 +223,24 @@ var PlayerMenuItem = function(audioFile, parentId) {
 PlayerMenuItem.prototype = new MenuItem;
 
 
-var AudioAllFilesMenuItem = function(parentId) {
+var AudioAllFilesMenuItem = function(parentId, audioFiles) {
 	this.title = "Play all";
 	this.id = parentId + "_playall";
+	this.parentId = parentId;
 	this.cssClass = "playall";
+	this.audioFiles = audioFiles;
 
 	this.displayContent = function() {
 		MenuTools.displayMenuItem(this);
 	}
 
-	// noop ????
 	this.loadSubMenuItems = function(highlightId) {
-		alert("Load all subs as player menu items ?");
+		var menuItems = [];
+		for (idx in this.audioFiles) {
+			var audioFile = this.audioFiles[idx];
+			menuItems.push(new PlayerMenuItem(audioFile, this.parentId + "/" + audioFile.name));
+		}
+		MenuHandler.setCurrentItems(menuItems);
 	}
 
 	this.performAction = function() {

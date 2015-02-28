@@ -1,4 +1,7 @@
-var AudioPlayer = function() {
+var AudioPlayer = function() {};
+AudioPlayer.audioJs;
+
+AudioPlayer.init = function() {
 	AudioPlayer.audioJs = audiojs.create(document.getElementById('audioJsAudio'), {
 		trackEnded: function() {
 			AudioPlayer.loadNextTrack(true, that.repeatAll);
@@ -8,12 +11,23 @@ var AudioPlayer = function() {
 		}
 	});
 }
+AudioPlayer.init();
 
-AudioPlayer.loadTrack = function(startPlaying) {
-	var trackSrc = $('#playList li.playing').attr('data-src');
-	this.audioJs.load(trackSrc);
-	if (startPlaying === undefined || startPlaying == true) {
-		this.audioJs.play();
+AudioPlayer.loadTrack = function(streamUrl, startPlaying) {
+	//var trackSrc = $('#playList li.playing').attr('data-src');
+	AudioPlayer.audioJs.load(streamUrl);
+	//if (startPlaying === undefined || startPlaying == true) {
+	AudioPlayer.audioJs.play();
+	//}
+}
+
+AudioPlayer.updatePercentage = function(percentage) {
+
+}
+
+AudioPlayer.stop = function() {
+	if (AudioPlayer.audioJs.playing == true) {
+		AudioPlayer.audioJs.pause();
 	}
 }
 
