@@ -5,6 +5,13 @@ MenuTools.loadSourceEntrances = function(id, highlightId) {
 	Tools.callBackend(url, function(data) {
 		var menuItems = [];
 
+		// check if we only have one audio menu
+		if (data.subFolders.length == 0 && data.audioFiles.length == 1) {
+			menuItems.push(new PlayerMenuItem(data.audioFiles[0], id + "/" + data.audioFiles[0].name));
+			MenuHandler.setCurrentItems(menuItems, highlightId);
+			return;
+		}
+
 		for (idx in data.subFolders) {
 			var subFolder = data.subFolders[idx];
 			menuItems.push(new DirectoryMenuItem(subFolder.name, subFolder.thumb, id));
