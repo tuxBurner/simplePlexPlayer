@@ -1,101 +1,120 @@
-var AudioJsWrapper = function(skipSeconds,repeatAll) {
+var AudioPlayer = function() {
+	AudioPlayer.audioJs = audiojs.create(document.getElementById('audioJsAudio'), {
+		trackEnded: function() {
+			AudioPlayer.loadNextTrack(true, that.repeatAll);
+		},
+		updatePlayhead: function(percentage) {
+			AudioPlayer.updatePercentage(percentage);
+		}
+	});
+}
 
-  this.skipSeconds = skipSeconds;
+AudioPlayer.loadTrack = function(startPlaying) {
+	var trackSrc = $('#playList li.playing').attr('data-src');
+	this.audioJs.load(trackSrc);
+	if (startPlaying === undefined || startPlaying == true) {
+		this.audioJs.play();
+	}
+}
 
-  // repeat playlist when rech end ?
-  this.repeatAll = repeatAll;
+var AudioJsWrapperOld = function(skipSeconds, repeatAll) {
 
-  var that = this;
+	this.skipSeconds = skipSeconds;
 
-  // initialize the player
-  this.audioJs = audiojs.create(document.getElementById('audioJsAudio'),{
-    trackEnded: function() {
-      that.loadNextTrack(true,that.repeatAll);
-    },
-    updatePlayhead: function(percentage) {
-      that.updatePercentage(percentage);
-    }
-  });
+	// repeat playlist when rech end ?
+	this.repeatAll = repeatAll;
 
-  this.total = undefined;
+	var that = this;
 
-  this.loadTrack =  function(startPlaying) {
-    var trackSrc = $('#playList li.playing').attr('data-src');
-    this.audioJs.load(trackSrc);
-    if(startPlaying === undefined || startPlaying == true) {
-      this.audioJs.play();
-    }
-  }
+	// initialize the player
+	this.audioJs = audiojs.create(document.getElementById('audioJsAudio'), {
+		trackEnded: function() {
+			that.loadNextTrack(true, that.repeatAll);
+		},
+		updatePlayhead: function(percentage) {
+			that.updatePercentage(percentage);
+		}
+	});
 
-  this.loadNextTrack = function(nextTitle,repeatOnEnd) {
-    var next = null;
+	this.total = undefined;
 
-    var playNextTrack = true;
+	this.loadTrack = function(startPlaying) {
+		var trackSrc = $('#playList li.playing').attr('data-src');
+		this.audioJs.load(trackSrc);
+		if (startPlaying === undefined || startPlaying == true) {
+			this.audioJs.play();
+		}
+	}
 
-    var scrollPos = $('#playListWrapper').data("scrollpos");
-    var scrollOffset = 0;
+	this.loadNextTrack = function(nextTitle, repeatOnEnd) {
+		var next = null;
 
-    if(nextTitle == true) {
-      next = $('#playList li.playing').next();
-      if(next.length == 0) {
-        next = $('#playList li').first();
-        scrollPos = 0;
-        // prevent of restarting the playlist when reached the end and settings are setted
-        if(repeatOnEnd !== undefined && repeatOnEnd == false) {
-          playNextTrack = false;
-        }
-      } else {
-        scrollPos+=$(next).outerHeight(true);
-      }
-    } else {
-      next = $('#playList li.playing').prev();
-      if(next.length == 0) {
-        next = $('#playList li').last();
-        scrollPos=$('#playList').height()-$(next).outerHeight(true);
-      } else {
-        scrollPos-=$('#playList li.playing').outerHeight(true);
-      }
-    }
+		var playNextTrack = true;
 
-    // hide all progress bars
-    $('#playList li.playing .playtime').text('00:00');
-    $('#playList li.playing .playprogress').css("width","0%");
-    $('#playList li.playing').removeClass('playing');
-    $(next).addClass('playing');
+		var scrollPos = $('#playListWrapper').data("scrollpos");
+		var scrollOffset = 0;
 
-    // scroll the container
-    $('#playListWrapper').scrollTop(scrollPos)
-    $('#playListWrapper').data("scrollpos",scrollPos);
+		if (nextTitle == true) {
+			next = $('#playList li.playing').next();
+			if (next.length == 0) {
+				next = $('#playList li').first();
+				scrollPos = 0;
+				// prevent of restarting the playlist when reached the end and settings are setted
+				if (repeatOnEnd !== undefined && repeatOnEnd == false) {
+					playNextTrack = false;
+				}
+			} else {
+				scrollPos += $(next).outerHeight(true);
+			}
+		} else {
+			next = $('#playList li.playing').prev();
+			if (next.length == 0) {
+				next = $('#playList li').last();
+				scrollPos = $('#playList').height() - $(next).outerHeight(true);
+			} else {
+				scrollPos -= $('#playList li.playing').outerHeight(true);
+			}
+		}
 
-    this.loadTrack(playNextTrack);
-  }
+		// hide all progress bars
+		$('#playList li.playing .playtime').text('00:00');
+		$('#playList li.playing .playprogress').css("width", "0%");
+		$('#playList li.playing').removeClass('playing');
+		$(next).addClass('playing');
 
-  this.updatePercentage = function(percentage) {
-    if($('#playList li.playing .duration').html() == "") {
-      $('#playList li.playing .duration').html(Tools.readableDuration(this.audioJs.element.duration));
-    }
+		// scroll the container
+		$('#playListWrapper').scrollTop(scrollPos)
+		$('#playListWrapper').data("scrollpos", scrollPos);
 
-    var playedString = Tools.readableDuration(this.audioJs.duration * percentage);
-    var percent = Math.round(percentage*100);
-    $('#playList li.playing .playprogress').css("width",percent+"%");
-    $('#playList li.playing .playtime').text(playedString);
-  }
+		this.loadTrack(playNextTrack);
+	}
 
-  this.stop = function() {
-    if(this.audioJs.playing == true) {
-      this.audioJs.pause();
-    }
-  }
+	this.updatePercentage = function(percentage) {
+		if ($('#playList li.playing .duration').html() == "") {
+			$('#playList li.playing .duration').html(Tools.readableDuration(this.audioJs.element.duration));
+		}
 
-  this.fwd = function(fwd,eventCounter) {
-    var newVal = that.audioJs.element.currentTime;
-    var amount = (eventCounter < that.skipSeconds.fastTrigger) ? that.skipSeconds.slow : that.skipSeconds.fast;
-    if(fwd ==  true) {
-      newVal+=amount;
-    } else {
-      newVal-=amount;
-    }
+		var playedString = Tools.readableDuration(this.audioJs.duration * percentage);
+		var percent = Math.round(percentage * 100);
+		$('#playList li.playing .playprogress').css("width", percent + "%");
+		$('#playList li.playing .playtime').text(playedString);
+	}
 
-    that.audioJs.element.currentTime = newVal;
-  }
+	this.stop = function() {
+		if (this.audioJs.playing == true) {
+			this.audioJs.pause();
+		}
+	}
+
+	this.fwd = function(fwd, eventCounter) {
+		var newVal = that.audioJs.element.currentTime;
+		var amount = (eventCounter < that.skipSeconds.fastTrigger) ? that.skipSeconds.slow : that.skipSeconds.fast;
+		if (fwd == true) {
+			newVal += amount;
+		} else {
+			newVal -= amount;
+		}
+
+		that.audioJs.element.currentTime = newVal;
+	}
 }

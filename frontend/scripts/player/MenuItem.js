@@ -16,7 +16,7 @@ MenuTools.loadSourceEntrances = function(id, highlightId) {
 
 		for (idx in data.audioFiles) {
 			var audioFile = data.audioFiles[idx];
-			menuItems.push(new AudioFileMenuItem(audioFile.name, audioFile.thumb, audioFile.duration, id));
+			menuItems.push(new AudioFileMenuItem(audioFile, id));
 		}
 
 		MenuHandler.setCurrentItems(menuItems, highlightId);
@@ -163,11 +163,12 @@ var DirectoryMenuItem = function(title, thumb, parentId) {
 }
 DirectoryMenuItem.prototype = new MenuItem;
 
-var AudioFileMenuItem = function(title, thumb, duration, parentId) {
-	this.title = title;
-	this.id = parentId + "/" + title;
-	this.thumb = thumb;
+var AudioFileMenuItem = function(audioFile, parentId) {
+	this.title = audioFile.name;
+	this.id = parentId + "/" + audioFile.name;
+	this.thumb = audioFile.thumb;
 	this.cssClass = "file";
+	this.audioFile = audioFile;
 
 	this.displayContent = function() {
 		MenuTools.displayMenuItem(this);
@@ -180,17 +181,41 @@ var AudioFileMenuItem = function(title, thumb, duration, parentId) {
 
 	this.performAction = function() {
 		var menuItems = [];
-		menuItems.push(new PlayerMenuItem(this.id));
+		menuItems.push(new PlayerMenuItem(audioFile, this.id));
 		MenuHandler.setCurrentItems(menuItems);
 	}
 }
 AudioFileMenuItem.prototype = new MenuItem;
 
-var PlayerMenuItem = function(parentId) {
-	this.id = parentId + "_player"
+var PlayerMenuItem = function(audioFile, parentId) {
+	this.audioFile = audioFile;
+	this.id = parentId + "_player";
+	this.title = "Play: " + audioFile.name;
+	this.thumb = audioFile.thumb;
+
 	this.displayContent = function() {
-		alert("maaah");
+		MenuTools.displayMenuItem(this);
 	}
+
+	this.handleKeyEvent = function(actionType) {
+		if (actionType == "left") {
+			// todo fwwd
+			MenuHandler.displayNextItem(false);
+		}
+		if (actionType == "right") {
+			// todo bkwd
+			MenuHandler.displayNextItem(true);
+		}
+		if (actionType == "action") {
+			console.error(this.audioFile);
+		}
+
+		if (actionType == "back") {
+			this.performBack();
+		}
+	}
+
+
 }
 PlayerMenuItem.prototype = new MenuItem;
 
