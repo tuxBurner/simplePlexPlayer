@@ -10,10 +10,10 @@ MenuTools.loadSourceEntrances = function(id, highlightId) {
 			menuItems.push(new DirectoryMenuItem(subFolder.name, subFolder.thumb, id));
 		}
 
-		/*for (idx in data.audioFiles) {
-		  var audioFile = data.audioFiles[idx];
-		  dir.addFile(audioFile, that);
-		}*/
+		for (idx in data.audioFiles) {
+			var audioFile = data.audioFiles[idx];
+			menuItems.push(new AudioFileMenuItem(audioFile.name, audioFile.thumb, audioFile.duration, id));
+		}
 
 		MenuHandler.setCurrentItems(menuItems, highlightId);
 	});
@@ -29,7 +29,7 @@ MenuTools.displayMenuItem = function(menuItem) {
 }
 
 MenuTools.mainMenuItems = null;
-MenuTools.loadMainMenu = function() {
+MenuTools.loadMainMenu = function(hilightId) {
 
 	if (MenuTools.mainMenuItems == null) {
 
@@ -47,7 +47,7 @@ MenuTools.loadMainMenu = function() {
 
 		});
 	} else {
-		MenuHandler.setCurrentItems(MenuTools.mainMenuItems);
+		MenuHandler.setCurrentItems(MenuTools.mainMenuItems, hilightId);
 	}
 
 }
@@ -140,10 +140,8 @@ var SourceMenuItem = function(title) {
 SourceMenuItem.prototype = new MenuItem;
 
 var DirectoryMenuItem = function(title, thumb, parentId) {
-	var _that = this;
 	this.title = title;
 	this.id = parentId + "/" + title;
-	this.parentId = parentId;
 	this.thumb = thumb;
 	this.cssClass = "directory";
 
@@ -165,10 +163,27 @@ var DirectoryMenuItem = function(title, thumb, parentId) {
 }
 DirectoryMenuItem.prototype = new MenuItem;
 
-/**
- * Holds an AudioItem
- */
-var AudioMenuItem = function() {
+var AudioFileMenuItem = function(title, thumb, duration, parentId) {
+	this.title = title;
+	this.id = parentId + "/" + title;
+	this.thumb = thumb;
+	this.cssClass = "file";
 
+	this.displayContent = function() {
+		MenuTools.displayMenuItem(this);
+	}
+
+	this.loadSubMenuItems = function(highlightId) {
+		alert("Display the player ?");
+		//MenuTools.loadSourceEntrances(this.id, highlightId);
+	}
+
+	this.performAction = function() {
+		this.loadSubMenuItems();
+	}
+
+	this.performBack = function() {
+		MenuHandler.loadParentContent();
+	}
 }
-AudioMenuItem.prototype = new MenuItem;
+AudioFileMenuItem.prototype = new MenuItem;

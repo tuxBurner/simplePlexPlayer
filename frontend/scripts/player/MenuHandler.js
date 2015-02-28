@@ -8,7 +8,7 @@ MenuHandler.setCurrentItems = function(menuItems, highlightId) {
 		return;
 	}
 
-	if (MenuHandler.currentMenuItems.length > 0) {
+	if (MenuHandler.currentMenuItems.length > 0 && highlightId === undefined) {
 		var currentMenuItem = MenuHandler.getCurrentMenuItem();
 		MenuHandler.menuStack.push(currentMenuItem);
 	}
@@ -18,7 +18,7 @@ MenuHandler.setCurrentItems = function(menuItems, highlightId) {
 	if (highlightId !== undefined) {
 		for (idx in menuItems) {
 			if (menuItems[idx].id == highlightId) {
-				MenuHandler.currentMenuIdx = idx;
+				MenuHandler.currentMenuIdx = Number(idx);
 				break;
 			}
 		}
@@ -31,15 +31,16 @@ MenuHandler.setCurrentItems = function(menuItems, highlightId) {
 }
 
 MenuHandler.loadParentContent = function() {
+
+	var parent = MenuHandler.menuStack.pop();
+
 	// this means we have to load the main menu
-	if (MenuHandler.menuStack.length < 2) {
-		alert("load the main menu");
+	if (MenuHandler.menuStack.length < 1) {
+		MenuTools.loadMainMenu(parent.id);
 		return;
 	}
 
-	var parent = MenuHandler.menuStack.pop();
 	var parentParent = MenuHandler.menuStack[MenuHandler.menuStack.length - 1];
-
 	parentParent.loadSubMenuItems(parent.id);
 }
 
