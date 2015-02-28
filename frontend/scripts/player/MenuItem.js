@@ -10,6 +10,10 @@ MenuTools.loadSourceEntrances = function(id, highlightId) {
 			menuItems.push(new DirectoryMenuItem(subFolder.name, subFolder.thumb, id));
 		}
 
+		if (data.audioFiles.length > 1) {
+			menuItems.push(new AudioAllFilesMenuItem(id));
+		}
+
 		for (idx in data.audioFiles) {
 			var audioFile = data.audioFiles[idx];
 			menuItems.push(new AudioFileMenuItem(audioFile.name, audioFile.thumb, audioFile.duration, id));
@@ -83,7 +87,7 @@ var MenuItem = function() {
 	}
 
 	this.performBack = function() {
-		alert("Override me performBack");
+		MenuHandler.loadParentContent();
 	}
 
 	// this is called when the menu item is displaying its content
@@ -156,10 +160,6 @@ var DirectoryMenuItem = function(title, thumb, parentId) {
 	this.performAction = function() {
 		this.loadSubMenuItems();
 	}
-
-	this.performBack = function() {
-		MenuHandler.loadParentContent();
-	}
 }
 DirectoryMenuItem.prototype = new MenuItem;
 
@@ -173,17 +173,45 @@ var AudioFileMenuItem = function(title, thumb, duration, parentId) {
 		MenuTools.displayMenuItem(this);
 	}
 
+	// noop
 	this.loadSubMenuItems = function(highlightId) {
-		alert("Display the player ?");
-		//MenuTools.loadSourceEntrances(this.id, highlightId);
+		return;
+	}
+
+	this.performAction = function() {
+		var menuItems = [];
+		menuItems.push(new PlayerMenuItem(this.id));
+		MenuHandler.setCurrentItems(menuItems);
+	}
+}
+AudioFileMenuItem.prototype = new MenuItem;
+
+var PlayerMenuItem = function(parentId) {
+	this.id = parentId + "_player"
+	this.displayContent = function() {
+		alert("maaah");
+	}
+}
+PlayerMenuItem.prototype = new MenuItem;
+
+
+var AudioAllFilesMenuItem = function(parentId) {
+	this.title = "Play all";
+	this.id = parentId + "_playall";
+	this.cssClass = "playall";
+
+	this.displayContent = function() {
+		MenuTools.displayMenuItem(this);
+	}
+
+	// noop ????
+	this.loadSubMenuItems = function(highlightId) {
+		alert("Load all subs as player menu items ?");
 	}
 
 	this.performAction = function() {
 		this.loadSubMenuItems();
 	}
 
-	this.performBack = function() {
-		MenuHandler.loadParentContent();
-	}
 }
-AudioFileMenuItem.prototype = new MenuItem;
+AudioAllFilesMenuItem.prototype = new MenuItem;
