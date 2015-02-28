@@ -49,7 +49,12 @@ var MenuHandler = function() {
     var optionMenuItems = []
     optionMenuItems.push(new MenuItem({
       "title": "Sys Infos",
-      "id": "opts_sysInfos"
+      "id": "opts_sysInfos",
+      "displayCallBack": function(player) {
+        player.optionsHandler.displaySysInfos();
+        //new OptionsHandler().displaySysInfos();
+        //alert("test123");
+      }
     }, "options", "opts_main"));
 
     optionMenuItems.push(new MenuItem({
@@ -89,7 +94,7 @@ var MenuHandler = function() {
         sep = ",";
       }
     }
-    window.location.hash = hash;
+    //window.location.hash = hash;
   }
 
   this.setMenuIdxByMenuItem = function(highlightMenuItem) {

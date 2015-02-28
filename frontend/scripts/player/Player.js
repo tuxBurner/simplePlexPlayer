@@ -1,4 +1,4 @@
-var Player = function (config) {
+var Player = function(config) {
 
   var that = this;
 
@@ -30,12 +30,13 @@ var Player = function (config) {
   /**
    * Initializes the player
    */
-  this.init = function () {
+  this.init = function() {
     that.initTemplats();
-    Tools.callBackend(that.config.baseUrl + "/sources", function (data) {
+    Tools.callBackend(that.config.baseUrl + "/sources", function(data) {
       for (idx in data) {
         var source = data[idx];
-        that.sections[source] = new Directory(source, source, undefined, false, -1);
+        that.sections[source] = new Directory(source, source, undefined,
+          false, -1);
         that.directories[source] = that.sections[source];
       }
 
@@ -58,7 +59,7 @@ var Player = function (config) {
   /**
    * Initializes the handlebar templates and caches them
    */
-  this.initTemplats = function () {
+  this.initTemplats = function() {
     that.templates = {
       "mainMenu": Handlebars.compile($("#main-tpl").html()),
       "player": Handlebars.compile($("#player-tpl").html()),
@@ -66,7 +67,8 @@ var Player = function (config) {
       // templates for the options
       "options_wrapper": Handlebars.compile($("#options_wrapper-tpl").html()),
       "options_sysinfos": Handlebars.compile($("#options_sysinfos-tpl").html()),
-      "options_wifisettings": Handlebars.compile($("#options_wifisettings-tpl").html())
+      "options_wifisettings": Handlebars.compile($(
+        "#options_wifisettings-tpl").html())
     }
   }
 
@@ -74,13 +76,13 @@ var Player = function (config) {
   /**
    * Initializes the main menu and displays it
    */
-  this.displayMainMenu = function () {
+  this.displayMainMenu = function() {
     that.menuHandler.initMainMenu(that.sections);
     that.displayContent("mainMenu", {}, that.initMenu);
   }
 
 
-  this.initMenu = function (highlightMenuItem) {
+  this.initMenu = function(highlightMenuItem) {
     // do we have a path in the hash url ?
     if (that.loadToStack.length > 0) {
       highlightMenuItem = that.loadToStack[0];
@@ -94,29 +96,36 @@ var Player = function (config) {
     that.displayMenuItem();
   }
 
-  this.displayMenuItem = function () {
+  this.displayMenuItem = function() {
     var menuItem = that.menuHandler.getCurrentMenuItem();
+
+    if (menuItem.displayCallBack !== undefined) {
+      menuItem.displayCallBack(that);
+      return;
+    }
+
     that.displayContent("menuitem", {
       "menuItem": menuItem,
       "menuStack": that.menuHandler.menuStack,
       "position": that.menuHandler.currentMenuIdx + 1,
       "itemsCount": that.menuHandler.currentMenuItems.length
-    }, function () {
-      if (that.loadToStack.length > 0) {
-        that.loadToStack.shift();
-        that.performAction();
-      }
+    }, function() {
+      //console.error(menuItem.displayCallBack);
+      /*  if (that.loadToStack.length > 0) {
+          that.loadToStack.shift();
+          that.performAction();
+        }*/
     });
   };
 
-  this.nextMenuItem = function (nextItem) {
+  this.nextMenuItem = function(nextItem) {
     var drawNewMenuItem = that.menuHandler.nextMenuItem(nextItem);
     if (drawNewMenuItem == true) {
       that.displayMenuItem();
     }
   }
 
-  this.displayPlayer = function (files, title) {
+  this.displayPlayer = function(files, title) {
     that.displayContent("player", {
       "files": files,
       "title": title,
@@ -124,7 +133,7 @@ var Player = function (config) {
     }, that.initPlayer);
   }
 
-  this.displayContent = function (tplName, data, callBack) {
+  this.displayContent = function(tplName, data, callBack) {
     var content = that.templates[tplName](data);
     that.currentDisplayTpl = tplName;
     $('#mainContainer').html(content);
@@ -137,7 +146,7 @@ var Player = function (config) {
   /**
    * Performs an action on the current menu item
    */
-  this.performAction = function () {
+  this.performAction = function() {
     var higlightedMenu = that.menuHandler.getCurrentMenuItem();
 
     var currentMenuItemType = higlightedMenu.type;
@@ -173,7 +182,7 @@ var Player = function (config) {
   /**
    * Performs an escap action on the current menu item
    */
-  this.performEscAction = function () {
+  this.performEscAction = function() {
     var removedMenuItem = that.menuHandler.removeLastMenuItemFromStack();
     if (removedMenuItem == null) {
       return;
@@ -199,33 +208,34 @@ var Player = function (config) {
     }
   }
 
-  this.initPlayer = function () {
+  this.initPlayer = function() {
     // Mark the first track
     $('#playList li').first().addClass('playing');
     that.audioJsWrapper.loadTrack();
   }
 
-  this.loadSection = function (id) {
+  this.loadSection = function(id) {
     that.loadDirectory(id, true);
   }
 
   /**
    * Load directory from sever
    */
-  this.loadDirectory = function (id, section, highlightMenuItem) {
+  this.loadDirectory = function(id, section, highlightMenuItem) {
     var url = "/sources/" + id.split('?').join('%3F');
 
     url = that.config.baseUrl + url;
 
     var dir = that.directories[id];
 
-    Tools.callBackend(url, function (data) {
+    Tools.callBackend(url, function(data) {
 
       dir.cleanSubs();
 
       for (idx in data.subFolders) {
         var subFolder = data.subFolders[idx];
-        dir.addSubDir(subFolder.name, subFolder.thumb, subFolder.disableCaching, that);
+        dir.addSubDir(subFolder.name, subFolder.thumb, subFolder.disableCaching,
+          that);
       }
 
       for (idx in data.audioFiles) {
@@ -241,11 +251,11 @@ var Player = function (config) {
   /**
    * Display the current options
    */
-  this.displayOptions = function (currentMenuItemId) {
+  this.displayOptions = function(currentMenuItemId) {
     // we just want to display the option menu items ?
     if (currentMenuItemId == "opts_main") {
       that.menuHandler.initOptionMenu();
-      that.displayContent("mainMenu", {}, function () {
+      that.displayContent("mainMenu", {}, function() {
         that.initMenu()
       });
     } else {
@@ -253,14 +263,14 @@ var Player = function (config) {
     }
   }
 
-  this.displayDir = function (directory, highlightMenuItem) {
+  this.displayDir = function(directory, highlightMenuItem) {
     that.menuHandler.initDirectoryMenu(directory);
-    that.displayContent("mainMenu", {}, function () {
+    that.displayContent("mainMenu", {}, function() {
       that.initMenu(highlightMenuItem)
     });
   }
 
-  this.startTimeOut = function () {
+  this.startTimeOut = function() {
     if (that.displayOff == true) {
       // make sure the display is on
       $.get(that.config.baseUrl + "/display/on");
@@ -270,10 +280,10 @@ var Player = function (config) {
 
     clearTimeout(that.timeOut)
     that.timeOut = setTimeout(that.handleTimeOut, that.config.sleepTimeOut *
-    1000);
+      1000);
   }
 
-  this.handleTimeOut = function () {
+  this.handleTimeOut = function() {
     that.displayOff = true;
 
     // turn off the display

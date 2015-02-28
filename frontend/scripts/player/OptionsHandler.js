@@ -38,18 +38,21 @@ var OptionsHandler = function(player) {
             var ssid = $('#options_wifisettings_essid').val();
             var wpa = $('#options_wifisettings_wpa').val();
 
-            var url = '/sys/network/config?wpa='+wpa+'&ssid='+ssid;
+            var url = '/sys/network/config?wpa=' + wpa + '&ssid=' + ssid;
 
-            Tools.callBackend(that.player.config.baseUrl + url, function(data) {
+            Tools.callBackend(that.player.config.baseUrl + url, function(
+              data) {
               that.player.keyBoardHandler.deRegisterOverrideHandler();
               that.player.performEscAction();
             });
             return;
           }
-          if(elemId == 'options_wifisettings_switchapmode') {
-            Tools.callBackend(that.player.config.baseUrl + '/sys/network/apMode/switch', function(data) {
-              window.location.reload();
-            });
+          if (elemId == 'options_wifisettings_switchapmode') {
+            Tools.callBackend(that.player.config.baseUrl +
+              '/sys/network/apMode/switch',
+              function(data) {
+                window.location.reload();
+              });
             return;
           }
 
@@ -65,9 +68,10 @@ var OptionsHandler = function(player) {
       });
 
     that.displayOptionsTpl('/sys/infos', 'Wifi Settings', function(data) {
-      var optionsContent = that.player.templates['options_wifisettings']({
-        "data": data
-      });
+      var optionsContent = that.player.templates['options_wifisettings']
+        ({
+          "data": data
+        });
       return optionsContent;
     }, function() {
       // register keyboardhandler when the content is rendered
@@ -90,17 +94,6 @@ var OptionsHandler = function(player) {
    * This is called when the user selects the display sysinfo options
    */
   this.displaySysInfos = function() {
-    that.player.keyBoardHandler.registerOverrideHandler(
-      function(e) {
-        if (e.which == that.player.keyBoardHandler.keyMapping.back) {
-          that.player.keyBoardHandler.deRegisterOverrideHandler();
-          that.player.performEscAction();
-        }
-      },
-      function(e) {
-        return;
-      });
-
     that.displayOptionsTpl('/sys/infos', 'Sys Infos', function(data) {
       var optionsContent = that.player.templates['options_sysinfos']({
         "data": data
@@ -112,7 +105,8 @@ var OptionsHandler = function(player) {
   /**
    * This is called whe the user wants to display an options entrance
    */
-  this.displayOptionsTpl = function(url, title, optionsContentCallBack, displayCallBack) {
+  this.displayOptionsTpl = function(url, title, optionsContentCallBack,
+    displayCallBack) {
     Tools.callBackend(that.player.config.baseUrl + url, function(data) {
       that.player.displayContent('options_wrapper', {
         "title": title,
