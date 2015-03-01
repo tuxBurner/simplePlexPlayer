@@ -21,36 +21,6 @@ div.audiojs {
   text-align: center;
   border: 1px solid #C3C3C3;
 }
-#audioJsWrapper {
-  width: 800px;
-  height: 600px;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  text-align: center;
-  border: 1px solid #C3C3C3;
-}
-#audioJsWrapper .playListWrapper {
-  width: 795px;
-  height: 460px;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-#audioJsWrapper #playList li .progress {
-  display: none;
-}
-#audioJsWrapper #playList li.playing {
-  background-color: #E1E1E1;
-}
-#audioJsWrapper #playList li.playing .progress {
-  display: block;
-}
-#audioJsWrapper #playList .progress .progress-bar {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -ms-transition: none;
-  -o-transition: none;
-  transition: none;
-}
 #menuItem {
   width: 800px;
   height: 600px;
@@ -65,8 +35,9 @@ div.audiojs {
   margin-top: 0;
 }
 #menuItem .breadcrumb {
-  position: relative;
-  top: 476px;
+  position: absolute;
+  top: 560px;
+  width: 800px;
   opacity: 0.8;
   font-size: 18px;
 }
@@ -120,4 +91,10 @@ div.audiojs {
 }
 #menuItem.file:before {
   content: "\f1c7";
+}
+#menuItem.player {
+  background-color: #5bc0de;
+}
+#menuItem.player:before {
+  content: "\f028";
 }

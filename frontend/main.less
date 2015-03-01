@@ -36,38 +36,6 @@ div.audiojs {
   border: 1px solid #C3C3C3;
 }
 
-// this is for the audio player
-#audioJsWrapper {
-  .containerProbs;
-
-  .playListWrapper {
-    width: @containerWidth - 5;
-    height: @containerHeight - 140;
-    overflow-y: hidden;
-    overflow-x: hidden;
-  }
-
-  #playList {
-    li .progress {
-      display: none;
-    }
-
-    li.playing {
-      background-color: #E1E1E1;
-      .progress {
-        display: block;
-      }
-    }
-
-    .progress .progress-bar {
-      -webkit-transition: none;
-      -moz-transition: none;
-      -ms-transition: none;
-      -o-transition: none;
-      transition: none;
-    }
-  }
-}
 
 // display of a menuitem
 #menuItem {
@@ -81,8 +49,9 @@ div.audiojs {
   }
 
   .breadcrumb {
-    position: relative;
-    top: @containerHeight - 124;
+    position: absolute;
+    top: @containerHeight - 40;
+    width: @containerWidth;
     opacity: @opacity;
     font-size: 18px;
   }
@@ -142,5 +111,11 @@ div.audiojs {
       content: "\f1c7";
     }
   }
-}
 
+  &.player {
+    background-color: #5bc0de;
+    &:before {
+      content: "\f028";
+    }
+  }
+}

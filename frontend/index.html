@@ -128,42 +128,27 @@
 
 <!-- PLAYER -->
 <script id="player-tpl" type="text/x-handlebars-template">
-  <div id="audioJsWrapper">
-    <h1>{{title}}</h1>
-
-    <ol class="breadcrumb">
-      {{#each menuStack}}
-      <li>{{title}}</li>
-      {{/each}}
-    </ol>
-
-    <div class="playListWrapper" id="playListWrapper" data-scrollpos="0">
-      <ul class="media-list" id="playList">
-        {{#each files}}
-        <li class="media" data-src="{{mp3}}">
-          <a class="pull-left" href="#">
-            {{#if thumb}}
-            <img width="64" height="64" src="{{thumb}}" alt="{{title}}"/>
-            {{else}}
-            <i class="fa fa-file-audio-o  fa-3x"></i>
-            {{/if}}
-          </a>
-
-          <div class="media-body">
-            <h3 class="media-heading">{{title}} (<span class="playtime">00:00</span> / <span class="duration">{{duration}}</span>)
-            </h3>
-
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="playprogress" style="width: 0%; background-color: #428bca; height: 16px;"></div>
-              </div>
-            </div>
-          </div>
-        </li>
+  {{#if menuItem.thumb}}
+  <div id="menuItem" class="player" style="background-image: url({{menuItem.thumb}});">
+    {{else}}
+    <div id="menuItem" class="player">
+      {{/if}}
+      <h3 class="well">
+        {{menuItem.title}}
+        <hr/>
+        (<span id="playerPlaytime" class="playtime">00:00</span> / <span id="playerDuration" class="duration">{{duration}}</span>)
+      </h3>
+      <ol class="breadcrumb">
+        {{#if menuStack}}
+        {{#each menuStack}}
+        <li>{{title}}</li>
         {{/each}}
-      </ul>
+        {{/if}}
+        <li>
+          <span class="label label-primary">{{position}} - {{itemsCount}}</span>
+        </li>
+      </ol>
     </div>
-  </div>
 </script>
 <!-- EO PLAYER -->
 
