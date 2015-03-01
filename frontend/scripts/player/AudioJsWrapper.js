@@ -14,17 +14,22 @@ AudioPlayer.init = function() {
 }
 AudioPlayer.init();
 
-AudioPlayer.loadTrack = function(streamUrl) {
+AudioPlayer.loadTrack = function(streamUrl, audioFile) {
+
+	if (audioFile.duration !== undefined) {
+		$('#playerDuration').html(Tools.readableDuration(audioFile.duration / 1000));
+	}
+
 	AudioPlayer.audioJs.load(streamUrl);
 	AudioPlayer.audioJs.play();
 }
 
 AudioPlayer.updatePercentage = function(percentage) {
 	if ($('#playerDuration').html() == "") {
-		$('#playerDuration').html(Tools.readableDuration(this.audioJs.element.duration));
+		$('#playerDuration').html(Tools.readableDuration(AudioPlayer.audioJs.element.duration));
 	}
 
-	var playedString = Tools.readableDuration(this.audioJs.duration * percentage);
+	var playedString = Tools.readableDuration(AudioPlayer.audioJs.duration * percentage);
 	$('#playerPlaytime').text(playedString);
 }
 

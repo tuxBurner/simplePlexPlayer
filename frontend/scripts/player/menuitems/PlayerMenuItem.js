@@ -13,7 +13,7 @@ var PlayerMenuItem = function(audioFile, parentId) {
       "itemsCount": MenuHandler.currentMenuItems.length
     });
 
-    AudioPlayer.loadTrack(this.streamUrl);
+    AudioPlayer.loadTrack(this.streamUrl, this.audioFile);
   }
 
   this.handleKeyEvent = function(actionType) {
