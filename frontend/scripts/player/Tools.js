@@ -23,6 +23,9 @@ Tools.blockUI = function() {
  * Helper for calling the backend via ajax
  */
 Tools.callBackend = function(url, callback) {
+
+	Tools.blockUI();
+
 	$.ajax({
 		type: 'GET',
 		url: url,
