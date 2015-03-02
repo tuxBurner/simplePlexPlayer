@@ -8,6 +8,7 @@ var KeyBoardEventHandler = function(player) {
 
 	this.keyDownBegin = null;
 	this.keyWasDown = false;
+	this.keyDownCounter = 0;
 
 	var that = this;
 
@@ -54,8 +55,9 @@ var KeyBoardEventHandler = function(player) {
 				return;
 		}
 
-		if (that.keyDownBegin === null) {
-			that.keyDownBegin = e.timeStamp;
+		if (this.keyDownBegin === null) {
+			this.keyDownBegin = e.timeStamp;
+			this.keyDownCounter = 0;
 		}
 
 		// pushing both buttons down reloads the gui @ mom
@@ -68,9 +70,10 @@ var KeyBoardEventHandler = function(player) {
 		var difference = e.timeStamp - that.keyDownBegin;
 		if (difference > Config.rotaryEventTimeout) {
 			this.keyWasDown = true;
-			that.keyDownBegin = e.timeStamp;
+			this.keyDownCounter++;
+			this.keyDownBegin = e.timeStamp;
 			var currentMenuItem = MenuHandler.getCurrentMenuItem();
-			currentMenuItem.handleKeyEventDown(actionToPerform);
+			currentMenuItem.handleKeyEventDown(actionToPerform, this.keyDownCounter);
 		}
 	}
 

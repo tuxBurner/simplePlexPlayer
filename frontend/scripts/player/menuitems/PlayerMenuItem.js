@@ -16,12 +16,12 @@ var PlayerMenuItem = function(audioFile, parentId) {
     AudioPlayer.loadTrack(this.streamUrl, this.audioFile);
   }
 
-  this.handleKeyEventDown = function(actionType) {
+  this.handleKeyEventDown = function(actionType, keyDownCounter) {
     if (actionType == "left") {
-      AudioPlayer.fwd(false, 1);
+      AudioPlayer.fwd(false, keyDownCounter);
     }
     if (actionType == "right") {
-      AudioPlayer.fwd(true, 1);
+      AudioPlayer.fwd(true, keyDownCounter);
     }
   }
 

@@ -24,7 +24,7 @@ var MenuItem = function() {
 		}
 	}
 
-	this.handleKeyEventDown = function(actionType) {}
+	this.handleKeyEventDown = function(actionType, keyDownCounter) {}
 
 	this.performAction = function() {
 		alert("Override me performAction");
