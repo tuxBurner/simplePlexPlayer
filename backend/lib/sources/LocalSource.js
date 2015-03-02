@@ -54,9 +54,9 @@ function LocalSource(conf) {
 				}
 
 				parentFolder.addSubFolder(subFolder);
-			} else {
+   			} else {
 
-				var fileExtension = path.extname(dirContentName);
+				var fileExtension = path.extname(dirContentName).toLowerCase();
 
 				// check if it is an image so we can add it as thumb
 				if (parentFolder.thumb === undefined && (fileExtension == ".jpeg" || fileExtension == ".jpg")) {
