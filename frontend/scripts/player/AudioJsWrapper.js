@@ -5,12 +5,10 @@ AudioPlayer.audioJs;
 AudioPlayer.init = function() {
 	AudioPlayer.audioJs = audiojs.create(document.getElementById('audioJsAudio'), {
 		trackEnded: function() {
-
-			if (Config.repeatAll == false) {
+			if (MenuHandler.hasNextItem() == true || Config.repeatAll == true) {
 				AudioPlayer.stop();
 				MenuHandler.displayNextItem(true);
 			}
-
 		},
 		updatePlayhead: function(percentage) {
 			AudioPlayer.updatePercentage(percentage);

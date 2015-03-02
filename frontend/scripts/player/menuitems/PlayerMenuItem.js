@@ -37,6 +37,11 @@ var PlayerMenuItem = function(audioFile, parentId) {
       }
     }
     if (actionType == "action") {
+      if (AudioPlayer.audioJs.playing == true) {
+        $('#playerPlayStatus').removeClass("fa-play").addClass("fa-pause");
+      } else {
+        $('#playerPlayStatus').removeClass("fa-pause").addClass("fa-play");
+      }
       AudioPlayer.audioJs.playPause();
     }
 

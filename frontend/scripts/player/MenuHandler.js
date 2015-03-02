@@ -29,8 +29,10 @@ MenuHandler.setCurrentItems = function(menuItems, highlightId) {
   MenuHandler.displayMenuItem();
 }
 
+/**
+ * This is called when the user wants to go back one menu
+ */
 MenuHandler.loadParentContent = function() {
-
   var parent = MenuHandler.menuStack.pop();
 
   // this means we have to load the main menu
@@ -39,6 +41,7 @@ MenuHandler.loadParentContent = function() {
     return;
   }
 
+  // we have to load the parent parent to higlight the parent menu entrance in it
   var parentParent = MenuHandler.menuStack[MenuHandler.menuStack.length - 1];
   parentParent.loadSubMenuItems(parent.id);
 }
@@ -54,9 +57,18 @@ MenuHandler.getCurrentMenuItem = function() {
 
 MenuHandler.displayNextItem = function(nextItem) {
   var drawNewMenuItem = MenuHandler.setNextMenuItemIdx(nextItem);
-  //if (drawNewMenuItem == true) {
   MenuHandler.displayMenuItem();
-  //	}
+}
+
+/*
+ * check if there is a next menu item in the menu
+ */
+MenuHandler.hasNextItem = function() {
+  if (MenuHandler.currentMenuItems.length <= 1) {
+    return false;
+  }
+
+  return (MenuHandler.currentMenuIdx + 1 < MenuHandler.currentMenuItems.length);
 }
 
 MenuHandler.setNextMenuItemIdx = function(nextItem) {
