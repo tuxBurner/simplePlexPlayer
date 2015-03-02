@@ -17,7 +17,8 @@ MenuTools.handleBarTpls = {
 /**
  * This loads a source entrance from the backend which can contain files and dirs
  */
-MenuTools.loadSourceEntrances = function(id, highlightId) {
+MenuTools.loadSourceEntrances = function(parent, highlightId) {
+  var id = parent.id;
   var url = "/sources/" + id.split('?').join('%3F');
   url = Config.baseUrl + url;
   Tools.callBackend(url, function(data) {
@@ -26,7 +27,7 @@ MenuTools.loadSourceEntrances = function(id, highlightId) {
     // check if we only have one audio menu
     if (data.subFolders.length == 0 && data.audioFiles.length == 1) {
       menuItems.push(new PlayerMenuItem(data.audioFiles[0], id + "/" + data.audioFiles[0].name));
-      MenuHandler.setCurrentItems(menuItems, highlightId);
+      MenuHandler.setCurrentItems(menuItems, parent, highlightId);
       return;
     }
 
@@ -44,7 +45,7 @@ MenuTools.loadSourceEntrances = function(id, highlightId) {
       menuItems.push(new AudioFileMenuItem(audioFile, id));
     }
 
-    MenuHandler.setCurrentItems(menuItems, highlightId);
+    MenuHandler.setCurrentItems(menuItems, parent, highlightId);
   });
 }
 
@@ -83,6 +84,6 @@ MenuTools.loadMainMenu = function(hilightId) {
 
     });
   } else {
-    MenuHandler.setCurrentItems(MenuTools.mainMenuItems, hilightId);
+    MenuHandler.setCurrentItems(MenuTools.mainMenuItems, null, hilightId);
   }
 }
