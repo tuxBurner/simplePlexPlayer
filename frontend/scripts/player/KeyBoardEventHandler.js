@@ -7,7 +7,7 @@ var KeyBoardEventHandler = function(player) {
 	this.player = player;
 
 	this.keyDownBegin = null;
-
+	this.keyWasDown = false;
 
 	var that = this;
 
@@ -58,10 +58,6 @@ var KeyBoardEventHandler = function(player) {
 			that.keyDownBegin = e.timeStamp;
 		}
 
-		var difference = e.timeStamp - that.keyDownBegin;
-		console.error(difference);
-
-
 		// pushing both buttons down reloads the gui @ mom
 		if (this.actionDown == true && this.backDown == true) {
 			window.location.reload();
@@ -69,8 +65,13 @@ var KeyBoardEventHandler = function(player) {
 			return;
 		}
 
-		var currentMenuItem = MenuHandler.getCurrentMenuItem();
-		currentMenuItem.handleKeyEventDown(actionToPerform);
+		var difference = e.timeStamp - that.keyDownBegin;
+		if (difference > Config.rotaryEventTimeout) {
+			this.keyWasDown = true;
+			that.keyDownBegin = e.timeStamp;
+			var currentMenuItem = MenuHandler.getCurrentMenuItem();
+			currentMenuItem.handleKeyEventDown(actionToPerform);
+		}
 	}
 
 	/**
@@ -93,7 +94,6 @@ var KeyBoardEventHandler = function(player) {
 		}
 
 		var actionToPerform = "none";
-		var keyWasDown = false;
 		switch (e.which) {
 			case that.keyMapping.left:
 				actionToPerform = "left"
@@ -103,23 +103,19 @@ var KeyBoardEventHandler = function(player) {
 				break;
 			case that.keyMapping.back:
 				actionToPerform = "back"
-				if (this.backDown == true) {
-					this.backDown = false;
-					keyWasDown = true;
-				}
+				this.backDown = false;
 				break;
 			case that.keyMapping.action:
 				actionToPerform = "action"
-				if (this.actionDown == true) {
-					this.actionDown = false;
-					keyWasDown = true;
-				}
+				this.actionDown = false;
 				break;
 		}
 
 		var currentMenuItem = MenuHandler.getCurrentMenuItem();
 		if (currentMenuItem !== undefined) {
-			currentMenuItem.handleKeyEvent(actionToPerform, keyWasDown);
+			currentMenuItem.handleKeyEvent(actionToPerform, this.keyWasDown);
 		}
+
+		this.keyWasDown = false;
 	}
 }
