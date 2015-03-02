@@ -5,7 +5,12 @@ AudioPlayer.audioJs;
 AudioPlayer.init = function() {
 	AudioPlayer.audioJs = audiojs.create(document.getElementById('audioJsAudio'), {
 		trackEnded: function() {
-			AudioPlayer.loadNextTrack(true, that.repeatAll);
+
+			if (Config.repeatAll == false) {
+				AudioPlayer.stop();
+				MenuHandler.displayNextItem(true);
+			}
+
 		},
 		updatePlayhead: function(percentage) {
 			AudioPlayer.updatePercentage(percentage);
@@ -14,8 +19,9 @@ AudioPlayer.init = function() {
 }
 AudioPlayer.init();
 
-AudioPlayer.loadTrack = function(streamUrl, audioFile) {
 
+
+AudioPlayer.loadTrack = function(streamUrl, audioFile) {
 	if (audioFile.duration !== undefined) {
 		$('#playerDuration').html(Tools.readableDuration(audioFile.duration / 1000));
 	}
@@ -39,17 +45,13 @@ AudioPlayer.stop = function() {
 	}
 }
 
-var AudioJsWrapperOld = function(skipSeconds, repeatAll) {
-
-	this.fwd = function(fwd, eventCounter) {
-		var newVal = that.audioJs.element.currentTime;
-		var amount = (eventCounter < that.skipSeconds.fastTrigger) ? that.skipSeconds.slow : that.skipSeconds.fast;
-		if (fwd == true) {
-			newVal += amount;
-		} else {
-			newVal -= amount;
-		}
-
-		that.audioJs.element.currentTime = newVal;
+AudioPlayer.fwd = function(fwd, eventCounter) {
+	var newVal = Number(AudioPlayer.audioJs.element.currentTime);
+	var amount = (eventCounter < Config.skipSeconds.fastTrigger) ? Config.skipSeconds.slow : Config.skipSeconds.fast;
+	if (fwd == true) {
+		newVal += amount;
+	} else {
+		newVal -= amount;
 	}
+	AudioPlayer.audioJs.element.currentTime = newVal;
 }

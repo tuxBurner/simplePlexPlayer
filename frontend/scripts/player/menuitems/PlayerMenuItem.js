@@ -16,14 +16,25 @@ var PlayerMenuItem = function(audioFile, parentId) {
     AudioPlayer.loadTrack(this.streamUrl, this.audioFile);
   }
 
-  this.handleKeyEvent = function(actionType) {
+  this.handleKeyEventDown = function(actionType) {
     if (actionType == "left") {
-      // todo fwwd
-      MenuHandler.displayNextItem(false);
+      AudioPlayer.fwd(false, 1);
     }
     if (actionType == "right") {
-      // todo bkwd
-      MenuHandler.displayNextItem(true);
+      AudioPlayer.fwd(true, 1);
+    }
+  }
+
+  this.handleKeyEvent = function(actionType, keyWasDown) {
+    if (actionType == "left") {
+      if (keyWasDown == false) {
+        MenuHandler.displayNextItem(false);
+      }
+    }
+    if (actionType == "right") {
+      if (keyWasDown == false) {
+        MenuHandler.displayNextItem(true);
+      }
     }
     if (actionType == "action") {
       AudioPlayer.audioJs.playPause();

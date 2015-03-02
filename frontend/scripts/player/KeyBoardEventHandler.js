@@ -6,6 +6,7 @@ var KeyBoardEventHandler = function(player) {
 	this.backDown = false;
 	this.player = player;
 
+	this.keyDownBegin = null;
 
 
 	var that = this;
@@ -49,8 +50,19 @@ var KeyBoardEventHandler = function(player) {
 				actionToPerform = "action"
 				this.actionDown = true;
 				break;
+			default:
+				return;
 		}
 
+		if (that.keyDownBegin === null) {
+			that.keyDownBegin = e.timeStamp;
+		}
+
+		var difference = e.timeStamp - that.keyDownBegin;
+		console.error(difference);
+
+
+		// pushing both buttons down reloads the gui @ mom
 		if (this.actionDown == true && this.backDown == true) {
 			window.location.reload();
 			Tools.blockUI();
@@ -65,6 +77,10 @@ var KeyBoardEventHandler = function(player) {
 	 * handle key pressed up
 	 */
 	this.handleKeyUp = function(e) {
+
+		// mark that the key is released again
+		that.keyDownBegin = null;
+
 		// display off well pushing any button just turns it on nothing else
 		if (that.player.displayOff == true) {
 			that.player.startTimeOut();
@@ -77,6 +93,7 @@ var KeyBoardEventHandler = function(player) {
 		}
 
 		var actionToPerform = "none";
+		var keyWasDown = false;
 		switch (e.which) {
 			case that.keyMapping.left:
 				actionToPerform = "left"
@@ -86,17 +103,23 @@ var KeyBoardEventHandler = function(player) {
 				break;
 			case that.keyMapping.back:
 				actionToPerform = "back"
-				this.backDown = false;
+				if (this.backDown == true) {
+					this.backDown = false;
+					keyWasDown = true;
+				}
 				break;
 			case that.keyMapping.action:
 				actionToPerform = "action"
-				this.actionDown = false;
+				if (this.actionDown == true) {
+					this.actionDown = false;
+					keyWasDown = true;
+				}
 				break;
 		}
 
 		var currentMenuItem = MenuHandler.getCurrentMenuItem();
 		if (currentMenuItem !== undefined) {
-			currentMenuItem.handleKeyEvent(actionToPerform);
+			currentMenuItem.handleKeyEvent(actionToPerform, keyWasDown);
 		}
 	}
 }

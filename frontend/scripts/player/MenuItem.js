@@ -7,7 +7,7 @@ var MenuItem = function() {
 	this.cssClass = "";
 
 	// normal handling of actions take place here
-	this.handleKeyEvent = function(actionType) {
+	this.handleKeyEvent = function(actionType, keyWasDown) {
 
 		if (actionType == "left") {
 			MenuHandler.displayNextItem(false);
