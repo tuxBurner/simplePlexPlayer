@@ -1,5 +1,7 @@
 backend/node_modules
 
+backend/network/apMode
+backend/network/test.cfg
 playMp3Play.iml
 .idea
 atlassian-ide-plugin.xml

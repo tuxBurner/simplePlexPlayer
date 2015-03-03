@@ -1,4 +1,14 @@
 #!/bin/sh
+
+# check if we have to start the ap mode
+if [ -f /home/pi/simplePlexPlayer/backend/network/apMode ]
+then
+    echo "Start the ap mode for the pi"
+    /usr/sbin/dnsmasq -u dnsmasq -C /home/pi/simplePlexPlayer/backend/network/dnsmasq.conf
+    /usr/sbin/hostapd -B /home/pi/simplePlexPlayer/backend/network/hostapd.conf
+fi
+
+
 unclutter &
 matchbox-window-manager -use_titlebar no & :
 xset -dpms
