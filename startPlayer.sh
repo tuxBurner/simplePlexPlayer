@@ -4,8 +4,8 @@
 if [ -f /home/pi/simplePlexPlayer/backend/network/apMode ]
 then
     echo "Start the ap mode for the pi"
+    /usr/sbin/hostapd -B /home/pi/simplePlexPlayer/backend/network  /hostapd.conf
     /usr/sbin/dnsmasq -u dnsmasq -C /home/pi/simplePlexPlayer/backend/network/dnsmasq.conf
-    /usr/sbin/hostapd -B /home/pi/simplePlexPlayer/backend/network/hostapd.conf
 fi
 
 
