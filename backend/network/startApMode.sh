@@ -25,6 +25,8 @@ touch ./apMode
 # copy the correct cfg
 cp networkConfAp.cfg $1
 
-/etc/init.d/networking restart
+ifdown wlan0
+ifup wlan0
+
 /usr/sbin/hostapd -B /home/pi/simplePlexPlayer/backend/network  /hostapd.conf
 /usr/sbin/dnsmasq -u dnsmasq -C /home/pi/simplePlexPlayer/backend/network/dnsmasq.conf

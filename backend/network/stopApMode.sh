@@ -30,4 +30,5 @@ cp networkConf.cfg $1
 
 killall dnsmasq
 killall hostapd
-/etc/init.d/networking restart
+ifdown wlan0
+ifup wlan0
