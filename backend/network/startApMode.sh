@@ -22,10 +22,11 @@ fi
 # mar that the maschine is in the ap mode
 touch ./apMode
 
+ifdown wlan0
+
 # copy the correct cfg
 cp networkConfAp.cfg $1
 
-ifdown wlan0
 ifup wlan0
 
 /usr/sbin/hostapd -B /home/pi/simplePlexPlayer/backend/network  /hostapd.conf

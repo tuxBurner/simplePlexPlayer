@@ -26,9 +26,10 @@ then
     rm ./apMode;
 fi
 
-cp networkConf.cfg $1
-
 killall dnsmasq
 killall hostapd
 ifdown wlan0
+
+cp networkConf.cfg $1
+
 ifup wlan0
