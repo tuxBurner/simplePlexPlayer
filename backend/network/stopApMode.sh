@@ -30,6 +30,8 @@ killall dnsmasq
 killall hostapd
 ifdown wlan0
 
+sleep 5;
+
 cp networkConf.cfg $1
 
 ifup wlan0
