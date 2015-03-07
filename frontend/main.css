@@ -49,22 +49,114 @@ div.audiojs {
   color: #C3C3C3;
   font-size: 200px;
 }
-#menuItem.options {
+#menuItem .options {
   background-color: #f2dede;
 }
-#menuItem.options:before {
-  content: "\f0ad";
-}
-#menuItem.options .dl-horizontal,
-#menuItem.options .form-control,
-#menuItem.options label,
-#menuItem.options .popover {
+#menuItem .options .dl-horizontal,
+#menuItem .options .form-control,
+#menuItem .options label,
+#menuItem .options .popover {
   font-size: 24px;
 }
-#menuItem.options .popover-title {
+#menuItem .options .popover-title {
   display: none;
 }
-#menuItem.options .btn:focus {
+#menuItem .options .btn:focus {
+  color: #000000;
+  font-weight: bold;
+}
+#menuItem.main_options {
+  background-color: #f2dede;
+}
+#menuItem.main_options:before {
+  content: "\f0ad";
+}
+#menuItem.main_options .dl-horizontal,
+#menuItem.main_options .form-control,
+#menuItem.main_options label,
+#menuItem.main_options .popover {
+  font-size: 24px;
+}
+#menuItem.main_options .popover-title {
+  display: none;
+}
+#menuItem.main_options .btn:focus {
+  color: #000000;
+  font-weight: bold;
+}
+#menuItem.sysinfos {
+  background-color: #f2dede;
+}
+#menuItem.sysinfos:before {
+  content: "\f129";
+}
+#menuItem.sysinfos .dl-horizontal,
+#menuItem.sysinfos .form-control,
+#menuItem.sysinfos label,
+#menuItem.sysinfos .popover {
+  font-size: 24px;
+}
+#menuItem.sysinfos .popover-title {
+  display: none;
+}
+#menuItem.sysinfos .btn:focus {
+  color: #000000;
+  font-weight: bold;
+}
+#menuItem.wifi_settings {
+  background-color: #f2dede;
+}
+#menuItem.wifi_settings:before {
+  content: "\f1eb";
+}
+#menuItem.wifi_settings .dl-horizontal,
+#menuItem.wifi_settings .form-control,
+#menuItem.wifi_settings label,
+#menuItem.wifi_settings .popover {
+  font-size: 24px;
+}
+#menuItem.wifi_settings .popover-title {
+  display: none;
+}
+#menuItem.wifi_settings .btn:focus {
+  color: #000000;
+  font-weight: bold;
+}
+#menuItem.restart {
+  background-color: #f2dede;
+}
+#menuItem.restart:before {
+  content: "\f01e";
+}
+#menuItem.restart .dl-horizontal,
+#menuItem.restart .form-control,
+#menuItem.restart label,
+#menuItem.restart .popover {
+  font-size: 24px;
+}
+#menuItem.restart .popover-title {
+  display: none;
+}
+#menuItem.restart .btn:focus {
+  color: #000000;
+  font-weight: bold;
+}
+#menuItem.shutdown {
+  background-color: #f2dede;
+}
+#menuItem.shutdown:before {
+  content: "\f011";
+}
+#menuItem.shutdown .dl-horizontal,
+#menuItem.shutdown .form-control,
+#menuItem.shutdown label,
+#menuItem.shutdown .popover {
+  font-size: 24px;
+}
+#menuItem.shutdown .popover-title {
+  display: none;
+}
+#menuItem.shutdown .btn:focus {
   color: #000000;
   font-weight: bold;
 }

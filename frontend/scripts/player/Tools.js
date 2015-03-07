@@ -51,11 +51,13 @@ Tools.callBackend = function(path, callback) {
 		timeout: 1500,
 		success: function(data, textStatus, XMLHttpRequest) {
 			$.unblockUI();
-			callback(data);
+			if (callback !== undefined) {
+				callback(data);
+			}
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
 			setTimeout(function() {
-				Tools.callBackend(url, callback)
+				Tools.callBackend(path, callback)
 			}, 3000);
 		}
 	});
