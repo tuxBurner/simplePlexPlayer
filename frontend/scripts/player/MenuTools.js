@@ -4,11 +4,9 @@ var MenuTools = function() {}
 MenuTools.mainMenuItems = null;
 
 MenuTools.handleBarTpls = {
-  //"mainMenu": Handlebars.compile($("#main-tpl").html()),
-  "player": Handlebars.compile($("#player-tpl").html()),
   "menuitem": Handlebars.compile($("#menuitem-tpl").html()),
+  "player": Handlebars.compile($("#player-tpl").html()),
   // templates for the options
-  //"options_wrapper": Handlebars.compile($("#options_wrapper-tpl").html()),
   "options_sysinfos": Handlebars.compile($("#options_sysinfos-tpl").html()),
   "options_wifisettings": Handlebars.compile($("#options_wifisettings-tpl").html())
 }

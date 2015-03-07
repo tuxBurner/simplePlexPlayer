@@ -61,26 +61,6 @@
 </script>
 <!-- EO MENU ITEM -->
 
-<!-- OPTIONS WRAPPER -->
-<!--script id="options_wrapper-tpl" type="text/x-handlebars-template">
-  <div id="menuItem" class="options">
-    <h3 class="well">{{title}}</h3>
-
-    <div>{{{optionsContent}}}</div>
-
-    <ol class="breadcrumb">
-      {{#if menuStack}}
-      {{#each menuStack}}
-      <li>{{title}}</li>
-      {{/each}}
-      {{/if}}
-      <li>
-        <span class="label label-primary">{{position}} - {{itemsCount}}</span>
-      </li>
-    </ol>
-  </div>
-</script-->
-<!-- EO OPTIONS WRAPPER -->
 
 <!-- OPTIONS SYSINFOS -->
 <script id="options_sysinfos-tpl" type="text/x-handlebars-template">
@@ -131,29 +111,10 @@
 
 
 <!-- PLAYER -->
-<script id="player-tpl" type="text/x-handlebars-template">
-  {{#if menuItem.thumb}}
-  <div id="menuItem" class="player" style="background-image: url('{{menuItem.thumb}}');">
-    {{else}}
-    <div id="menuItem" class="player">
-      {{/if}}
-      <h3 class="well">
-        {{menuItem.title}}
-      </h3>
-      <h3  class="well">
-        (<span id="playerPlaytime" class="playtime">00:00</span> / <span id="playerDuration" class="duration">{{duration}}</span>) <i class="fa fa-play" id="playerPlayStatus"></i>
-      </h3>
-      <ol class="breadcrumb">
-        {{#if menuStack}}
-        {{#each menuStack}}
-        <li>{{title}}</li>
-        {{/each}}
-        {{/if}}
-        <li>
-          <span class="label label-primary">{{position}} - {{itemsCount}}</span>
-        </li>
-      </ol>
-    </div>
+<script id="player-tpl" type="text/x-handlebars-template">  
+  <h3  class="well">
+    (<span id="playerPlaytime" class="playtime">00:00</span> / <span id="playerDuration" class="duration">{{duration}}</span>) <i class="fa fa-play" id="playerPlayStatus"></i>
+  </h3>
 </script>
 <!-- EO PLAYER -->
 
