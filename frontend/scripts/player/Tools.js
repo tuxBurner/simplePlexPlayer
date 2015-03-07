@@ -36,9 +36,11 @@ Tools.blockUI = function() {
 /**
  * Helper for calling the backend via ajax
  */
-Tools.callBackend = function(url, callback) {
+Tools.callBackend = function(path, callback) {
 
 	Tools.blockUI();
+
+	var url = Config.baseUrl + '/' + path;
 
 	$.ajax({
 		type: 'GET',

@@ -8,6 +8,15 @@ var OptionMainMenuItem = function() {
 
   this.menuItems = [];
   this.menuItems.push(new OptionSysInfoMenuItem());
+
+  var shutDownMenu = new SimpleMenuItem('main_options_shutDown', 'Shutdown', 'options', {
+    "performAction": function() {
+
+    }
+  });
+  this.menuItems.push(shutDownMenu);
+
+
   var wifiSettings = new SimpleMenuItem('main_options_wifi', 'Wifi Settings', 'options', {
     "loadSubMenuItems": function(highlightId) {
       MenuHandler.setCurrentItems([new OptionWifiSettingsMenuItem()], this);
