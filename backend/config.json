@@ -1,21 +1,23 @@
 {
-  "serverPort": 8080,
-  "sdisplayOnOfPin": 18,
-  "networkCfgFile" : "test.cfg",
-  "sources": [{
-    "name": "Usb",
-    "type": "dir",
-    "path": "/media",
-    "disableCaching": true
-  }, {
-    "name": "plexHoerspiele",
-    "type": "plex",
-    "section": 4,
-    "server": "192.168.0.133",
-    "port": 32400
-  }, {
-    "name": "radio",
-    "type": "radio",
-    "cfgFile": "./radio/radiostation.json"
-  }]
+	"serverPort": 8080,
+	"sdisplayOnOfPin": 18,
+	"networkCfgFile": "test.cfg",
+	"sources": [{
+		"name": "Usb",
+		"type": "dir",
+		"path": "/media",
+		"disableCaching": true
+	}, {
+		"name": "plexHoerspiele",
+		"type": "plex",
+		"section": 4,
+		"server": "192.168.0.133",
+		"port": 32400
+	}, {
+		"name": "radio",
+		"type": "radio",
+		"cfgFile": "./radio/radiostation.json"
+	}],
+	"shutdownCmd": "sudo /sbin/shutdown",
+	"restartCmd": "sudo /sbin/restart"
 }
