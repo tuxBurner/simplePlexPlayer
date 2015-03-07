@@ -1,29 +1,29 @@
 {
-  "serverPort": 8080,
-  "sdisplayOnOfPin": 18,
-  "networkCfgFile": "test.cfg",
-  "sources": [{
-    "name": "Usb",
-    "type": "dir",
-    "path": "/media",
-    "disableCaching": true
-  }, {
-    "name": "plex Alben",
-    "type": "plex",
-    "section": 1,
-    "server": "192.168.0.133",
-    "port": 32400
-  }, {
-    "name": "plexHoerspiele",
-    "type": "plex",
-    "section": 4,
-    "server": "192.168.0.133",
-    "port": 32400
-  }, {
-    "name": "radio",
-    "type": "radio",
-    "cfgFile": "./radio/radiostation.json"
-  }],
-  "shutdownCmd": "sudo /sbin/shutdown",
-  "restartCmd": "sudo /sbin/halt"
+	"serverPort": 8080,
+	"sdisplayOnOfPin": 18,
+	"networkCfgFile": "test.cfg",
+	"sources": [{
+		"name": "Usb",
+		"type": "dir",
+		"path": "/media",
+		"disableCaching": true
+	}, {
+		"name": "plex Alben",
+		"type": "plex",
+		"section": 1,
+		"server": "192.168.0.133",
+		"port": 32400
+	}, {
+		"name": "plexHoerspiele",
+		"type": "plex",
+		"section": 4,
+		"server": "192.168.0.133",
+		"port": 32400
+	}, {
+		"name": "radio",
+		"type": "radio",
+		"cfgFile": "./radio/radiostation.json"
+	}],
+	"shutdownCmd": "sudo /sbin/halt",
+	"restartCmd": "sudo /sbin/reboot"
 }
