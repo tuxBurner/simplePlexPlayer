@@ -8,6 +8,12 @@
     "path": "/media",
     "disableCaching": true
   }, {
+    "name": "plex Alben",
+    "type": "plex",
+    "section": 1,
+    "server": "192.168.0.133",
+    "port": 32400
+  }, {
     "name": "plexHoerspiele",
     "type": "plex",
     "section": 4,
