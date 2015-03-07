@@ -25,5 +25,5 @@
     "cfgFile": "./radio/radiostation.json"
   }],
   "shutdownCmd": "sudo /sbin/shutdown",
-  "restartCmd": "sudo /sbin/reboot"
+  "restartCmd": "sudo /sbin/halt"
 }
