@@ -86,11 +86,12 @@ var KeyBoardEventHandler = function(player) {
     // mark that the key is released again
     that.keyDownBegin = null;
 
-    that.player.startTimeOut();
-
     // display off well pushing any button just turns it on nothing else
     if (that.player.displayOff == true) {
+      that.player.startTimeOut();
       return;
+    } else {
+      that.player.startTimeOut();
     }
 
     var pageBlocked = $(window).data("blockUI.isBlocked");
