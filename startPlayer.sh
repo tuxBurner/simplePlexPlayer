@@ -4,28 +4,33 @@
 if [ -f /home/pi/simplePlexPlayer/backend/network/apMode ]
 then
     echo "Start the ap mode for the pi"
-    /usr/sbin/hostapd -B /home/pi/simplePlexPlayer/backend/network  /hostapd.conf
-    /usr/sbin/dnsmasq -u dnsmasq -C /home/pi/simplePlexPlayer/backend/network/dnsmasq.conf
+    sudo /usr/sbin/hostapd -B /home/pi/simplePlexPlayer/backend/network  /hostapd.conf
+    sudo /usr/sbin/dnsmasq -u dnsmasq -C /home/pi/simplePlexPlayer/backend/network/dnsmasq.conf
 fi
 
+# start the backend
+cd /home/pi/simplePlexPlayer/backend
+node server.js &
 
+
+# start the pikeyd
+cd /home/pi/pikeyd
+sudo ./pikeyd -k
+sudo ./pikeyd -pu -d
+
+
+# prep some x stuff
 unclutter &
 matchbox-window-manager -use_titlebar no & :
 xset -dpms
 xset s off
+
 while true; do
-cd backend
-/home/pi/.nvm/current/bin/node server.js &
-cd ..
+  # start the frontend
+  cd /home/pi/simplePlexPlayer/frontend
 
-cd backend/pikeyd
-./pikeyd -k
-./pikeyd -pu -d
-cd ../..
-
-cd frontend
-#/usr/bin/midori -c ~/.config/midori -e Fullscreen -a ./index.html
-mkdir ephy-profile
-epiphany-browser --profile=./ephy-profile -a ./index.html
-cd ../
+  if [ ! -d ephy-profile ]; then
+    mkdir ephy-profile
+  fi
+  epiphany-browser --profile=./ephy-profile -a ./index.html
 done
