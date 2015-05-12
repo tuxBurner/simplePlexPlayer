@@ -44,6 +44,17 @@ framebuffer_width=800
 framebuffer_height=600
 ```
 
+I also changed the overscan settings here you have to figure out which are the correct ones
+
+```bash
+# uncomment the following to adjust overscan. Use positive numbers if console
+# goes off screen, and negative if there is too much border
+overscan_left=-18
+overscan_right=-18
+#overscan_top=16
+#overscan_bottom=16
+```
+
 ## Keyboard
 
 I use pikeyd to use certain GPIO pins as Keyboard device.
@@ -109,7 +120,7 @@ cd /home/pi/simplePlexPlayer/backend
 node server.js
 ```
 
-### frontent
+### frontend
 
 ``` bash
 sudo apt-get install matchbox-window-manager
