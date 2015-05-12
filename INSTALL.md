@@ -120,6 +120,11 @@ make **/home/pi/simplePlexPlayer/startPlayer.sh** executable
 chmod 0777 /home/pi/simplePlexPlayer/startPlayer.sh
 ```
 
+For testing evrything call
+```bash
+startx
+```
+
 ## sound volume
 
 When the sound volume is to low.
