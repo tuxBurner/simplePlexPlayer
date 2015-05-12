@@ -78,6 +78,15 @@ sudo dpkg -i node_latest_armhf.deb
 rm node_latest_armhf.deb
 ```
 
+## quick2wire needed for a node module
+```bash
+git clone https://github.com/VipSaran/quick2wire-gpio-admin.git
+cd quick2wire-gpio-admin
+make
+sudo make install
+sudo adduser $USER gpio
+```
+
 ## simplePlexPlayer
 
 In **/home/pi** call:

@@ -1,15 +1,11 @@
 {
-	"name": "SPMB",
-	"description": "This controlls some gpio ports on the rpi and provides a setup interface",
-	"author": "tuxBurner",
-	"dependencies" : {
-	  "express": "4.x",
-      "rpi-gpio": "0.5.0",
-      "plex-api": "0.4.2",
-      "musicmetadata" : "0.5.0"
-	},
-	"devDependencies": {
-		"grunt": "~0.4.1",
-		"grunt-express": "~1.0.0"
-	}
+  "name": "SPMB",
+  "description": "This controlls some gpio ports on the rpi and provides a setup interface",
+  "author": "tuxBurner",
+  "dependencies": {
+    "express": "4.x",
+    "pi-gpio": "0.0.7",
+    "plex-api": "0.4.2",
+    "musicmetadata": "0.5.0"
+  }
 }
