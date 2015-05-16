@@ -6,8 +6,12 @@ var conf = require('./config.json');
 
 var rpiGpio = null;
 if (conf.displayOnOfPin !== undefined) {
-	var RpiGpio = require('./lib/RpiGpio.js');
-	rpiGpio = new RpiGpio(conf);
+  try {
+    var RpiGpio = require('./lib/RpiGpio.js');
+    rpiGpio = new RpiGpio(conf);
+  } catch (ex) {
+    console.error(ex);
+  }
 }
 
 var sources = {};
