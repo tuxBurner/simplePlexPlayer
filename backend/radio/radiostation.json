@@ -6,4 +6,8 @@
   "name": "hr-info",
   "url": "http://hr-mp3-m-hrinfo.akacast.akamaistream.net/7/698/142135/v1/gnl.akacast.akamaistream.net/hr-mp3-m-hrinfo",
   "thumb": "http://www.hr-online.de/website/radio/hr-info/images/logo_hrinfo_head.jpg"
+}, {
+  "name": "Radio Teddy",
+  "url": "http://streams.ir-media-tec.com/radioteddy.mp3",
+  "thumb": "http://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Radio_Teddy_Logo.svg/1010px-Radio_Teddy_Logo.svg.png"
 }]
