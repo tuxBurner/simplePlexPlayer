@@ -54,7 +54,24 @@ function Folder(name, path, thumb) {
   }
 
   this.addFile = function(audioFile) {
+    if (that.audioFiles[audioFile.name] !== undefined) {
+      audioFile.name = that.findUniqueName(audioFile.name);
+    }
     that.audioFiles[audioFile.name] = audioFile;
+  }
+
+  /**
+   * tries to find a unique name when the one is already taken
+   */
+  this.findUniqueName = function(title) {
+    var pref = 1;
+    do {
+      var newTitle = title + '_' + pref;
+      if (that.audioFiles[newTitle] === undefined) {
+        return newTitle;
+      }
+      pref++;
+    } while (true);
   }
 
   /**
