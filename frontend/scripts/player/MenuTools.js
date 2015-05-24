@@ -60,8 +60,22 @@ MenuTools.displayMenuItem = function(menuItem, menuAdditionalContent) {
 }
 
 MenuTools.displayContent = function(tplName, data, callBack) {
+	var currentBg = $('#menuItem').css('background-image');
+	$('#menuItem').removeClass();
+
 	var content = MenuTools.handleBarTpls[tplName](data);
-	$('#mainContainer').html(content);
+	$('#menuItem').html(content);
+	$('#menuItem').addClass(data.menuItem.cssClass);
+
+	if (data.menuItem.thumb !== undefined) {
+		var newBg = 'url(' + data.menuItem.thumb + ')';
+		if (currentBg !== newBg) {
+			$('#menuItem').css('background-image', newBg);
+		}
+	} else {
+		$('#menuItem').css('background-image', 'none');
+	}
+
 }
 
 MenuTools.loadMainMenu = function(hilightId) {
