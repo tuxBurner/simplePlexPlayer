@@ -67,10 +67,10 @@ function PlexSource(conf) {
 
 		var folder = null;
 		if (parentFolder.subFolders[title] === undefined) {
-			var thumb = (entry.attributes.thumb !== undefined) ? that.plexHttpUrl + entry.attributes.thumb : parentFolder.thumb;
 
-			if (thumb !== undefined) {
-				thumb = that.plexHttpUrl + "/photo/:/transcode?url=" + thumb + "&width=800&height=600"
+			var thumb = parentFolder.thumb;
+			if (entry.attributes.thumb !== undefined) {
+				thumb = that.plexHttpUrl + "/photo/:/transcode?url=" + that.plexHttpUrl + entry.attributes.thumb + "&width=800&height=600"
 			}
 
 			folder = new Folder(title, entry.attributes.key, thumb);
