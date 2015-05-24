@@ -26,8 +26,8 @@ function Folder(name, path, thumb) {
    * @param httpRespCallback
    */
   this.loadSubData = function(httpRespCallback) {
-    if(this.dataCallBack !== null && this.initialized == false) {
-      if(this.disableCaching == true) {
+    if (this.dataCallBack !== null && this.initialized == false) {
+      if (this.disableCaching == true) {
         this.subFolders = {};
         this.audioFiles = {};
       } else {
@@ -44,11 +44,11 @@ function Folder(name, path, thumb) {
    */
   this.addSubFolder = function(folder) {
     that.subFolders[folder.name] = folder;
-    if(that.thumb == '' && folder.thumb != '') {
+    if (that.thumb == '' && folder.thumb != '') {
       that.thumb = folder.thumb;
     }
 
-    if(that.thumb != '' && folder.thumb == '') {
+    if (that.thumb != '' && folder.thumb == '') {
       folder.thumb = that.thumb;
     }
   }
@@ -62,19 +62,26 @@ function Folder(name, path, thumb) {
    */
   this.toJSON = function() {
     var subFolders = [];
-    for(idx  in this.subFolders) {
-      subFolders.push({"name": idx, "thumb": this.subFolders[idx].thumb});
+    for (idx in this.subFolders) {
+      subFolders.push({
+        "name": idx,
+        "thumb": this.subFolders[idx].thumb
+      });
     }
 
     var audioFiles = [];
-    for(idx  in this.audioFiles) {
-      audioFiles.push({"name": idx, "thumb": this.audioFiles[idx].thumb, "duration": this.audioFiles[idx].duration});
+    for (idx in this.audioFiles) {
+      audioFiles.push({
+        "name": idx,
+        "thumb": this.audioFiles[idx].thumb,
+        "duration": this.audioFiles[idx].duration
+      });
     }
 
     var json = {
       "subFolders": subFolders,
       "audioFiles": audioFiles,
-      "disableCaching" : this.disableCaching
+      "disableCaching": this.disableCaching
     }
     return json;
   }

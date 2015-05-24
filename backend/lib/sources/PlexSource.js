@@ -61,6 +61,10 @@ function PlexSource(conf) {
 
 	this.creatFolderFromEntry = function(entry, parentFolder) {
 		var title = entry.attributes.title.replace('/', '-');
+		if (parentFolder.subFolders[title] !== undefined) {
+			title = that.findUniqueName(title, parentFolder);
+		}
+
 		var folder = null;
 		if (parentFolder.subFolders[title] === undefined) {
 			var thumb = (entry.attributes.thumb !== undefined) ? that.plexHttpUrl + entry.attributes.thumb : parentFolder.thumb;
@@ -83,7 +87,21 @@ function PlexSource(conf) {
 
 	}
 
+	this.findUniqueName = function(title, parentFolder) {
+		var pref = 1;
+		do {
+			var newTitle = title + '_' + pref;
+			if (parentFolder.subFolders[newTitle] === undefined) {
+				return newTitle;
+			}
+			pref++;
+		} while (true);
+	}
+
+
+	// when constructed start loading the data from the backend
 	that.loadData();
 }
+
 
 module.exports = PlexSource;
