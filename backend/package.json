@@ -6,7 +6,8 @@
     "express": "4.x",
     "pi-gpio": "0.0.7",
     "plex-api": "0.4.2",
-    "musicmetadata": "0.5.0"
+    "musicmetadata": "0.5.0",
+    "loudness": "0.2.x"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
