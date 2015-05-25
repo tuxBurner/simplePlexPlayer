@@ -2,7 +2,6 @@ backend/node_modules
 backend/bower_components
 backend/network/apMode
 backend/network/test.cfg
-backend/views/public
 playMp3Play.iml
 .idea
 atlassian-ide-plugin.xml

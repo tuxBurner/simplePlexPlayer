@@ -11,7 +11,7 @@ module.exports = function(grunt) {
     bower: {
       install: {
         options: {
-          "targetDir": "./views/public"
+          "targetDir": "./views/public/bower"
         }
       }
     }
