@@ -1,5 +1,5 @@
 backend/node_modules
-
+backend/bower_components
 backend/network/apMode
 backend/network/test.cfg
 playMp3Play.iml

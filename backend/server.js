@@ -14,9 +14,6 @@ if (conf.displayOnOfPin !== undefined) {
   }
 }
 
-// controlls the loudness
-var loudness = require('loudness');
-
 var sources = {};
 
 var LocalSource = require('./lib/sources/LocalSource.js');
@@ -57,8 +54,31 @@ for (idx in conf.sources) {
  * #### THE EXPRESS STUFF ####
  */
 var express = require('express');
+var exphbs = require('express-handlebars');
 var app = express();
+var path = require('path');
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
+app.use(express.static(path.join(__dirname + '/public')));
+app.use('/bower_components', express.static(path.join(__dirname + '/bower_components')));
 
+
+/**
+ * #### ADMIN PANEL ####
+ */
+app.get('/', function(req, res) {
+  res.render('index');
+});
+/**
+ * #### EO ADMIN PANEL ####
+ */
+
+
+/**
+ * #### DISPLAY ON / OFF ####
+ */
 // only expose gpio stuff when having gpio
 app.get('/display/on', function(req, res) {
   if (rpiGpio !== null) {
@@ -75,6 +95,10 @@ app.get('/display/off', function(req, res) {
   }
   res.send("OK");
 });
+/**
+ * #### EO DISPLAY ON / OFF ####
+ */
+
 
 
 /**
@@ -248,7 +272,17 @@ app.get('/sys/network/apMode/switch', function(req, res) {
   }
 });
 
-app.get('/sys/loudness', function(req, res) {
+
+
+/**
+ * #### VOLUME STUFF ####
+ */
+// controlls the loudness
+var loudness = require('loudness');
+/**
+ * Endpoint for reading the volume
+ */
+app.get('/sys/volume', function(req, res) {
   loudness.getVolume(function(err, vol) {
     res.jsonp({
       "loudness": vol
@@ -256,7 +290,10 @@ app.get('/sys/loudness', function(req, res) {
   });
 });
 
-app.get('/sys/loudness/:vol', function(req, res) {
+/**
+ * Endpoint for setting the volume
+ */
+app.get('/sys/volume/:vol', function(req, res) {
   var vol = req.params.vol;
   if (vol < 0) {
     vol = 0;
@@ -270,6 +307,9 @@ app.get('/sys/loudness/:vol', function(req, res) {
     });
   });
 });
+/**
+ * #### EO VOLUME STUFF ####
+ */
 
 
 
@@ -339,6 +379,7 @@ app.get('/sys/shutdown', function(req, res) {
 });
 
 
+// start the server
 var server = app.listen(conf.serverPort, function() {
   console.log('Listening on port %d', server.address().port);
 });
