@@ -284,7 +284,7 @@ var loudness = require('loudness');
 app.get('/sys/volume', function(req, res) {
   loudness.getVolume(function(err, vol) {
     res.jsonp({
-      "loudness": vol
+      "volume": vol
     });
   });
 });
