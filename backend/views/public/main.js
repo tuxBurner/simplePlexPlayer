@@ -19,7 +19,6 @@ admin.initVolSlider = function() {
       "orientation": "vertical"
     }).on("slide", function(slideEvt) {
       $("#volumeCtrlVal").text(slideEvt.value);
-    }).on("slideStop", function(slideEvt) {
       $.get('/sys/volume/' + slideEvt.value);
     });
 
