@@ -7,13 +7,20 @@ module.exports = function(grunt) {
       target: {
         script: "server.js"
       }
+    },
+    bower: {
+      install: {
+        options: {
+          "targetDir": "./views/public"
+        }
+      }
     }
   });
 
-  // Load the plugin that provides the "uglify" task.
+  grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks("grunt-supervisor");
 
   // Default task(s).
-  grunt.registerTask('default', ['supervisor']);
+  grunt.registerTask('default', ['bower', 'supervisor']);
 
 };

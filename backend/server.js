@@ -21,7 +21,7 @@ var PlexSource = require('./lib/sources/PlexSource.js');
 var RadioSource = require('./lib/sources/RadioSource.js');
 
 // load all sources and instanstiate them
-for (idx in conf.sources) {
+for (var idx in conf.sources) {
   var sourceConf = conf.sources[idx];
 
   var source = null;
@@ -44,7 +44,7 @@ for (idx in conf.sources) {
       }
   }
 
-  if (source != null) {
+  if (source !== null) {
     sources[source.conf.name] = source;
   }
 }
@@ -61,9 +61,7 @@ app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
-app.use(express.static(path.join(__dirname + '/public')));
-app.use('/bower_components', express.static(path.join(__dirname + '/bower_components')));
-
+app.use('public', express.static(path.join(__dirname + '/public')));
 
 /**
  * #### ADMIN PANEL ####
@@ -74,6 +72,7 @@ app.get('/', function(req, res) {
 /**
  * #### EO ADMIN PANEL ####
  */
+
 
 
 /**
@@ -125,14 +124,14 @@ app.get('/sources/:sourceName/*', function(req, res) {
 
     var parent = sources[req.params.sourceName].rootFolder;
 
-    for (idx in pathParts) {
+    for (var idx in pathParts) {
       var pathInfo = pathParts[idx];
       if (parent.subFolders[pathInfo] === undefined) {
         if (parent.audioFiles[pathInfo] === undefined) {
           res.status(500).send('Source ' + pathInfo + " not found !");
         } else {
           var file = parent.audioFiles[pathInfo];
-          if (file.stream == false) {
+          if (file.stream === false) {
             res.sendFile(file.path);
             return;
           } else {
@@ -154,7 +153,7 @@ app.get('/sources/:sourceName/*', function(req, res) {
 
 app.get('/file/*', function(req, res) {
   var path = req.params[0];
-  if (fs.existsSync(path) == false) {
+  if (fs.existsSync(path) === false) {
     res.status(500).send("Local file: " + path + " does not exist");
   } else {
     res.sendFile(path);
@@ -176,7 +175,7 @@ var gatherNetDevInfos = function() {
   for (var dev in ifaces) {
     var alias = 0;
     ifaces[dev].forEach(function(details) {
-      if (details.family == 'IPv4' && details.internal == false) {
+      if (details.family === 'IPv4' && details.internal === false) {
         var devName = dev + (alias ? ':' + alias : '');
         iDevs.push({
           "name": devName,
@@ -187,7 +186,7 @@ var gatherNetDevInfos = function() {
     });
   }
   return iDevs;
-}
+};
 
 /**
  * collects all the sysinfos
@@ -208,8 +207,7 @@ var gatherSysInfos = function() {
   };
 
   return sysInfos;
-
-}
+};
 
 /**
  * Gather the sys informations
@@ -265,7 +263,7 @@ app.get('/sys/network/apMode/stop', function(req, res) {
  */
 app.get('/sys/network/apMode/switch', function(req, res) {
   var inApMode = fs.existsSync('./network/apMode');
-  if (inApMode == true) {
+  if (inApMode === true) {
     execStopApMode(res);
   } else {
     execStartApMode(res);
@@ -354,7 +352,7 @@ var pressKeyInX = function(key, res) {
       "status": "okay"
     });
   });
-}
+};
 
 /**
  * Restarts the system
