@@ -11,13 +11,13 @@
 		"name": "plex Alben",
 		"type": "plex",
 		"section": 1,
-		"server": "192.168.0.133",
+		"server": "192.168.0.3",
 		"port": 32400
 	}, {
 		"name": "plexHoerspiele",
 		"type": "plex",
-		"section": 4,
-		"server": "192.168.0.133",
+		"section": 2,
+		"server": "192.168.0.3",
 		"port": 32400
 	}, {
 		"name": "radio",
