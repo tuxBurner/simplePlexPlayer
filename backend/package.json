@@ -4,7 +4,7 @@
   "author": "tuxBurner",
   "dependencies": {
     "express": "4.x",
-    "pi-gpio": "0.0.7",
+    "pi-gpio": "0.0.8",
     "plex-api": "0.4.2",
     "musicmetadata": "0.5.0",
     "loudness": "0.2.x",
